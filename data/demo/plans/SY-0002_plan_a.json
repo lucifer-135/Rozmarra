@@ -1,0 +1,99 @@
+{
+  "patient_id": "SY-0002",
+  "plan_name": "Plan A: usual medicines",
+  "template_id": "navratri_one_meal",
+  "fast_type": "navratri",
+  "date": "2026-10-15",
+  "city": "Ahmedabad",
+  "fast_start": "2026-10-14T20:00:00",
+  "fast_end": "2026-10-15T19:30:00",
+  "water_allowed": true,
+  "meals": [
+    {
+      "time": "2026-10-14T19:30:00",
+      "label": "Vrat meal on the previous evening",
+      "label_hi": "पिछली शाम का व्रत का भोजन",
+      "food_category": "fast_absorbing",
+      "carbs_g": 90.0,
+      "breaks_fast": false
+    },
+    {
+      "time": "2026-10-15T19:30:00",
+      "label": "Evening vrat meal that breaks the fast: sabudana khichdi, potato and kuttu puri",
+      "label_hi": "व्रत खोलने का शाम का भोजन: साबूदाना खिचड़ी, आलू और कुट्टू की पूरी",
+      "food_category": "fast_absorbing",
+      "carbs_g": 100.0,
+      "breaks_fast": true
+    }
+  ],
+  "medicines": [
+    {
+      "name": "premixed_insulin_30_70",
+      "dose": 12.0,
+      "time": "2026-10-14T20:00:00",
+      "usual_dose": 12.0,
+      "usual_time": "2026-10-14T20:00:00"
+    },
+    {
+      "name": "atorvastatin",
+      "dose": 20.0,
+      "time": "2026-10-14T21:00:00",
+      "usual_dose": 20.0,
+      "usual_time": "2026-10-14T21:00:00"
+    },
+    {
+      "name": "premixed_insulin_30_70",
+      "dose": 18.0,
+      "time": "2026-10-15T08:00:00",
+      "usual_dose": 18.0,
+      "usual_time": "2026-10-15T08:00:00"
+    },
+    {
+      "name": "gliclazide_mr",
+      "dose": 60.0,
+      "time": "2026-10-15T08:00:00",
+      "usual_dose": 60.0,
+      "usual_time": "2026-10-15T08:00:00"
+    },
+    {
+      "name": "telmisartan",
+      "dose": 40.0,
+      "time": "2026-10-15T08:00:00",
+      "usual_dose": 40.0,
+      "usual_time": "2026-10-15T08:00:00"
+    },
+    {
+      "name": "aspirin",
+      "dose": 75.0,
+      "time": "2026-10-15T13:00:00",
+      "usual_dose": 75.0,
+      "usual_time": "2026-10-15T13:00:00"
+    },
+    {
+      "name": "premixed_insulin_30_70",
+      "dose": 12.0,
+      "time": "2026-10-15T20:00:00",
+      "usual_dose": 12.0,
+      "usual_time": "2026-10-15T20:00:00"
+    },
+    {
+      "name": "atorvastatin",
+      "dose": 20.0,
+      "time": "2026-10-15T21:00:00",
+      "usual_dose": 20.0,
+      "usual_time": "2026-10-15T21:00:00"
+    }
+  ],
+  "activities": [
+    {
+      "start": "2026-10-15T21:00:00",
+      "end": "2026-10-15T22:30:00",
+      "label": "Garba or dandiya dancing",
+      "mets": 5.0
+    }
+  ],
+  "status": "draft",
+  "approved_by": null,
+  "approved_on": null,
+  "notes": []
+}

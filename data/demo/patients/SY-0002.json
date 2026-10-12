@@ -1,0 +1,1617 @@
+{
+  "resourceType": "Bundle",
+  "id": "347a5a19-d329-5480-bbd4-601aa9342586",
+  "meta": {
+    "tag": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+        "code": "HTEST",
+        "display": "test health data"
+      }
+    ]
+  },
+  "type": "collection",
+  "timestamp": "2026-10-01T00:00:00+05:30",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205",
+      "resource": {
+        "resourceType": "Patient",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "identifier": [
+          {
+            "system": "urn:rozmarra:patient-id",
+            "value": "SY-0002"
+          }
+        ],
+        "name": [
+          {
+            "family": "Patel",
+            "given": [
+              "Ramesh"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1964-06-02",
+        "address": [
+          {
+            "city": "Ahmedabad",
+            "country": "IN"
+          }
+        ],
+        "communication": [
+          {
+            "language": {
+              "coding": [
+                {
+                  "system": "urn:ietf:bcp:47",
+                  "code": "hi",
+                  "display": "hi"
+                }
+              ],
+              "text": "hi"
+            },
+            "preferred": true
+          }
+        ],
+        "extension": [
+          {
+            "url": "urn:rozmarra:extension:fast-word",
+            "valueString": "उपवास"
+          },
+          {
+            "url": "urn:rozmarra:extension:fasts-kept",
+            "valueCode": "navratri_one_meal"
+          }
+        ],
+        "id": "7c315a4a-4544-5266-9414-6164f966e205"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cbee00b0-f162-5460-a1b8-3eecc73585dd",
+      "resource": {
+        "resourceType": "Condition",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "44054006",
+              "display": "Diabetes mellitus type 2"
+            }
+          ],
+          "text": "Diabetes mellitus type 2"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "onsetDateTime": "2011-05-20",
+        "id": "cbee00b0-f162-5460-a1b8-3eecc73585dd"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d7555eec-b769-5ab5-b4ec-fd025cb38f3f",
+      "resource": {
+        "resourceType": "Condition",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "38341003",
+              "display": "Hypertensive disorder"
+            }
+          ],
+          "text": "Hypertensive disorder"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "id": "d7555eec-b769-5ab5-b4ec-fd025cb38f3f"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b1c14263-9fbf-575c-a7fc-213df0d27d06",
+      "resource": {
+        "resourceType": "Condition",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "709044004",
+              "display": "Chronic kidney disease"
+            }
+          ],
+          "text": "Chronic kidney disease"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "id": "b1c14263-9fbf-575c-a7fc-213df0d27d06"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:4213b28a-8c81-53f3-917f-6920261705e5",
+      "resource": {
+        "resourceType": "Condition",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "53741008",
+              "display": "Coronary arteriosclerosis"
+            }
+          ],
+          "text": "Coronary arteriosclerosis"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "note": [
+          {
+            "text": "The disease is stable."
+          }
+        ],
+        "id": "4213b28a-8c81-53f3-917f-6920261705e5"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:af651270-3a8b-5aca-b138-c94a7c356d1a",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "4548-4",
+              "display": "Hemoglobin A1c/Hemoglobin.total in Blood"
+            }
+          ],
+          "text": "Hemoglobin A1c/Hemoglobin.total in Blood"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueQuantity": {
+          "value": 7.9,
+          "unit": "%",
+          "system": "http://unitsofmeasure.org",
+          "code": "%"
+        },
+        "id": "af651270-3a8b-5aca-b138-c94a7c356d1a"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:1a2f0695-c444-5f4b-8e53-6471c5cc5276",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1558-6",
+              "display": "Fasting glucose [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Fasting glucose [Mass/volume] in Serum or Plasma"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueQuantity": {
+          "value": 142.0,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "id": "1a2f0695-c444-5f4b-8e53-6471c5cc5276"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7176443a-1cfd-5294-a683-d518dd7bef72",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "20448-7",
+              "display": "Insulin [Units/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Insulin [Units/volume] in Serum or Plasma"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueQuantity": {
+          "value": 9.0,
+          "unit": "u[IU]/mL",
+          "system": "http://unitsofmeasure.org",
+          "code": "u[IU]/mL"
+        },
+        "id": "7176443a-1cfd-5294-a683-d518dd7bef72"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:49607eb0-aeff-5382-93c2-58137bfcec0a",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2160-0",
+              "display": "Creatinine [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Creatinine [Mass/volume] in Serum or Plasma"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueQuantity": {
+          "value": 1.45,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "id": "49607eb0-aeff-5382-93c2-58137bfcec0a"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b4535967-4bd7-521d-bc1f-b1e425d9d7ab",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "98979-8",
+              "display": "Glomerular filtration rate/1.73 sq M.predicted (CKD-EPI 2021)"
+            }
+          ],
+          "text": "Glomerular filtration rate/1.73 sq M.predicted (CKD-EPI 2021)"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueQuantity": {
+          "value": 52.0,
+          "unit": "mL/min/{1.73_m2}",
+          "system": "http://unitsofmeasure.org",
+          "code": "mL/min/{1.73_m2}"
+        },
+        "id": "b4535967-4bd7-521d-bc1f-b1e425d9d7ab"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:5fd93b6b-7870-5c85-a141-6736de11b7a5",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ],
+          "text": "Body weight"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueQuantity": {
+          "value": 74.0,
+          "unit": "kg",
+          "system": "http://unitsofmeasure.org",
+          "code": "kg"
+        },
+        "id": "5fd93b6b-7870-5c85-a141-6736de11b7a5"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c5d7bbb7-3836-550d-97b9-a01f11853eb4",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2",
+              "display": "Body height"
+            }
+          ],
+          "text": "Body height"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueQuantity": {
+          "value": 168.0,
+          "unit": "cm",
+          "system": "http://unitsofmeasure.org",
+          "code": "cm"
+        },
+        "id": "c5d7bbb7-3836-550d-97b9-a01f11853eb4"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:e34349f5-72e3-50b2-81e1-6698cb59c4f8",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "Heart rate"
+            }
+          ],
+          "text": "Heart rate"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueQuantity": {
+          "value": 72,
+          "unit": "/min",
+          "system": "http://unitsofmeasure.org",
+          "code": "/min"
+        },
+        "id": "e34349f5-72e3-50b2-81e1-6698cb59c4f8"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:a132868e-036e-5ea8-9bfa-3bfcbb3b295f",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "39156-5",
+              "display": "Body mass index (BMI) [Ratio]"
+            }
+          ],
+          "text": "Body mass index (BMI) [Ratio]"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueQuantity": {
+          "value": 26.2,
+          "unit": "kg/m2",
+          "system": "http://unitsofmeasure.org",
+          "code": "kg/m2"
+        },
+        "id": "a132868e-036e-5ea8-9bfa-3bfcbb3b295f"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:1867b82f-5a02-50cd-95ad-449934f5fa97",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "85354-9",
+              "display": "Blood pressure panel with all children optional"
+            }
+          ],
+          "text": "Blood pressure panel with all children optional"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8480-6",
+                  "display": "Systolic blood pressure"
+                }
+              ],
+              "text": "Systolic blood pressure"
+            },
+            "valueQuantity": {
+              "value": 138,
+              "unit": "mm[Hg]",
+              "system": "http://unitsofmeasure.org",
+              "code": "mm[Hg]"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8462-4",
+                  "display": "Diastolic blood pressure"
+                }
+              ],
+              "text": "Diastolic blood pressure"
+            },
+            "valueQuantity": {
+              "value": 82,
+              "unit": "mm[Hg]",
+              "system": "http://unitsofmeasure.org",
+              "code": "mm[Hg]"
+            }
+          }
+        ],
+        "id": "1867b82f-5a02-50cd-95ad-449934f5fa97"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c2ca53f2-e979-5050-bfd5-83b71cf1685b",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "social-history"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11341-5",
+              "display": "History of Occupation"
+            }
+          ],
+          "text": "History of Occupation"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "valueString": "Retired textile trader",
+        "id": "c2ca53f2-e979-5050-bfd5-83b71cf1685b"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bfd6ece7-0fb8-5ac5-a335-435729101141",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "84413-4",
+              "display": "Genotype display name"
+            }
+          ],
+          "text": "Genotype display name"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueCodeableConcept": {
+          "text": "CYP2C9 *1/*1"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]"
+                }
+              ],
+              "text": "Gene studied [ID]"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://www.genenames.org/geneId",
+                  "code": "HGNC:2623",
+                  "display": "CYP2C9"
+                }
+              ],
+              "text": "CYP2C9"
+            }
+          }
+        ],
+        "id": "bfd6ece7-0fb8-5ac5-a335-435729101141"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:5751ead2-ad95-551c-9faa-cec010a35b32",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-input",
+              "code": "hypoglycaemia",
+              "display": "History of low blood sugar"
+            }
+          ],
+          "text": "History of low blood sugar"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-answer",
+              "code": "less_than_weekly",
+              "display": "less_than_weekly"
+            }
+          ],
+          "text": "less_than_weekly"
+        },
+        "id": "5751ead2-ad95-551c-9faa-cec010a35b32"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:1ea62faa-000a-5c06-af1c-fb1ac33bac02",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-input",
+              "code": "self-monitoring",
+              "display": "Self-monitoring of blood glucose"
+            }
+          ],
+          "text": "Self-monitoring of blood glucose"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-answer",
+              "code": "as_needed",
+              "display": "as_needed"
+            }
+          ],
+          "text": "as_needed"
+        },
+        "id": "1ea62faa-000a-5c06-af1c-fb1ac33bac02"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:4617a713-87c1-5ae8-b1da-e1b8850c168b",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-input",
+              "code": "physical-labour",
+              "display": "Physical work"
+            }
+          ],
+          "text": "Physical work"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-answer",
+              "code": "none",
+              "display": "none"
+            }
+          ],
+          "text": "none"
+        },
+        "id": "4617a713-87c1-5ae8-b1da-e1b8850c168b"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:434e788a-f11c-5b20-8330-a57b34319612",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-input",
+              "code": "previous-fasting",
+              "display": "Previous fasting experience"
+            }
+          ],
+          "text": "Previous fasting experience"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-answer",
+              "code": "neutral_or_positive",
+              "display": "neutral_or_positive"
+            }
+          ],
+          "text": "neutral_or_positive"
+        },
+        "id": "434e788a-f11c-5b20-8330-a57b34319612"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:5b19c68a-1a8d-514b-9989-f8333760a624",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-input",
+              "code": "acute-complications",
+              "display": "DKA or HHS in the last 12 months"
+            }
+          ],
+          "text": "DKA or HHS in the last 12 months"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-answer",
+              "code": "none",
+              "display": "none"
+            }
+          ],
+          "text": "none"
+        },
+        "id": "5b19c68a-1a8d-514b-9989-f8333760a624"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:0636e7d6-7199-53a8-82ee-831786f0d1e5",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-input",
+              "code": "macrovascular",
+              "display": "Heart and blood vessel disease"
+            }
+          ],
+          "text": "Heart and blood vessel disease"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-answer",
+              "code": "stable",
+              "display": "stable"
+            }
+          ],
+          "text": "stable"
+        },
+        "id": "0636e7d6-7199-53a8-82ee-831786f0d1e5"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:07d9957d-c14c-5d48-a30c-df56664d28ea",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-input",
+              "code": "pregnancy",
+              "display": "Pregnancy"
+            }
+          ],
+          "text": "Pregnancy"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-answer",
+              "code": "not_pregnant",
+              "display": "not_pregnant"
+            }
+          ],
+          "text": "not_pregnant"
+        },
+        "id": "07d9957d-c14c-5d48-a30c-df56664d28ea"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:42040a5f-d59c-58f3-832d-76cedb7d7d13",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-input",
+              "code": "frailty",
+              "display": "Frailty or impaired cognition"
+            }
+          ],
+          "text": "Frailty or impaired cognition"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueBoolean": false,
+        "id": "42040a5f-d59c-58f3-832d-76cedb7d7d13"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:dd5bc167-68aa-56c5-8ec0-a1e6872c44a6",
+      "resource": {
+        "resourceType": "Observation",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "urn:rozmarra:idf-dar-input",
+              "code": "support-at-home",
+              "display": "Support at home"
+            }
+          ],
+          "text": "Support at home"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "effectiveDateTime": "2026-10-01",
+        "valueBoolean": true,
+        "id": "dd5bc167-68aa-56c5-8ec0-a1e6872c44a6"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:85238b52-4937-5628-8a36-6290c68f54f5",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.whocc.no/atc",
+              "code": "A10AD01",
+              "display": "Premixed human insulin 30/70"
+            },
+            {
+              "system": "urn:rozmarra:medicine",
+              "code": "premixed_insulin_30_70",
+              "display": "Premixed human insulin 30/70"
+            }
+          ],
+          "text": "Premixed human insulin 30/70"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "dosage": [
+          {
+            "text": "Premixed human insulin 30/70 18 units at 8:00 am",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "08:00:00"
+                ]
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 18.0,
+                  "unit": "units",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "[IU]"
+                }
+              }
+            ]
+          },
+          {
+            "text": "Premixed human insulin 30/70 12 units at 8:00 pm",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "20:00:00"
+                ]
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 12.0,
+                  "unit": "units",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "[IU]"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "85238b52-4937-5628-8a36-6290c68f54f5"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:a590d959-fbee-501d-bf40-e0e417dd7544",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.whocc.no/atc",
+              "code": "A10BB09",
+              "display": "Gliclazide MR"
+            },
+            {
+              "system": "urn:rozmarra:medicine",
+              "code": "gliclazide_mr",
+              "display": "Gliclazide MR"
+            }
+          ],
+          "text": "Gliclazide MR"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "dosage": [
+          {
+            "text": "Gliclazide MR 60 mg at 8:00 am",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "08:00:00"
+                ]
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 60.0,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "a590d959-fbee-501d-bf40-e0e417dd7544"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:98ed4306-cae3-56c4-ae2a-a173ad2ffb3f",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.whocc.no/atc",
+              "code": "C09CA07",
+              "display": "Telmisartan"
+            },
+            {
+              "system": "urn:rozmarra:medicine",
+              "code": "telmisartan",
+              "display": "Telmisartan"
+            }
+          ],
+          "text": "Telmisartan"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "dosage": [
+          {
+            "text": "Telmisartan 40 mg at 8:00 am",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "08:00:00"
+                ]
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 40.0,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "98ed4306-cae3-56c4-ae2a-a173ad2ffb3f"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:392e59f0-0335-5806-9820-b3c38ea74d72",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.whocc.no/atc",
+              "code": "C10AA05",
+              "display": "Atorvastatin"
+            },
+            {
+              "system": "urn:rozmarra:medicine",
+              "code": "atorvastatin",
+              "display": "Atorvastatin"
+            }
+          ],
+          "text": "Atorvastatin"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "dosage": [
+          {
+            "text": "Atorvastatin 20 mg at 9:00 pm",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "21:00:00"
+                ]
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 20.0,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "392e59f0-0335-5806-9820-b3c38ea74d72"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:6bea6040-58d6-5bad-9820-4343144064d1",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "meta": {
+          "tag": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST",
+              "display": "test health data"
+            }
+          ]
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.whocc.no/atc",
+              "code": "B01AC06",
+              "display": "Aspirin"
+            },
+            {
+              "system": "urn:rozmarra:medicine",
+              "code": "aspirin",
+              "display": "Aspirin"
+            }
+          ],
+          "text": "Aspirin"
+        },
+        "subject": {
+          "reference": "urn:uuid:7c315a4a-4544-5266-9414-6164f966e205"
+        },
+        "dosage": [
+          {
+            "text": "Aspirin 75 mg at 1:00 pm",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "13:00:00"
+                ]
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 75.0,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "6bea6040-58d6-5bad-9820-4343144064d1"
+      }
+    }
+  ]
+}

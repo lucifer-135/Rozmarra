@@ -93,6 +93,11 @@ class FastTemplate:
     # True when the patient eats nothing between the start and the end of the fast.
     no_food_during_fast: bool = True
 
+    @property
+    def short_name(self) -> str:
+        """The name of the fast without its description, for example "Karva Chauth"."""
+        return self.name.split(":", 1)[0]
+
 
 @dataclass(frozen=True)
 class UsualDose:

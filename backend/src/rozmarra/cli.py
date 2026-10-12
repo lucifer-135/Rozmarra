@@ -34,8 +34,12 @@ model_app = typer.Typer(help="Train and evaluate the prediction models.", no_arg
 demo_app = typer.Typer(
     help="Prepare the demo patients and their saved results.", no_args_is_help=True
 )
+ehr_app = typer.Typer(
+    help="Create synthetic health records in FHIR R4 format.", no_args_is_help=True
+)
 
 app.add_typer(data_app, name="data")
+app.add_typer(ehr_app, name="ehr")
 app.add_typer(twin_app, name="twin")
 app.add_typer(synth_app, name="synth")
 app.add_typer(model_app, name="model")
@@ -121,10 +125,35 @@ def model_evaluate() -> None:
     _not_built("model evaluate")
 
 
+@ehr_app.command("generate")
+def ehr_generate(
+    patients: int = typer.Option(300, help="The number of synthetic records to create."),
+    seed: int = typer.Option(2026, help="The random seed, so that the records are reproducible."),
+) -> None:
+    """Create synthetic health records and save them as FHIR R4 Bundles in data/processed/ehr."""
+    from rozmarra.config import PROCESSED_DIR
+    from rozmarra.ehr.generator import generate_records
+    from rozmarra.ehr.store import write_bundles
+
+    folder = PROCESSED_DIR / "ehr"
+    paths = write_bundles(generate_records(patients, seed), folder)
+    typer.echo(f"Rozmarra saved {len(paths)} synthetic health records in {folder}.")
+
+
 @demo_app.command("build")
 def demo_build() -> None:
-    """Prepare the demo patients and their saved results."""
-    _not_built("demo build")
+    """Prepare the demo patients: their health records, draft plans and IDF-DAR scores."""
+    from rozmarra.config import DEMO_DIR
+    from rozmarra.demo import build_demo
+    from rozmarra.formatting import capitalised
+
+    for summary in build_demo():
+        typer.echo(
+            f"{summary['label']}, plans to keep the {summary['fast']} fast on "
+            f"{summary['fast_date_text']}. The IDF-DAR total is {summary['idf_dar_total']:g} "
+            f"({capitalised(summary['idf_dar_category'])})."
+        )
+    typer.echo(f"Rozmarra saved the synthetic demo patients in {DEMO_DIR}.")
 
 
 @app.command("serve")

@@ -1,0 +1,72 @@
+{
+  "patient_id": "SY-0003",
+  "plan_name": "Plan A: usual medicines",
+  "template_id": "ramadan",
+  "fast_type": "ramadan",
+  "date": "2027-02-20",
+  "city": "Hyderabad",
+  "fast_start": "2027-02-20T05:27:00",
+  "fast_end": "2027-02-20T18:19:00",
+  "water_allowed": false,
+  "meals": [
+    {
+      "time": "2027-02-20T04:57:00",
+      "label": "Suhoor before dawn",
+      "label_hi": "सुबह होने से पहले सहरी",
+      "food_category": "slow_absorbing",
+      "carbs_g": 70.0,
+      "breaks_fast": false
+    },
+    {
+      "time": "2027-02-20T18:19:00",
+      "label": "Iftar at sunset, starting with dates and water",
+      "label_hi": "सूर्यास्त पर इफ़्तार, खजूर और पानी से शुरुआत",
+      "food_category": "fast_absorbing",
+      "carbs_g": 80.0,
+      "breaks_fast": true
+    },
+    {
+      "time": "2027-02-20T19:34:00",
+      "label": "Dinner",
+      "label_hi": "रात का खाना",
+      "food_category": "mixed",
+      "carbs_g": 60.0,
+      "breaks_fast": false
+    }
+  ],
+  "medicines": [
+    {
+      "name": "metformin",
+      "dose": 1000.0,
+      "time": "2027-02-20T08:00:00",
+      "usual_dose": 1000.0,
+      "usual_time": "2027-02-20T08:00:00"
+    },
+    {
+      "name": "metformin",
+      "dose": 1000.0,
+      "time": "2027-02-20T20:00:00",
+      "usual_dose": 1000.0,
+      "usual_time": "2027-02-20T20:00:00"
+    },
+    {
+      "name": "insulin_glargine",
+      "dose": 18.0,
+      "time": "2027-02-20T22:00:00",
+      "usual_dose": 18.0,
+      "usual_time": "2027-02-20T22:00:00"
+    }
+  ],
+  "activities": [
+    {
+      "start": "2027-02-20T20:04:00",
+      "end": "2027-02-20T21:34:00",
+      "label": "Taraweeh night prayers",
+      "mets": 2.5
+    }
+  ],
+  "status": "draft",
+  "approved_by": null,
+  "approved_on": null,
+  "notes": []
+}

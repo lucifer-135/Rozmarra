@@ -1,0 +1,80 @@
+{
+  "patient_id": "SY-0004",
+  "plan_name": "Plan A: usual medicines",
+  "template_id": "ekadashi_phalahar",
+  "fast_type": "ekadashi",
+  "date": "2026-11-05",
+  "city": "Varanasi",
+  "fast_start": "2026-11-05T06:08:00",
+  "fast_end": "2026-11-06T07:30:00",
+  "water_allowed": true,
+  "meals": [
+    {
+      "time": "2026-11-05T08:00:00",
+      "label": "Tea with milk and fruit",
+      "label_hi": "दूध वाली चाय और फल",
+      "food_category": "fast_absorbing",
+      "carbs_g": 20.0,
+      "breaks_fast": false
+    },
+    {
+      "time": "2026-11-05T13:00:00",
+      "label": "Fruit, milk and makhana",
+      "label_hi": "फल, दूध और मखाना",
+      "food_category": "fast_absorbing",
+      "carbs_g": 30.0,
+      "breaks_fast": false
+    },
+    {
+      "time": "2026-11-05T19:30:00",
+      "label": "Evening phalahar: potato or singhara",
+      "label_hi": "शाम का फलाहार: आलू या सिंघाड़ा",
+      "food_category": "fast_absorbing",
+      "carbs_g": 50.0,
+      "breaks_fast": false
+    },
+    {
+      "time": "2026-11-06T07:30:00",
+      "label": "Parana meal that breaks the fast the next morning",
+      "label_hi": "अगली सुबह व्रत खोलने का पारण भोजन",
+      "food_category": "mixed",
+      "carbs_g": 60.0,
+      "breaks_fast": true
+    }
+  ],
+  "medicines": [
+    {
+      "name": "glibenclamide",
+      "dose": 5.0,
+      "time": "2026-11-05T08:00:00",
+      "usual_dose": 5.0,
+      "usual_time": "2026-11-05T08:00:00"
+    },
+    {
+      "name": "telmisartan",
+      "dose": 40.0,
+      "time": "2026-11-05T08:00:00",
+      "usual_dose": 40.0,
+      "usual_time": "2026-11-05T08:00:00"
+    },
+    {
+      "name": "glibenclamide",
+      "dose": 5.0,
+      "time": "2026-11-06T08:00:00",
+      "usual_dose": 5.0,
+      "usual_time": "2026-11-06T08:00:00"
+    },
+    {
+      "name": "telmisartan",
+      "dose": 40.0,
+      "time": "2026-11-06T08:00:00",
+      "usual_dose": 40.0,
+      "usual_time": "2026-11-06T08:00:00"
+    }
+  ],
+  "activities": [],
+  "status": "draft",
+  "approved_by": null,
+  "approved_on": null,
+  "notes": []
+}
