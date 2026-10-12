@@ -15,7 +15,7 @@ Rozmarra (रोज़मर्रा) is a Hindi and Urdu word that means "ever
 | Item | Details |
 |---|---|
 | Team name | NOT_SOMEONE_IMPORTANT |
-| College or incubator | The team will add this information. |
+| College | Indian Institute of Technology (Indian School of Mines) Dhanbad, also known as IIT (ISM) Dhanbad |
 | Challenge | Digital Twin Challenge 2026 by Happiest Health, part of the Reimagining and Reforming Healthcare in India Summit 2026 |
 
 | Member | Role | Main responsibilities |

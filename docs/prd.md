@@ -10,7 +10,7 @@ Rozmarra is a digital twin that helps doctors keep people with Type 2 Diabetes s
 | Submission deadline | 20 October 2026, 7:00 PM IST |
 | Document version | 1.1, updated on 12 October 2026 with the answers to the open questions |
 | Document status | Approved for building. The team will update this document when a decision changes. |
-| Team | NOT_SOMEONE_IMPORTANT. The members are Shivansh Gautam (team leader; digital twin and prediction models), Aman Soni (data and application) and Divy Sharma (documentation, testing and presentation). The college or incubator will be added. |
+| Team | NOT_SOMEONE_IMPORTANT. The members are Shivansh Gautam (team leader; digital twin and prediction models), Aman Soni (data and application) and Divy Sharma (documentation, testing and presentation). The college is IIT (ISM) Dhanbad. |
 | Repository name | Rozmarra |
 | Related document | `techstack.md` describes the tools, data formats, models and code structure. |
 
@@ -578,11 +578,12 @@ The team will also add a model card, a data card and step-by-step instructions f
 
 ## 22. Open questions
 
-The team answered the first set of open questions on 12 October 2026.
+The team answered all the open questions on 12 October 2026.
 
 | Question | Answer |
 |---|---|
 | What is the team name? | The team name is NOT_SOMEONE_IMPORTANT. |
+| What is the college? | The college is the Indian Institute of Technology (Indian School of Mines) Dhanbad, also known as IIT (ISM) Dhanbad. |
 | Who are the members, and what are their roles? | Shivansh Gautam is the team leader and leads the digital twin and the prediction models. Aman Soni leads the data and the application. Divy Sharma leads documentation, testing and the presentation. |
 | Is the team registered on Unstop? | Yes. The team is registered. |
 | What will the repository be called? | The team will name the repository Rozmarra, after the project title. |
@@ -590,11 +591,7 @@ The team answered the first set of open questions on 12 October 2026.
 | Who will review the Hindi text? | Shivansh Gautam will review the Hindi text. |
 | Who will present in the video, and in which language? | Shivansh Gautam will present the video in simple, clear English. |
 
-One question is still open:
-
-1. What is the name of the college or incubator?
-
-The team will update this section as this question is answered.
+No questions are open at present. The team will add new questions to this section as they arise.
 
 ## 23. Glossary
 
