@@ -6,6 +6,9 @@ data/raw/
 data/processed/
 *.zip
 
+# One fit plot for each real patient. The report keeps a few examples in reports/figures.
+reports/twin_fit/patients/
+
 # Secrets and local settings
 .env
 .env.*

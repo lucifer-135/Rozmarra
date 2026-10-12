@@ -20,6 +20,6 @@ def test_version_option_prints_the_package_version():
 
 
 def test_a_command_that_is_not_built_says_so_and_fails():
-    result = runner.invoke(app, ["twin", "fit"])
+    result = runner.invoke(app, ["model", "train"])
     assert result.exit_code == 1
     assert "not built yet" in result.output

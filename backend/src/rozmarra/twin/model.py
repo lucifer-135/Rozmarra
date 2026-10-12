@@ -58,17 +58,30 @@ class FittedParameter:
         return float(np.log(self.high / self.low) / 4)
 
 
-# The parameters that the fit estimates for each patient, with the starting value and
-# the range from docs/techstack.md, Section 5.3.
+# The parameters that the fit estimates for each patient, with the population value
+# (the centre of the prior) and the allowed range.
+#
+# The first fitting round on 12 October 2026 used the starting values and ranges in
+# docs/techstack.md, Section 5.3. Many twins reached a limit of their range. In
+# particular, 16 of 18 twins with a sulfonylurea reached the lowest allowed gamma_su,
+# and the meal-size factor reached its lowest value for 40 of 89 twins, including 10 of
+# 14 CGMacros twins with recorded carbohydrates. The second round therefore uses
+# centres close to the first-round medians and wider ranges. The first round used only
+# each patient's fitting days, so the held-out days stay untouched.
 FITTED = (
-    FittedParameter("S_G", 0.015, 0.005, 0.035),
-    FittedParameter("S_I", 2e-4, 0.3e-4, 8e-4),
-    FittedParameter("beta", 0.04, 0.005, 0.15),
-    FittedParameter("k_abs_factor", 1.0, 0.5, 2.0),
-    FittedParameter("meal_factor", 1.0, 0.5, 2.0),
-    FittedParameter("gamma_su", 8.0, 2.0, 15.0),
+    FittedParameter("S_G", 0.015, 0.003, 0.05),
+    FittedParameter("S_I", 3e-4, 0.2e-4, 15e-4),
+    FittedParameter("beta", 0.02, 0.002, 0.2),
+    FittedParameter("k_abs_factor", 0.8, 0.3, 2.0),
+    FittedParameter("meal_factor", 0.7, 0.3, 2.0),
+    FittedParameter("gamma_su", 3.0, 0.5, 15.0),
 )
 FITTED_NAMES = tuple(p.name for p in FITTED)
+CENTRES = {p.name: p.centre for p in FITTED}
+
+
+def _centre(name: str):
+    return field(default_factory=lambda: np.array([CENTRES[name]]))
 
 
 @dataclass
@@ -79,12 +92,12 @@ class Parameters:
     I_b: np.ndarray
     body_weight: np.ndarray
     renal_factor: np.ndarray  # min(eGFR / 90, 1)
-    S_G: np.ndarray = field(default_factory=lambda: np.array([0.015]))
-    S_I: np.ndarray = field(default_factory=lambda: np.array([2e-4]))
-    beta: np.ndarray = field(default_factory=lambda: np.array([0.04]))
-    k_abs_factor: np.ndarray = field(default_factory=lambda: np.array([1.0]))
-    meal_factor: np.ndarray = field(default_factory=lambda: np.array([1.0]))
-    gamma_su: np.ndarray = field(default_factory=lambda: np.array([8.0]))
+    S_G: np.ndarray = _centre("S_G")
+    S_I: np.ndarray = _centre("S_I")
+    beta: np.ndarray = _centre("beta")
+    k_abs_factor: np.ndarray = _centre("k_abs_factor")
+    meal_factor: np.ndarray = _centre("meal_factor")
+    gamma_su: np.ndarray = _centre("gamma_su")
     cr_factor: np.ndarray = field(default_factory=lambda: np.array([1.0]))
     k_hgp: float = K_HGP
     a_f: float = A_F

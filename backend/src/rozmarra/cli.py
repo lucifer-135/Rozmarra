@@ -108,9 +108,22 @@ def data_prepare() -> None:
 
 
 @twin_app.command("fit")
-def twin_fit() -> None:
-    """Fit a twin to each real patient and write the fit report."""
-    _not_built("twin fit")
+def twin_fit(
+    workers: int = typer.Option(6, help="The number of patients to fit at the same time."),
+    limit: int = typer.Option(0, help="Fit only this many patients, for a quick check."),
+) -> None:
+    """Fit a twin to each usable real patient and write the fit report to reports/twin_fit."""
+    from rozmarra.twin.report import fit_all
+
+    summary = fit_all(workers=workers, limit=limit or None)
+    rmse = summary["median_rmse_mg_dl"]
+    two_hours = summary["median_forecast_rmse_mg_dl"].get("120", {})
+    typer.echo(
+        f"Rozmarra fitted {summary['patients_fitted']} twins. The median error in 12-hour windows "
+        f"is {rmse['fitted_days']} mg/dL on fitted days and {rmse['held_out_days']} mg/dL on "
+        f"held-out days. The median 2-hour forecast error is {two_hours.get('twin')} mg/dL, "
+        f"compared with {two_hours.get('last_value')} mg/dL for the last value."
+    )
 
 
 @synth_app.command("cohort")
