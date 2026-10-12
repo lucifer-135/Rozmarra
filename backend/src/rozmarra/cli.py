@@ -94,8 +94,17 @@ def data_download(
 
 @data_app.command("prepare")
 def data_prepare() -> None:
-    """Convert the downloaded datasets into the standard Parquet format."""
-    _not_built("data prepare")
+    """Convert the downloaded datasets into the standard Parquet format in data/processed."""
+    from rozmarra.config import PROCESSED_DIR
+    from rozmarra.data.prepare import prepare
+
+    summary = prepare()
+    for dataset, facts in summary["datasets"].items():
+        typer.echo(
+            f"{dataset}: {facts['patients']} patients, {facts['cgm_readings']:,} CGM readings "
+            f"over a median of {facts['median_days_of_cgm']} days, and {facts['meals']:,} meals."
+        )
+    typer.echo(f"Rozmarra saved the standard tables in {PROCESSED_DIR}.")
 
 
 @twin_app.command("fit")

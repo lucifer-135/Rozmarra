@@ -1,0 +1,45 @@
+{
+  "source": "real_open",
+  "datasets": {
+    "CGMacros": {
+      "patients": 45,
+      "patients_with_cgm": 45,
+      "patients_by_diabetes_status": {
+        "prediabetes": 16,
+        "healthy": 15,
+        "type_2_diabetes": 14
+      },
+      "cgm_readings": 126618,
+      "median_days_of_cgm": 9.9,
+      "share_of_cgm_readings_below_70_mg_dl": 0.0038,
+      "share_of_cgm_readings_below_54_mg_dl": 0.0012,
+      "meals": 1706,
+      "meals_with_carbohydrates": 1706,
+      "signals": [
+        "glucose_cgm",
+        "glucose_cgm_secondary",
+        "heart_rate",
+        "mets",
+        "steps"
+      ]
+    },
+    "ShanghaiT2DM": {
+      "patients": 109,
+      "patients_with_cgm": 109,
+      "patients_by_diabetes_status": {
+        "type_2_diabetes": 109
+      },
+      "cgm_readings": 112462,
+      "median_days_of_cgm": 12.7,
+      "share_of_cgm_readings_below_70_mg_dl": 0.0234,
+      "share_of_cgm_readings_below_54_mg_dl": 0.0077,
+      "meals": 3808,
+      "meals_with_carbohydrates": 3063,
+      "signals": [
+        "blood_ketone",
+        "glucose_cgm",
+        "glucose_fingerstick"
+      ]
+    }
+  }
+}

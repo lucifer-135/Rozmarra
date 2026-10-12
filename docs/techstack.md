@@ -173,6 +173,8 @@ The API and the dashboard exchange fasting plans in this format. The values belo
 }
 ```
 
+The code (`backend/src/rozmarra/fasting/plan.py`) makes two changes to this example. First, every time is a full date and time, so that fasts that last more than one day are clear. Second, each medicine has a `dose` field, and the unit (mg or units) comes from the medicine catalogue, so that insulin doses fit the same format.
+
 Rozmarra uses three food categories:
 
 - The `fast_absorbing` category covers sweets, sabudana, potatoes, fruit juice and dates.

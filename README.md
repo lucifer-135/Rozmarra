@@ -184,6 +184,9 @@ The dashboard then opens at http://localhost:5173, and the API documentation is 
 cd backend
 uv run rozmarra --help
 uv run rozmarra data download    # Downloads the open datasets into data/raw (about 1 GB)
+uv run rozmarra data prepare     # Converts them into the standard Parquet tables
+uv run rozmarra ehr generate     # Creates synthetic health records as FHIR R4 Bundles
+uv run rozmarra demo build       # Saves the synthetic demo patients and their draft plans
 uv run rozmarra serve            # Starts the API at http://127.0.0.1:8000
 uv run pytest                    # Runs the backend tests
 ```
