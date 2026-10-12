@@ -14,7 +14,8 @@
     "idf_dar_total": 2.5,
     "idf_dar_category": "low",
     "dehydration_caution": true,
-    "plan_status": "draft"
+    "plan_status": "draft",
+    "donor_twin": "SH-2001-1"
   },
   {
     "patient_id": "SY-0002",
@@ -31,7 +32,8 @@
     "idf_dar_total": 11.0,
     "idf_dar_category": "high",
     "dehydration_caution": false,
-    "plan_status": "draft"
+    "plan_status": "draft",
+    "donor_twin": "SH-2001-0"
   },
   {
     "patient_id": "SY-0003",
@@ -48,7 +50,8 @@
     "idf_dar_total": 8.5,
     "idf_dar_category": "high",
     "dehydration_caution": false,
-    "plan_status": "draft"
+    "plan_status": "draft",
+    "donor_twin": "CG-012"
   },
   {
     "patient_id": "SY-0004",
@@ -65,6 +68,7 @@
     "idf_dar_total": 7.5,
     "idf_dar_category": "high",
     "dehydration_caution": false,
-    "plan_status": "draft"
+    "plan_status": "draft",
+    "donor_twin": "SH-2014-0"
   }
 ]

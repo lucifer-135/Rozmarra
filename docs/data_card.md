@@ -4,7 +4,7 @@ This data card describes the data that Rozmarra uses, how the team processes it,
 
 | Item | Details |
 |---|---|
-| Version | 0.1, written on 12 October 2026 |
+| Version | 0.2, updated on 12 October 2026 with the synthetic fasting days |
 | Data types | Open anonymised datasets and synthetic data. Rozmarra uses no real patient data from India. |
 | Related documents | `docs/model_card.md` describes the models. `docs/techstack.md`, Section 4, describes the data formats. |
 
@@ -153,7 +153,76 @@ On 12 October 2026, the team checked the codes for eGFR, the genotype, the gene 
 
 The four demo patients follow the summaries in `docs/prd.md`, Section 6.3. The details that the requirements leave open are team choices that give the IDF-DAR totals in `docs/techstack.md`, Section 9. For example, Kamla Devi's HbA1c of 7.2% and Abdul Rahman's eGFR of 82 mL/min/1.73 m² are team choices. Ramesh Patel's usual word for the fast is उपवास, which is common in Gujarat. The Ekadashi date for Kamla Devi (5 November 2026) is an example date, and the doctor should check the local calendar.
 
-## 7. Fasting templates
+## 7. Virtual patients and synthetic fasting days
+
+No open dataset contains CGM data from Indian festival fasts. The command `rozmarra synth cohort` therefore creates synthetic fasting days for virtual patients (FR-A3). Every file it writes is labelled `synthetic`. The command writes the files to `data/processed/synthetic` and a summary to `reports/synthetic_summary.json`.
+
+### 7.1 Virtual patients
+
+- **Size and groups.** The cohort has 500 virtual patients. `docs/techstack.md` names 300 as a starting size and asks the team to increase it when events are too few for reliable testing, so the team chose 500. The first 400 virtual patients form the training group, and the last 100 form the test group.
+- **Real patients and folds.** Each real person belongs to one of five folds through a fixed hash of the person's identifier, and two recording periods of the same person share a fold. Fold 0 (15 of the 89 fitted twins) is the test group.
+- **Donors.** Each virtual patient has a synthetic health record from the record generator and a donor twin. Training virtual patients take donors only from the training group, and test virtual patients only from the test group. A donor whose fasting level is close to the record's fasting glucose is more likely to be chosen. The weight follows a normal curve with a standard deviation of 15 mg/dL. The cohort used 62 training donors and 12 test donors.
+- **True and estimated parameters.** The estimated parameters are the donor's fitted mean. The true parameters, which generate the data, are drawn around the estimate. The draw keeps the correlation of the donor's uncertainty but limits each standard deviation to 0.3 on the log scale, because a wider draw pushed many virtual patients to the limits of the ranges.
+- **Sulfonylurea effect.** The team decided on 12 October 2026 that virtual patients and demo patients use the population value γ_su = 3 as the estimate. Their true value is drawn around it with a log-scale standard deviation of 0.5. The model card, Section 5.5, explains the reason.
+
+### 7.2 Timelines
+
+- Each virtual patient has 7 to 14 normal days, followed by three fasting episodes with two normal days between them and one normal day after the last episode.
+- The episodes come from the fasts that the patient keeps. Other fasting patterns fill the remaining places, so that every pattern has enough data. For this reason, the fasting patterns in the cohort do not follow the community probabilities in Section 6.1.
+- Each fasting episode follows its template (Section 8), with the patient's usual medicines (Plan A). For 35% of the episodes of patients who take a sulfonylurea or insulin, a plan B changes the medicines. A sulfonylurea dose is halved, or omitted in 20% of these cases. Premixed insulin falls to 70% of the dose and basal insulin to 80%.
+- Normal days follow the usual meal routine in the model card, Section 5.6.
+
+### 7.3 Variation that the prediction twin does not know
+
+| Setting | Starting value |
+|---|---|
+| Meal times | Vary with a standard deviation of 15 minutes |
+| Portion sizes | Vary with a log-scale standard deviation of 0.25, or 0.3 for the meal that breaks the fast |
+| Logged carbohydrates | Differ from the real amount with a log-scale standard deviation of 0.2 |
+| Unrecorded snacks | 15 g of fast-absorbing food on 30% of the normal days, in the late afternoon, not logged |
+| Glucose disturbance | A slowly varying disturbance with a standard deviation of 0.35 mg/dL per minute and a time constant of 60 minutes. It moves glucose by about 15 to 20 mg/dL, which is smaller than the twin's error on real data (about 30 mg/dL). |
+
+### 7.4 Sensor and smartwatch models
+
+| Signal | Model |
+|---|---|
+| CGM | The twin's glucose, delayed by 5 to 10 minutes, with correlated noise (standard deviation 6 to 10 mg/dL), a sensor bias (standard deviation 3%), 2% of readings missing at random and gaps of 30 to 120 minutes about every 3 days. Readings come every 5 minutes and stay between 40 and 400 mg/dL. |
+| Heart rate | The resting heart rate from the record, a daily rhythm of plus or minus 5 beats per minute, 5 beats per minute lower during sleep, 9 beats per minute for each MET above rest, and noise. When glucose falls below about 72 mg/dL, the heart rate rises by up to 15 to 20 beats per minute. This rise is multiplied by 0.6 above age 65, by 0.7 after 15 years of diabetes, by 0.4 with unawareness of low blood sugar and by 0.4 with a beta-blocker. During a fast without water, the heart rate rises by 0.4 beats per minute for each hour after the eighth hour, up to 4 beats per minute. |
+| Heart rate variability (RMSSD) | A personal level of 45 ms minus 0.5 ms for each year above age 30 (limited to 12 to 60 ms). It falls when low glucose, thirst or activity raise the heart rate, and it is 20% higher during sleep. |
+| Physical activity | A daily pattern for each occupation, about three short walks each day, and the activities of the fasting plan, such as garba (5 METs) and Taraweeh prayers (2.5 METs) |
+| Steps | Walking at 3 METs or more gives up to 125 steps each minute. Light work gives fewer steps. |
+| Sleep | Sleep runs from about 10:30 pm to 6:00 am, with random variation. It is split around suhoor during Ramadan and around sargi on Karva Chauth, and it starts later after garba. Sleep stages follow 90-minute cycles with more deep sleep early and more REM sleep late. |
+
+### 7.5 Comparison with real data
+
+| Measure | Synthetic normal days | Synthetic fasting windows | Real ShanghaiT2DM | Real CGMacros (Type 2 Diabetes) |
+|---|---|---|---|---|
+| Mean glucose | 184 mg/dL | 159 mg/dL | 140 mg/dL | 166 mg/dL |
+| Readings below 70 mg/dL | 0.39% | 1.51% | 2.34% | 0.15% |
+| Readings below 54 mg/dL | 0.07% | 0.26% | 0.77% | 0.02% |
+| Readings above 250 mg/dL | 11.5% | 5.1% | 3.8% | 6.9% |
+
+The synthetic mean glucose agrees with the average HbA1c of the records (8.0%) through the standard formula for estimated average glucose. The ShanghaiT2DM patients were mostly in hospital under intensive treatment, which explains their lower mean. Readings above 250 mg/dL on synthetic normal days are more common than in the real data. The median heart rate is 77 beats per minute, and the median number of steps is about 6,700 each day.
+
+### 7.6 Event rates
+
+These numbers come from `reports/synthetic_summary.json`.
+
+| Measure | Value |
+|---|---|
+| Fasting episodes | 1,500 |
+| Episodes with low blood sugar (below 70 mg/dL for at least 15 minutes) | 11.4% |
+| Usable E1 time points | 361,708, of which 0.94% have the label 1 |
+| E1 at 54 mg/dL, E1 120 minutes ahead and E3 | 0.25%, 1.75% and 0.90% of usable time points |
+| Meals that break a fast followed by E2 | 49.3% |
+
+Low blood sugar was more common in long fasts: 21.9% of Jain upvas episodes and 19.9% of Navratri episodes with one meal a day, against 4.7% of Navratri episodes with fruit and milk. It occurred in 19.7% of the episodes of patients on insulin, 8.6% of patients on a sulfonylurea without insulin, and 8.3% of patients on neither. The twin's sulfonylurea effect is modest, so sulfonylurea users without insulin had about the same rate as patients on neither medicine. Episodes with a plan B had low blood sugar in 9.7% of cases, against 11.8% with the usual medicines.
+
+### 7.7 Demo fasting days
+
+The command `rozmarra demo build` also creates a synthetic history of 14 normal days and the planned fast for each demo patient, in `data/demo/fasting_days`. Each demo twin is the training donor with the closest fasting level, with no random draw, and the fast uses the usual medicines. The team does not tune these days to make a story happen. The figure `reports/figures/demo_fasting_days.png` shows them.
+
+## 8. Fasting templates
 
 The fasting templates in `backend/src/rozmarra/fasting/templates.py` are starting points. The doctor can change every time, meal and water setting.
 
@@ -163,14 +232,14 @@ The fasting templates in `backend/src/rozmarra/fasting/templates.py` are startin
 - The meal sizes are starting values. For example, the meal that breaks the Karva Chauth fast has 110 g of carbohydrate, and the Navratri evening meal has 100 g.
 - For the "fasting hours" item of the IDF-DAR score, Rozmarra uses the longest time between two meals in the plan.
 
-## 8. Limitations
+## 9. Limitations
 
 - The real data comes from China and the United States, not from India.
 - The synthetic records and the synthetic fasting days reflect the team's modelling assumptions.
 - The carbohydrate values in ShanghaiT2DM are rough estimates from the meal text.
 - No doctor or pharmacist has reviewed the clinical content of this prototype.
 
-## 9. Citations
+## 10. Citations
 
 1. Zhao Q, et al. Chinese diabetes datasets for data-driven machine learning (ShanghaiT1DM and ShanghaiT2DM). Scientific Data, 2023;10:35.
 2. CGMacros: a scientific dataset for personalized nutrition and diet monitoring. PhysioNet, version 1.0.0, 2025.

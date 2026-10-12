@@ -110,13 +110,21 @@ With the median fitted parameters:
 
 ### 5.5 The sulfonylurea effect
 
-The real data identifies the sulfonylurea effect poorly. The 18 ShanghaiT2DM patients with a sulfonylurea mostly take gliclazide, often together with insulin, and many of them were in hospital. Their fitted effect is small: the median γ_su is 0.5, the lowest allowed value. With that value, halving the glimepiride dose on a day without food raises the lowest glucose by only about 2 mg/dL in a test case. With the population value of 3, it raises the lowest glucose by about 7 mg/dL. The team will decide how the virtual patients handle this effect, and the decision will appear in this card.
+The real data identifies the sulfonylurea effect poorly. The 18 ShanghaiT2DM patients with a sulfonylurea mostly take gliclazide, often together with insulin, and many of them were in hospital. Their fitted effect is small: the median γ_su is 0.5, the lowest allowed value. With that value, halving the glimepiride dose on a day without food raises the lowest glucose by only about 2 mg/dL in a test case. With the population value of 3, it raises the lowest glucose by about 7 mg/dL.
+
+**Decision of 12 October 2026.** Clinical studies show that sulfonylureas cause low blood sugar during fasting. Virtual patients and demo patients therefore use the population value γ_su = 3 as their estimate, and their true value is drawn around it with a log-scale standard deviation of 0.5. The evaluation will repeat the analysis with the weaker fitted values. Even with γ_su = 3, the twin's sulfonylurea effect is modest: in the synthetic cohort, sulfonylurea users without insulin had low blood sugar in about the same share of fasting episodes as patients on neither medicine (data card, Section 7.6).
 
 ### 5.6 Simulating a fasting plan
 
 A plan simulation starts one usual day before the plan, with the patient's usual medicines and a usual Indian meal routine of 50 g, 70 g, 20 g and 70 g of carbohydrate at 8:30 am, 1:30 pm, 5:00 pm and 8:30 pm. This routine is a starting value. The simulation draws 100 parameter samples to create the band from the 10th to the 90th percentile, and the first sample is always the most likely twin. The average-patient curve uses the median parameters of the fitted twins with the patient's own fasting glucose, body weight, kidney function, medicines and plan.
 
 On the team's Windows laptop, one Karva Chauth day with 100 samples, the average patient and the usual day before it took a median of 0.66 seconds over five runs. The target is less than 1 second.
+
+### 5.7 Virtual patients
+
+Each virtual patient joins a synthetic health record with the twin of a real donor patient (data card, Section 7.1). The "true" parameters generate the synthetic data, and the prediction models will use only the "estimated" parameters, because a real twin is only an estimate of the patient. The synthetic data also contains variation that the estimated twin does not know, such as unrecorded snacks and a slowly varying glucose disturbance. Results on simulated fasting days will still partly reflect the team's modelling assumptions.
+
+The Kalman filter (FR-B8, a Should item) is not built. Every forecast uses the trend-matched start.
 
 ## 6. The prediction models (planned)
 

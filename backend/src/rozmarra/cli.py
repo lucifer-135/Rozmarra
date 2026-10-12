@@ -128,11 +128,22 @@ def twin_fit(
 
 @synth_app.command("cohort")
 def synth_cohort(
-    patients: int = typer.Option(300, help="The number of virtual patients to create."),
+    patients: int = typer.Option(500, help="The number of virtual patients to create."),
     seed: int = typer.Option(2026, help="The random seed, so that the cohort is reproducible."),
+    workers: int = typer.Option(6, help="The number of patient groups to simulate at once."),
 ) -> None:
-    """Create synthetic virtual patients with fasting days and wearable signals."""
-    _not_built("synth cohort")
+    """Create synthetic virtual patients with normal days, fasting days, wearables and labels."""
+    from rozmarra.synth.cohort import OUT_DIR, build_cohort
+
+    summary = build_cohort(patients, seed, workers=workers)
+    low = summary["episodes_with_low_blood_sugar"]
+    typer.echo(
+        f"Rozmarra created {summary['virtual_patients']} synthetic virtual patients with "
+        f"{summary['fasting_episodes']} fasting episodes. Low blood sugar occurred in "
+        f"{low['share_with_low_blood_sugar']:.0%} of the episodes, and "
+        f"{summary['e2_share_with_label_1']:.0%} of the meals that break a fast were followed by "
+        f"high blood sugar. The files are in {OUT_DIR}."
+    )
 
 
 @model_app.command("train")
