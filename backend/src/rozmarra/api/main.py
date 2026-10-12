@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from rozmarra import __version__
-from rozmarra.api.routes import health
+from rozmarra.api.routes import health, model_card, patients
 from rozmarra.config import DASHBOARD_ORIGINS
 
 
@@ -32,6 +32,8 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     app.include_router(health.router, prefix="/api")
+    app.include_router(patients.router, prefix="/api")
+    app.include_router(model_card.router, prefix="/api")
     return app
 
 

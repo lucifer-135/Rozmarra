@@ -199,6 +199,7 @@ class PlanSimulation:
     p90: np.ndarray
     average: np.ndarray | None  # The average patient with the same plan
     samples: int
+    curves: np.ndarray | None = None  # Every sample curve, with the shape (samples, minutes)
 
     def time_at(self, minute: int) -> datetime:
         return self.start + timedelta(minutes=int(minute))
@@ -257,6 +258,7 @@ def simulate_plan(
     samples: int = BAND_SAMPLES,
     average: TwinProfile | None = None,
     seed: int = 2026,
+    keep_curves: bool = False,
 ) -> PlanSimulation:
     """Simulate a fasting plan with an uncertainty band and, if given, the average patient."""
     t0, minutes, meals, doses, mets, morning = plan_timeline(plan, list(usual_doses))
@@ -287,4 +289,5 @@ def simulate_plan(
         p90=band[90],
         average=window[samples] if average is not None else None,
         samples=samples,
+        curves=window[:samples] if keep_curves else None,
     )

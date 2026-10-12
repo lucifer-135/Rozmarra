@@ -1,0 +1,86 @@
+{
+  "source": "synthetic",
+  "virtual_patients": 500,
+  "by_group": {
+    "training": 400,
+    "test": 100
+  },
+  "fasting_episodes": 1500,
+  "e1_time_points_usable": 362088,
+  "e1_share_of_usable_points_with_label_1": 0.0086,
+  "e1_120_share": 0.0161,
+  "e1_54_share": 0.0022,
+  "e3_share": 0.0098,
+  "e2_breaking_meals": 1500,
+  "e2_share_with_label_1": 0.5233,
+  "episodes_with_low_blood_sugar": {
+    "episodes": 1500,
+    "share_with_low_blood_sugar": 0.108
+  },
+  "by_template": {
+    "chhath": {
+      "episodes": 143,
+      "share_with_low_blood_sugar": 0.119
+    },
+    "custom": {
+      "episodes": 13,
+      "share_with_low_blood_sugar": 0.077
+    },
+    "ekadashi_phalahar": {
+      "episodes": 210,
+      "share_with_low_blood_sugar": 0.086
+    },
+    "jain_ekasana": {
+      "episodes": 113,
+      "share_with_low_blood_sugar": 0.106
+    },
+    "jain_upvas": {
+      "episodes": 114,
+      "share_with_low_blood_sugar": 0.211
+    },
+    "karva_chauth": {
+      "episodes": 208,
+      "share_with_low_blood_sugar": 0.072
+    },
+    "navratri_one_meal": {
+      "episodes": 191,
+      "share_with_low_blood_sugar": 0.194
+    },
+    "navratri_phalahar": {
+      "episodes": 215,
+      "share_with_low_blood_sugar": 0.047
+    },
+    "nirjala_ekadashi": {
+      "episodes": 111,
+      "share_with_low_blood_sugar": 0.126
+    },
+    "ramadan": {
+      "episodes": 182,
+      "share_with_low_blood_sugar": 0.077
+    }
+  },
+  "by_medicine": {
+    "insulin": {
+      "episodes": 390,
+      "share_with_low_blood_sugar": 0.197
+    },
+    "neither": {
+      "episodes": 528,
+      "share_with_low_blood_sugar": 0.083
+    },
+    "sulfonylurea without insulin": {
+      "episodes": 582,
+      "share_with_low_blood_sugar": 0.07
+    }
+  },
+  "by_plan_change": {
+    "usual": {
+      "episodes": 1190,
+      "share_with_low_blood_sugar": 0.111
+    },
+    "changed": {
+      "episodes": 310,
+      "share_with_low_blood_sugar": 0.097
+    }
+  }
+}

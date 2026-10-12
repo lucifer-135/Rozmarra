@@ -1,11 +1,11 @@
 # Rozmarra: Model Card
 
-This model card describes how Rozmarra makes its estimates, which assumptions it uses, and how the team tests it. Section 5 reports the fit of the physiology twin on real open data. The team will add the results of the prediction models after the evaluation runs.
+This model card describes how Rozmarra makes its estimates, which assumptions it uses, and how the team tests it. Section 5 reports the fit of the physiology twin on real open data, and Section 6 reports the results of the prediction models.
 
 | Item | Details |
 |---|---|
-| Version | 0.2, updated on 12 October 2026 with the physiology twin |
-| Status | The clinical score, the safety rules and the physiology twin are built. The prediction models are not built yet. |
+| Version | 0.3, updated on 13 October 2026 with the prediction models |
+| Status | The clinical score, the safety rules, the physiology twin and the prediction models are built. |
 | Intended use | A research prototype that supports a doctor who plans a religious fast with a patient who has Type 2 Diabetes. It is not a certified medical device, and it must not be used for real patients. |
 | Clinical review | No doctor or pharmacist has reviewed the clinical content of this prototype. |
 
@@ -126,16 +126,114 @@ Each virtual patient joins a synthetic health record with the twin of a real don
 
 The Kalman filter (FR-B8, a Should item) is not built. Every forecast uses the trend-matched start.
 
-## 6. The prediction models (planned)
+## 6. The prediction models
 
-The team will build the prediction models on 16 October 2026, as `docs/techstack.md`, Sections 6 to 8, describes. The team will then add these items to this card:
+The results in this section come from `reports/metrics.json`, which the command `rozmarra model evaluate` wrote on 13 October 2026. The synthetic results partly reflect the team's modelling assumptions, because the same kind of twin that generated the synthetic data also provides some of the features.
 
-- the event rates in the synthetic fasting days;
-- the results on real patients and on simulated fasting days, with 95% confidence intervals, baselines and the ablation study;
-- the results for low blood sugar at 70 mg/dL and at 54 mg/dL, at two alert thresholds; and
-- the subgroup results.
+### 6.1 Design
 
-The team will report the measured values honestly, even if they fall short of the targets in `docs/prd.md`, Section 15.3.
+- **Targets.** E1 is low blood sugar within 60 minutes (Must), E1 within 120 minutes and E3 is glucose above 300 mg/dL within 60 minutes (both Should), and E2 is high blood sugar within 4 hours after the meal that breaks the fast, predicted 2 hours before the meal (Must). F1 is the whole-fast forecast (Must, Section 6.5).
+- **Features.** The features cover CGM (the current value, changes, slope, lowest value, variability and missing readings), CGM history over 7 and 14 days, twin forecasts from the trend-matched start, wearables (heart rate against its usual level at that time of day, heart rate variability, steps, METs and sleep), the fasting context and the health record. The twin forecasts use only the estimated twin and the logged meals and doses.
+- **Training.** Each model is a LightGBM classifier with 300 trees and a learning rate of 0.05. A comparison on the validation patients of the training group (never the test group) showed better results than the starting settings with stronger regularisation (15 leaves, at least 200 time points in each leaf, 60% of the features for each tree and an L2 penalty of 5) and with one extra feature, the twin's lowest forecast value in the next 60 minutes. On real data, the model leaves out the health record, because the real records are sparse and constant for each patient, and the same comparison showed better results without them.
+- **Calibration and alerts.** Isotonic regression on the validation patients calibrates the chances. One millionth of the raw score breaks ties between time points in the same calibration step. Alert threshold A detects 80% of the positive time points on the validation patients, and threshold B is the point where sensitivity equals specificity. An alert is not repeated within 30 minutes unless the chance rises by 10 percentage points (FR-C7).
+- **Risk words.** For the plan forecasts, a chance below 20% is Low, 20% to 50% is Moderate, and above 50% is High. Low blood sugar within 60 minutes is rare, so threshold A is a small chance (about 3.5%). For the 60-minute alert, the words are therefore tied to the alert level: below threshold A is Low, from threshold A to 20% is Moderate, and 20% or more is High. A clinical expert should review both sets of words.
+- **Data completeness.** A prediction needs a current CGM reading and at least 70% of the expected readings in the last 2 hours. Otherwise, the dashboard shows the message in FR-C8.
+- **Reasons.** The SHAP TreeExplainer finds the features that raised the chance the most. Each becomes a sentence from a fixed English and Hindi template, with at most one sentence from each group of similar features, such as the twin forecasts.
+
+### 6.2 How the team tested the models
+
+- **Synthetic fasting days.** The models learned on the 400 training virtual patients and were tested on the 100 test virtual patients, whose donor twins come only from the real test group.
+- **Real normal days.** Five-fold cross-validation grouped by person, on the 89 real patients with a fitted twin. Each fold was tested only on the held-out days of its patients, on which the twins were not fitted. The real data contains no fasting days.
+- **Intervals.** 95% intervals come from 1,000 bootstrap samples drawn by patient for the main results, and 200 for the baselines and the ablation study.
+
+### 6.3 Low blood sugar 60 minutes ahead (E1) on synthetic fasting days
+
+The test group had 71,141 usable time points from 100 patients, with 717 positive time points and 116 low blood sugar events.
+
+| Measure | Result | Target in docs/prd.md |
+|---|---|---|
+| AUROC | 0.990 (95% interval 0.984 to 0.994) | 0.85 or higher: met |
+| AUPRC | 0.472 (0.372 to 0.590) | Not set |
+| Brier score | 0.0069 (0.004 to 0.011) | Reported |
+| Events detected in time at threshold A | 81% (75% to 91%), 94 of 116 events | At least 80%: met |
+| False alerts at threshold A | 2.5 per patient per fasting day (1.6 to 3.6) | At most 2: not met |
+| Median warning time at threshold A | 30 minutes | At least 30 minutes: met |
+| Threshold B | 85% of events detected, 4.7 false alerts per patient per fasting day, median warning 25 minutes | Reported |
+
+**At 54 mg/dL.** Against low blood sugar below 54 mg/dL, the same model reached an AUROC of 0.987 (0.979 to 0.995) and an AUPRC of 0.189 (0.100 to 0.342). At threshold A, it detected 43 of 54 severe events (80%) with a median warning of 20 minutes.
+
+**Baselines and ablation (AUROC and AUPRC).**
+
+| Model | AUROC | AUPRC |
+|---|---|---|
+| Full model (all streams) | 0.990 | 0.472 |
+| Twin alone | 0.989 | 0.554 (0.425 to 0.658) |
+| Model with CGM data only | 0.979 | 0.386 |
+| CGM and wearables | 0.977 | 0.381 |
+| Last glucose value | 0.944 | 0.279 |
+| Straight-line trend | 0.921 | 0.198 |
+| Health record alone | 0.772 | 0.028 |
+| IDF-DAR score alone | 0.732 | 0.024 |
+| Wearables alone | 0.615 | 0.056 |
+
+The full model has a higher AUPRC than every model that uses a single data stream, which meets the target in `docs/prd.md`, Section 15.3. On the test patients, however, the twin alone reached a higher AUPRC than the full model, and the two intervals overlap. On the validation patients, the full model was slightly better than the twin alone. Because the twin also generated the synthetic data, the strength of the twin on synthetic data is partly circular.
+
+**Subgroups (threshold A).** The share of events detected in time was 82% for patients on insulin (94 events), 75% for patients on a sulfonylurea without insulin (20 events), 73% for patients aged 65 or over (22 events), 77% for women and 87% for men. Patients on insulin had 4.8 false alerts per patient per fasting day. No test patient had an eGFR below 60, so that subgroup has no result.
+
+**Should targets.** E1 120 minutes ahead reached an AUROC of 0.986 and an AUPRC of 0.588, with 87% of events detected in time. E3 reached an AUROC of 0.995 and an AUPRC of 0.619, with 61% of events detected in time.
+
+### 6.4 High blood sugar after the fast (E2) on synthetic fasting days
+
+The test group had 288 meals that break a fast, and 149 of them were followed by E2. E2 is common because the meals that break a fast are large and often sweet.
+
+| Measure | Result |
+|---|---|
+| AUROC | 0.958 (0.931 to 0.979). The target is 0.80 or higher: met. |
+| AUPRC | 0.954 (0.916 to 0.981) |
+| Threshold A | Sensitivity 74%, specificity 96% |
+| Threshold B | Sensitivity 89%, specificity 91% |
+| Twin peak alone | AUROC 0.970 |
+| Planned carbohydrates alone | AUROC 0.706 |
+| Glucose 2 hours before the meal | AUROC 0.673 |
+
+As for E1, the twin's predicted peak alone did slightly better than the full model on synthetic data. The check with real meals in `docs/prd.md`, Section 15.3, is not done.
+
+### 6.5 The whole-fast forecast (F1)
+
+Before the fast, the estimated twin simulates the plan with 30 parameter samples. A logistic regression combines the twin's view with the CGM history of the 14 days before the fast and the health record (`backend/src/rozmarra/ml/episodes.py`). It was tested on the 300 fasting episodes of the 100 test virtual patients.
+
+| Forecast | AUROC | AUPRC | Twin alone (AUROC) |
+|---|---|---|---|
+| Low blood sugar during the fast (36 episodes with an event) | 0.973 (0.945 to 0.992) | 0.877 | 0.815 |
+| High blood sugar after the fast (155 episodes with an event) | 0.972 (0.954 to 0.986) | 0.975 | 0.942 |
+
+The IDF-DAR score alone reached an AUROC of 0.750 for low blood sugar during the fast. The twin's predicted peak is capped at 600 mg/dL, because a few twins with extreme fitted parameters predicted peaks above 1,000 mg/dL, which is not physiological.
+
+### 6.6 Low blood sugar 60 minutes ahead (E1) on real normal days
+
+The held-out days had 30,896 usable time points from 89 patients, with 337 positive time points.
+
+| Measure | Result | Target |
+|---|---|---|
+| AUROC | 0.943 (0.919 to 0.964) | 0.80 or higher: met |
+| AUPRC | 0.247 (0.121 to 0.382) | Not set |
+| Brier score | 0.0094 | Reported |
+| ShanghaiT2DM at threshold A | 75 of 77 events detected in time, median warning 45 minutes, 5.6 false alerts per patient per day | Reported |
+| CGMacros at threshold A | 3 of 3 events detected in time, median warning 45 minutes, 0.5 false alerts per patient per day | Reported |
+| At 54 mg/dL | AUROC 0.935 (0.839 to 0.984), 28 positive time points | Reported |
+
+On real data, the model with CGM data only reached a higher AUPRC (0.311) than the full model (0.247), and the model with CGM and wearables reached 0.278. The real data therefore does not show that combining the data streams adds value. Only the 14 CGMacros participants have smartwatch data, and they had very few low readings. The twin alone reached an AUROC of 0.928 and an AUPRC of 0.232, and the last glucose value reached 0.917 and 0.144.
+
+### 6.7 Sensitivity analysis with the weaker sulfonylurea effect
+
+The command `rozmarra model sensitivity` repeated the synthetic cohort and the E1 evaluation with the virtual patients' sulfonylurea effect centred on γ_su = 0.5, the median fitted on real data. Low blood sugar then occurred in 10.8% of the fasting episodes (11.4% in the main cohort), and in 7.0% of the episodes of sulfonylurea users without insulin (8.6% in the main cohort). The E1 model reached an AUROC of 0.989 (0.984 to 0.994) and an AUPRC of 0.477 (0.381 to 0.579), against 0.990 and 0.472 in the main analysis. The results therefore do not depend on the size of the sulfonylurea effect, which also shows that the twin's sulfonylurea effect is modest in both cohorts.
+
+### 6.8 What these results mean
+
+- The real-data results describe normal days in China and the United States, not fasting days in India.
+- The synthetic results depend on the team's modelling assumptions. In particular, the twin generated the synthetic data, so twin features look stronger on synthetic data than they may be in real life.
+- The false alert rate at threshold A is above the target of 2 per patient per fasting day on synthetic data, and much higher on the 15-minute ShanghaiT2DM data. A clinical team would need to choose an alert level that balances missed events and false alerts.
+- The Parkes error grid, the Kalman filter and the LSTM comparison are not done.
 
 ## 7. Ideas from other projects
 

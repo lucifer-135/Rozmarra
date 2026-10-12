@@ -72,7 +72,9 @@ def choose_donor(
     return twins[int(rng.choice(len(twins), p=weights / weights.sum()))]
 
 
-def donor_profile(record: PatientRecord, donor: dict, day: date) -> TwinProfile:
+def donor_profile(
+    record: PatientRecord, donor: dict, day: date, gamma_su_centre: float = CENTRES["gamma_su"]
+) -> TwinProfile:
     """The estimated twin of a synthetic patient: the donor's fitted parameters and uncertainty."""
     names = FITTED_NAMES
     mean = np.log([CENTRES[n] for n in names])
@@ -87,7 +89,7 @@ def donor_profile(record: PatientRecord, donor: dict, day: date) -> TwinProfile:
                 if other in donor_names and other != "gamma_su":
                     cov[i, j] = donor_cov[a, donor_names.index(other)]
     g = names.index("gamma_su")
-    mean[g] = np.log(CENTRES["gamma_su"])
+    mean[g] = np.log(gamma_su_centre)
     cov[g, :] = cov[:, g] = 0.0
     cov[g, g] = GAMMA_SU_LOG_SD**2
     return TwinProfile(
@@ -127,10 +129,14 @@ def true_parameters(profile: TwinProfile, rng: np.random.Generator) -> dict[str,
 
 
 def virtual_twin(
-    record: PatientRecord, twins: list[dict], day: date, rng: np.random.Generator
+    record: PatientRecord,
+    twins: list[dict],
+    day: date,
+    rng: np.random.Generator,
+    gamma_su_centre: float = CENTRES["gamma_su"],
 ) -> VirtualTwin:
     donor = choose_donor(record.fasting_glucose_mg_dl, twins, rng)
-    profile = donor_profile(record, donor, day)
+    profile = donor_profile(record, donor, day, gamma_su_centre)
     return VirtualTwin(record, donor["patient_id"], profile, true_parameters(profile, rng))
 
 

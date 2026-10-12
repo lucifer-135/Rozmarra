@@ -147,15 +147,67 @@ def synth_cohort(
 
 
 @model_app.command("train")
-def model_train() -> None:
-    """Train the LightGBM models for the adverse events."""
-    _not_built("model train")
+def model_train(
+    workers: int = typer.Option(6, help="The number of patient groups to process at once."),
+) -> None:
+    """Build the feature tables for the models: time points, meals and fasting episodes."""
+    import warnings
+
+    from rozmarra.ml.datasets import FEATURE_DIR, build_feature_tables
+    from rozmarra.ml.episodes import build_episode_table
+
+    warnings.filterwarnings("ignore", category=RuntimeWarning)
+    counts = build_feature_tables(workers=workers)
+    episodes = build_episode_table(workers=workers)
+    typer.echo(
+        f"Rozmarra built {counts['e1_synthetic']:,} synthetic time points, "
+        f"{counts['e2_synthetic']:,} meals that break a fast, {counts['e1_real']:,} real time "
+        f"points and {len(episodes):,} fasting episodes in {FEATURE_DIR}."
+    )
 
 
 @model_app.command("evaluate")
 def model_evaluate() -> None:
-    """Evaluate the models and write reports/metrics.json and the figures."""
-    _not_built("model evaluate")
+    """Train the models on the training group, test them, and write reports/metrics.json."""
+    import json
+    import warnings
+
+    from rozmarra.config import REPORTS_DIR
+    from rozmarra.ml.episodes import train_episode_models
+    from rozmarra.ml.evaluate import run_all
+    from rozmarra.ml.figures import write_figures
+
+    warnings.filterwarnings("ignore")
+    metrics = run_all()
+    metrics["synthetic"]["f1"] = train_episode_models()
+    (REPORTS_DIR / "metrics.json").write_text(json.dumps(metrics, indent=1), encoding="utf-8")
+    write_figures(metrics)
+    e1 = metrics["synthetic"]["e1"]
+    real = metrics["real"]["e1"]["all"]
+    typer.echo(
+        f"Synthetic fasting days: E1 AUROC {e1['auroc']}, AUPRC {e1['auprc']}. "
+        f"Real normal days: E1 AUROC {real['auroc']}, AUPRC {real['auprc']}. "
+        f"The full results are in {REPORTS_DIR / 'metrics.json'}."
+    )
+
+
+@model_app.command("sensitivity")
+def model_sensitivity(
+    workers: int = typer.Option(6, help="The number of patient groups to process at once."),
+) -> None:
+    """Repeat the E1 evaluation with the weaker sulfonylurea effect fitted on real data."""
+    import warnings
+
+    from rozmarra.ml.sensitivity import WEAK_GAMMA_SU, run
+
+    warnings.filterwarnings("ignore")
+    result = run(workers=workers)
+    low = result["episodes_with_low_blood_sugar"]["share_with_low_blood_sugar"]
+    typer.echo(
+        f"With the sulfonylurea effect centred on {WEAK_GAMMA_SU}, low blood sugar occurred in "
+        f"{low:.0%} of the fasting episodes. The E1 model reached an AUROC of "
+        f"{result['e1']['auroc']} and an AUPRC of {result['e1']['auprc']} on the test group."
+    )
 
 
 @ehr_app.command("generate")

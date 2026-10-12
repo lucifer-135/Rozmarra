@@ -116,13 +116,19 @@ def point_labels(
     horizon_min: int = 60,
     threshold: float = 70.0,
     below: bool = True,
+    step_min: int = STEP_MIN,
 ) -> pd.DataFrame:
-    """Labels for E1 (below=True) or E3 (below=False) at every 5 minutes inside the windows."""
+    """Labels for E1 (below=True) or E3 (below=False) at every step inside the windows.
+
+    The step is 5 minutes by default. For 15-minute CGM data, a 15-minute step avoids
+    three identical time points for each reading.
+    """
     events = find_events(minutes, values, interval_min, threshold, below, None)
     starts = np.array([e.start for e in events])
     rows = []
     for window_start, window_end in windows:
-        for t in range(int(window_start), int(window_end) + 1, STEP_MIN):
+        first = int(np.ceil(window_start / step_min) * step_min)
+        for t in range(first, int(window_end) + 1, step_min):
             latest = np.searchsorted(minutes, t, side="right") - 1
             if latest < 0 or t - minutes[latest] > interval_min:
                 continue

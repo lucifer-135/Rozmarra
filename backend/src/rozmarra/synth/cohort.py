@@ -630,7 +630,9 @@ def process_chunk(job: tuple[int, list[Timeline], Path]) -> int:
 # --- The whole cohort --------------------------------------------------------------------
 
 
-def make_virtual_twins(count: int, seed: int) -> list[tuple[VirtualTwin, str]]:
+def make_virtual_twins(
+    count: int, seed: int, gamma_su_centre: float = 3.0
+) -> list[tuple[VirtualTwin, str]]:
     twins = load_twins()
     if not twins:
         raise FileNotFoundError("The fitted twins are missing. Please run 'rozmarra twin fit'.")
@@ -642,14 +644,20 @@ def make_virtual_twins(count: int, seed: int) -> list[tuple[VirtualTwin, str]]:
     for i, record in enumerate(records):
         group = "test" if i >= count - n_test else "training"
         donors = test if group == "test" else training
-        result.append((virtual_twin(record, donors, record.record_date, rng), group))
+        twin = virtual_twin(record, donors, record.record_date, rng, gamma_su_centre)
+        result.append((twin, group))
     return result
 
 
 def build_cohort(
-    count: int = 500, seed: int = RANDOM_SEED, workers: int = 6, out_dir: Path = OUT_DIR
+    count: int = 500,
+    seed: int = RANDOM_SEED,
+    workers: int = 6,
+    out_dir: Path = OUT_DIR,
+    gamma_su_centre: float = 3.0,
+    summary_name: str = "synthetic_summary.json",
 ) -> dict:
-    pairs = make_virtual_twins(count, seed)
+    pairs = make_virtual_twins(count, seed, gamma_su_centre)
     timelines = [
         build_timeline(twin, group, seed * 1000 + i) for i, (twin, group) in enumerate(pairs)
     ]
@@ -681,9 +689,7 @@ def build_cohort(
     }
     summary = summarise(tables)
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
-    (REPORTS_DIR / "synthetic_summary.json").write_text(
-        json.dumps(summary, indent=2), encoding="utf-8"
-    )
+    (REPORTS_DIR / summary_name).write_text(json.dumps(summary, indent=2), encoding="utf-8")
     return summary
 
 

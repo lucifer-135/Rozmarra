@@ -20,6 +20,17 @@ def test_version_option_prints_the_package_version():
 
 
 def test_a_command_that_is_not_built_says_so_and_fails():
-    result = runner.invoke(app, ["model", "train"])
+    # A small separate app, so that the test never runs a real and possibly slow command.
+    import typer
+
+    from rozmarra.cli import _not_built
+
+    demo = typer.Typer()
+
+    @demo.command()
+    def placeholder() -> None:
+        _not_built("placeholder")
+
+    result = runner.invoke(demo, [])
     assert result.exit_code == 1
     assert "not built yet" in result.output

@@ -6,7 +6,7 @@
     "test": 100
   },
   "fasting_episodes": 1500,
-  "e1_time_points_usable": 361708,
+  "e1_time_points_usable": 361480,
   "e1_share_of_usable_points_with_label_1": 0.0094,
   "e1_120_share": 0.0175,
   "e1_54_share": 0.0025,

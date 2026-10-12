@@ -193,7 +193,21 @@ uv run pytest                    # Runs the backend tests
 
 ## 9. Results
 
-No results exist yet. The team will test Rozmarra in two parts: on real patients from ShanghaiT2DM and CGMacros whose data was not used for training, and on simulated fasting days for virtual patients who were not used for training. The team will report the measured values here, with their confidence intervals and their limits, even if they fall short of the targets.
+The team tested Rozmarra in two parts. No open dataset contains CGM data from Indian festival fasts, so the fasting results come from simulated fasting days. The full results, with all intervals and limits, are in [`docs/model_card.md`](docs/model_card.md), Sections 5 and 6.
+
+| Test | Result |
+|---|---|
+| Twin fit on 89 real patients | The median error in 12-hour windows on held-out days was 32.5 mg/dL. The median 2-hour forecast error was 30.2 mg/dL, against 38.8 mg/dL for the last glucose value. |
+| Low blood sugar 60 minutes ahead, real normal days (held-out days) | AUROC 0.943 (95% interval 0.919 to 0.964). The target was 0.80 or higher. |
+| Low blood sugar 60 minutes ahead, synthetic fasting days (100 test virtual patients) | AUROC 0.990 (0.984 to 0.994). 81% of events were detected in time, with a median warning of 30 minutes. There were 2.5 false alerts per patient per fasting day, which is above the target of 2. |
+| High blood sugar after the fast, synthetic fasting days | AUROC 0.958 (0.931 to 0.979) |
+| Whole-fast forecast of low blood sugar, before the fast | AUROC 0.973 (0.945 to 0.992), against 0.815 for the twin alone and 0.750 for the IDF-DAR score alone |
+
+These results have important limits:
+
+- The real data comes from normal days in China and the United States, not from fasting days in India.
+- On synthetic data, the twin alone reached a higher AUPRC than the full model. The twin also generated the synthetic data, so this strength is partly circular.
+- On real data, the model with CGM data only did better than the model that combines all data streams.
 
 ## 10. Safety, ethics and limitations
 
