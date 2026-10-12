@@ -1,0 +1,53 @@
+[project]
+name = "rozmarra"
+version = "0.1.0"
+description = "Rozmarra is a digital twin that helps doctors keep people with Type 2 Diabetes safe during religious fasts in India."
+license = "Apache-2.0"
+requires-python = ">=3.12,<3.13"
+authors = [{ name = "The Rozmarra team" }]
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.7",
+    "typer>=0.12",
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "pyarrow>=16",
+    "scipy>=1.13",
+    "scikit-learn>=1.5",
+    "lightgbm>=4.3",
+    "shap>=0.46",
+    "jinja2>=3.1",
+    "pyyaml>=6.0",
+    "openpyxl>=3.1",
+    "matplotlib>=3.9",
+]
+
+[project.scripts]
+rozmarra = "rozmarra.cli:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rozmarra"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+# Typer and FastAPI declare options with function calls in argument defaults.
+ignore = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

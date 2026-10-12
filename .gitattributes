@@ -1,0 +1,8 @@
+# Git stores text files with Unix line endings and converts them on checkout.
+* text=auto
+
+# Shell scripts must keep Unix line endings so that they run on macOS and Linux.
+*.sh text eol=lf
+
+# PowerShell scripts keep Windows line endings.
+*.ps1 text eol=crlf

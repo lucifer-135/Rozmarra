@@ -1,0 +1,41 @@
+# Private planning file. It must never reach the public repository.
+handoff.md
+
+# Downloaded and processed datasets. Download scripts fetch them again.
+data/raw/
+data/processed/
+*.zip
+
+# Secrets and local settings
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+
+# Node.js and the dashboard build
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Local databases for plan approvals in the demo
+*.sqlite
+*.sqlite3
+*.db
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

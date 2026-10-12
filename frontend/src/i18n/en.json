@@ -1,0 +1,37 @@
+{
+  "app": {
+    "name": "Rozmarra",
+    "subtitle": "Rozmarra helps doctors plan safer fasts for people with Type 2 Diabetes in India.",
+    "language": "Language of the dashboard",
+    "languageEnglish": "English",
+    "languageHindi": "हिन्दी"
+  },
+  "notice": {
+    "clinical": "Rozmarra supports clinical decisions. It does not replace the judgement of a doctor.",
+    "prototype": "Rozmarra is a research prototype. It is not a certified medical device.",
+    "synthetic": "Synthetic data",
+    "syntheticDetail": "All patients in this prototype are synthetic. They do not represent real people."
+  },
+  "placeholder": {
+    "title": "The dashboard is being built",
+    "body": "This page is a placeholder. The screens in the list below will appear here as the team builds them.",
+    "screensTitle": "Planned screens",
+    "screens": {
+      "patients": "Patients who plan to fast",
+      "virtualPatient": "Virtual patient",
+      "simulator": "Test a fasting plan",
+      "monitor": "Live fasting monitor",
+      "plan": "Patient fasting plan",
+      "about": "How Rozmarra makes predictions"
+    }
+  },
+  "service": {
+    "title": "Connection to the Rozmarra service",
+    "statusChecking": "Checking",
+    "statusOnline": "Connected",
+    "statusOffline": "Not connected",
+    "checking": "The dashboard is checking the connection to the Rozmarra service.",
+    "online": "The Rozmarra service is running. The service version is {{version}}.",
+    "offline": "The dashboard cannot reach the Rozmarra service. Please start the service with the command \"uv run rozmarra serve\" in the backend folder."
+  }
+}
