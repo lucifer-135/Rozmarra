@@ -50,5 +50,10 @@ select = ["E", "F", "I", "B", "UP"]
 # Typer and FastAPI declare options with function calls in argument defaults.
 ignore = ["B008"]
 
+[tool.ruff.lint.per-file-ignores]
+# The twin uses the symbol I for plasma insulin, as docs/techstack.md does.
+"src/rozmarra/twin/*" = ["E741"]
+"tests/test_twin.py" = ["E741"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
