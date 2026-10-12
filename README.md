@@ -16,8 +16,13 @@ Rozmarra (रोज़मर्रा) is a Hindi and Urdu word that means "ever
 |---|---|
 | Team name | NOT_SOMEONE_IMPORTANT |
 | College or incubator | The team will add this information. |
-| Members and roles | The team will add this information. |
 | Challenge | Digital Twin Challenge 2026 by Happiest Health, part of the Reimagining and Reforming Healthcare in India Summit 2026 |
+
+| Member | Role | Main responsibilities |
+|---|---|---|
+| Shivansh Gautam | Team leader; lead for the digital twin and the prediction models | Shivansh leads the project and the overall design. Shivansh builds the physiology twin, trains and evaluates the prediction models, and presents the demonstration video. |
+| Aman Soni | Lead for the data and the application | Aman builds the data loaders for the open datasets, the synthetic health records and fasting days, the API and the doctor dashboard. |
+| Divy Sharma | Lead for documentation, testing and the presentation | Divy prepares the fasting templates, the architecture diagram, the presentation, the model card and the data card. Divy also tests the demo on a fresh copy of the repository. |
 
 ## 2. Demonstration video
 
