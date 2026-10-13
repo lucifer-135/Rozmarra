@@ -1,0 +1,12 @@
+{# A short version of the plan for SMS or WhatsApp. This is a concept: Rozmarra sends no messages. #}
+{{ patient_name }}: {{ date }} को आपका {{ word }} {{ fast_start }} शुरू होगा और {{ fast_end }} खत्म होगा।
+कृपया {{ checks }} अपनी शुगर की जाँच करें।
+अगर शुगर 70 mg/dL से कम या 300 mg/dL से ज़्यादा हो, या आपकी तबीयत ठीक न लगे, तो कृपया तुरंत {{ word }} खोल दें।
+{% for m in medicines %}
+{% if m.kind == "removed" %}
+कृपया {{ m.time }} {{ m.name }} {{ m.dose }} न लें।
+{% elif m.kind != "same" %}
+कृपया {{ m.time }} {{ m.name }} {{ m.dose }} लें।
+{% endif %}
+{% endfor %}
+Dr {{ doctor }}

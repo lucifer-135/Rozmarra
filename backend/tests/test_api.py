@@ -108,6 +108,14 @@ def test_a_plan_must_be_approved_before_printing():
     statuses = {r["patient_id"]: r["plan_status"] for r in client.get("/api/patients").json()}
     assert statuses["SY-0003"] == "approved"
     assert statuses["SY-0001"] == "not_started"
+
+    document = client.get("/api/patients/SY-0003/plans/plan-a/document", params={"lang": "hi"})
+    assert document.status_code == 200 and "text/html" in document.headers["content-type"]
+    assert "रोज़ा" in document.text and "Dr Ananya Rao" in document.text
+    message = client.get("/api/patients/SY-0003/plans/plan-a/document", params={"format": "text"})
+    assert message.text.startswith("Abdul Rahman: Your fast on 20 February 2027")
+    wrong = client.get("/api/patients/SY-0003/plans/plan-a/document", params={"lang": "fr"})
+    assert wrong.status_code == 422
     empty = client.post(
         "/api/patients/SY-0003/plans/plan-a/approve", json={"doctor_name": " Dr ", "plan": plan}
     )

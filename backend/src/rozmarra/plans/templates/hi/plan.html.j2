@@ -1,0 +1,65 @@
+{# The patient fasting plan in Hindi. Every sentence below is fixed. A native Hindi speaker
+   reviews this template before the submission. #}
+{% extends "base.html.j2" %}
+{% block title %}{{ patient_name }} की उपवास योजना{% endblock %}
+{% block content %}
+<h1>{{ date }} को {{ fast_name }} के {{ word_oblique }} के लिए आपकी योजना</h1>
+<p class="patient">{{ patient_name }}, उम्र {{ age }}</p>
+
+<div class="rule" role="note">
+  <span class="rule-title">सबसे ज़रूरी नियम</span>
+  अगर शुगर 70 mg/dL से कम या 300 mg/dL से ज़्यादा हो, या आपकी तबीयत ठीक न लगे, तो कृपया तुरंत {{ word }} खोल दें।
+</div>
+
+<h2>आपका {{ word }}</h2>
+<p>आपका {{ word }} <span class="time">{{ fast_start }}</span> शुरू होगा और <span class="time">{{ fast_end }}</span> खत्म होगा।</p>
+{% if water_allowed %}
+<p>{{ word_oblique }} के दौरान आप पानी पी सकते हैं। कृपया पूरे दिन थोड़ी-थोड़ी देर में पानी पीते रहें।</p>
+{% else %}
+<p>इस {{ word_oblique }} में पानी पीने की अनुमति नहीं है। कृपया {{ word }} शुरू होने से पहले और खत्म होने के बाद पर्याप्त पानी पिएँ।</p>
+{% endif %}
+
+<h2>अपनी शुगर की जाँच कब करें</h2>
+<p>कृपया {{ checks }} अपनी शुगर की जाँच करें।</p>
+<p>अगर आपकी तबीयत ठीक न लगे, तो कृपया किसी भी समय अपनी शुगर की जाँच करें।</p>
+<p>पसीना आना, काँपना, दिल की धड़कन तेज़ होना, बहुत ज़्यादा भूख लगना और उलझन होना शुगर कम होने के लक्षण हो सकते हैं।</p>
+
+<h2>आपकी दवाइयाँ</h2>
+{% if medicines %}
+<ul>
+{% for m in medicines %}
+  {% if m.kind == "changed" and m.dose_changed and m.time_changed %}
+  <li>आपके डॉक्टर ने सलाह दी है कि आप {{ m.name }} {{ m.usual_dose }} {{ m.usual_time }} लेने की जगह {{ m.dose }} <span class="time">{{ m.time }}</span> लें।</li>
+  {% elif m.kind == "changed" and m.dose_changed %}
+  <li>आपके डॉक्टर ने सलाह दी है कि आप <span class="time">{{ m.time }}</span> {{ m.name }} {{ m.usual_dose }} की जगह {{ m.dose }} लें।</li>
+  {% elif m.kind == "changed" %}
+  <li>आपके डॉक्टर ने सलाह दी है कि आप {{ m.name }} {{ m.dose }} {{ m.usual_time }} की जगह <span class="time">{{ m.time }}</span> लें।</li>
+  {% elif m.kind == "added" %}
+  <li>आपके डॉक्टर ने आपकी योजना में <span class="time">{{ m.time }}</span> {{ m.name }} {{ m.dose }} जोड़ी है।</li>
+  {% elif m.kind == "removed" %}
+  <li>आपके डॉक्टर ने सलाह दी है कि इस {{ word_oblique }} के दौरान आप {{ m.time }} {{ m.name }} {{ m.dose }} न लें।</li>
+  {% else %}
+  <li>कृपया <span class="time">{{ m.time }}</span> {{ m.name }} {{ m.dose }} हमेशा की तरह लें।</li>
+  {% endif %}
+{% endfor %}
+</ul>
+{% else %}
+<p>इस {{ word_oblique }} के लिए आपकी योजना में कोई दवा नहीं है।</p>
+{% endif %}
+
+<h2>आपका भोजन</h2>
+<ul>
+{% for meal in meals %}
+  <li><span class="time">{{ meal.time }}</span>: {{ meal.label }}, जिसमें लगभग {{ meal.carbs }} g कार्बोहाइड्रेट है।</li>
+{% endfor %}
+</ul>
+{% if breaking_meal_time %}
+<p>आपका {{ word }} {{ breaking_meal_time }} के भोजन से खुलेगा। कृपया इस भोजन की शुरुआत पानी और थोड़े से भोजन से करें। कृपया मिठाई थोड़ी मात्रा में ही खाएँ।</p>
+{% endif %}
+
+<h2>आपके डॉक्टर</h2>
+<p>अगर इस योजना के बारे में आपका कोई सवाल हो, तो कृपया Dr {{ doctor }} से संपर्क करें।{% if contact %} संपर्क की जानकारी: {{ contact }}।{% endif %}</p>
+<p class="approval">Dr {{ doctor }} द्वारा {{ approved_on }} को मंज़ूर</p>
+
+<p class="note">यह योजना रोज़मर्रा नाम के एक शोध प्रोटोटाइप ने एक कृत्रिम मरीज़ के लिए बनाई है। यह योजना आपके डॉक्टर की सलाह की जगह नहीं लेती।</p>
+{% endblock %}

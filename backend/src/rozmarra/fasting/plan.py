@@ -68,6 +68,8 @@ class FastingPlan(BaseModel):
     status: PlanStatus = PlanStatus.DRAFT
     approved_by: str | None = None
     approved_on: date | None = None
+    # The contact details that the doctor gives for the patient plan, for example a clinic.
+    approved_contact: str | None = None
     notes: list[str] = []
 
     @property

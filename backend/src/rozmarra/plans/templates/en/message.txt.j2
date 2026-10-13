@@ -1,0 +1,12 @@
+{# A short version of the plan for SMS or WhatsApp. This is a concept: Rozmarra sends no messages. #}
+{{ patient_name }}: Your fast on {{ date }} will start at {{ fast_start }} and will end at {{ fast_end }}.
+Please check your blood sugar at {{ checks }}.
+Please break your fast immediately if your blood sugar is below 70 mg/dL or above 300 mg/dL, or if you feel unwell.
+{% for m in medicines %}
+{% if m.kind == "removed" %}
+Please do not take {{ m.name }} {{ m.dose }} at {{ m.time }}.
+{% elif m.kind != "same" %}
+Please take {{ m.name }} {{ m.dose }} at {{ m.time }}.
+{% endif %}
+{% endfor %}
+Dr {{ doctor }}

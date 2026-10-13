@@ -32,12 +32,17 @@ APPROVALS_FILE = DEMO_DIR / "approvals.sqlite"
 
 def _content(plan: FastingPlan) -> dict:
     """The plan without its status and approval, to check whether the doctor changed it."""
-    return plan.model_dump(exclude={"status", "approved_by", "approved_on"})
+    return plan.model_dump(exclude={"status", "approved_by", "approved_on", "approved_contact"})
 
 
 def _as_draft(plan: FastingPlan) -> FastingPlan:
     return plan.model_copy(
-        update={"status": PlanStatus.DRAFT, "approved_by": None, "approved_on": None}
+        update={
+            "status": PlanStatus.DRAFT,
+            "approved_by": None,
+            "approved_on": None,
+            "approved_contact": None,
+        }
     )
 
 
@@ -196,12 +201,15 @@ class DemoStore:
             self._save(connection, patient_id, plan_id, draft)
         return draft
 
-    def approve(self, patient_id: str, plan_id: str, plan: FastingPlan, doctor: str) -> FastingPlan:
+    def approve(
+        self, patient_id: str, plan_id: str, plan: FastingPlan, doctor: str, contact: str = ""
+    ) -> FastingPlan:
         approved = plan.model_copy(
             update={
                 "status": PlanStatus.APPROVED,
                 "approved_by": doctor,
                 "approved_on": date.today(),
+                "approved_contact": contact.strip() or None,
             }
         )
         with self._connect() as connection:

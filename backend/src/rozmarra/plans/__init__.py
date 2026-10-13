@@ -1,1 +1,1 @@
-"""Printable patient fasting plans in English and Hindi, rendered from fixed reviewed templates."""
+"""The printable patient fasting plan, built from fixed templates in English and Hindi."""

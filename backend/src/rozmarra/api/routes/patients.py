@@ -8,8 +8,8 @@ import re
 from datetime import date, datetime
 
 from fastapi import APIRouter, HTTPException, Path, Query
-from fastapi.responses import HTMLResponse
-from pydantic import BaseModel
+from fastapi.responses import HTMLResponse, PlainTextResponse
+from pydantic import BaseModel, Field
 
 from rozmarra.api import services
 from rozmarra.api.store import STORE
@@ -19,6 +19,7 @@ from rozmarra.fasting.plan import FastingPlan
 from rozmarra.fasting.templates import TEMPLATES, build_plan
 from rozmarra.formatting import long_date
 from rozmarra.medicines import MEDICINES, NON_DIABETES_CLASSES, get_medicine
+from rozmarra.plans.render import render_message, render_plan
 from rozmarra.risk.idf_dar import NOTE_OTHER_FASTS, calculate
 
 router = APIRouter(tags=["Patients"])
@@ -61,6 +62,7 @@ class ComparePlans(BaseModel):
 class Approval(BaseModel):
     doctor_name: str
     plan: FastingPlan
+    doctor_contact: str = Field("", max_length=200)
 
 
 class TemplateRequest(BaseModel):
@@ -403,7 +405,7 @@ def approve(patient_id: str, approval: Approval, plan_id: str = PLAN_ID):
     if not doctor:
         raise HTTPException(status_code=422, detail="Please enter the name of the doctor.")
     _check(approval.plan)
-    plan = STORE.approve(patient_id, plan_id, approval.plan, doctor)
+    plan = STORE.approve(patient_id, plan_id, approval.plan, doctor, approval.doctor_contact)
     return {
         "plan": plan.model_dump(mode="json"),
         "approval_text": f"Approved by Dr {plan.approved_by} on {long_date(plan.approved_on)}",
@@ -415,16 +417,20 @@ def approve(patient_id: str, approval: Approval, plan_id: str = PLAN_ID):
     response_class=HTMLResponse,
     summary="The printable patient fasting plan",
 )
-def document(patient_id: str, plan_id: str = PLAN_ID, lang: str = "en"):
-    _record_or_404(patient_id)
-    if STORE.approved_plan(patient_id, plan_id) is None:
+def document(
+    patient_id: str,
+    plan_id: str = PLAN_ID,
+    lang: str = Query("en", pattern="^(en|hi)$"),
+    format: str = Query("html", pattern="^(html|text)$"),
+):
+    record = _record_or_404(patient_id)
+    plan = STORE.approved_plan(patient_id, plan_id)
+    if plan is None:
         raise HTTPException(
             status_code=409,
             detail=("The doctor must approve this plan before Rozmarra can print it."),
         )
-    raise HTTPException(
-        status_code=501,
-        detail=(
-            "The printable patient plan is not built yet. The team will add it on 18 October 2026."
-        ),
-    )
+    lowest = services.lowest_glucose_time(patient_id, plan)
+    if format == "text":
+        return PlainTextResponse(render_message(record, plan, lang, lowest))
+    return HTMLResponse(render_plan(record, plan, lang, lowest))

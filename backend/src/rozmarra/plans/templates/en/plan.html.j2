@@ -1,0 +1,65 @@
+{# The patient fasting plan in English. Every sentence below is fixed. A person reviews this
+   template before the submission. #}
+{% extends "base.html.j2" %}
+{% block title %}Fasting plan for {{ patient_name }}{% endblock %}
+{% block content %}
+<h1>Your fasting plan for {{ fast_name }} on {{ date }}</h1>
+<p class="patient">{{ patient_name }}, Age {{ age }}</p>
+
+<div class="rule" role="note">
+  <span class="rule-title">The most important rule</span>
+  Please break your fast immediately if your blood sugar is below 70 mg/dL or above 300 mg/dL, or if you feel unwell.
+</div>
+
+<h2>Your fast</h2>
+<p>Your fast (<span lang="hi">{{ word }}</span>) will start at <span class="time">{{ fast_start }}</span> and will end at <span class="time">{{ fast_end }}</span>.</p>
+{% if water_allowed %}
+<p>You may drink water during the fast. Please drink water regularly through the day.</p>
+{% else %}
+<p>This fast does not allow water. Please drink enough water before the fast starts and after it ends.</p>
+{% endif %}
+
+<h2>When to check your blood sugar</h2>
+<p>Please check your blood sugar at {{ checks }}.</p>
+<p>Please also check your blood sugar at any time if you feel unwell.</p>
+<p>Sweating, shaking, a fast heartbeat, strong hunger and confusion can be signs of low blood sugar.</p>
+
+<h2>Your medicines</h2>
+{% if medicines %}
+<ul>
+{% for m in medicines %}
+  {% if m.kind == "changed" and m.dose_changed and m.time_changed %}
+  <li>Your doctor has advised you to take {{ m.name }} {{ m.dose }} at <span class="time">{{ m.time }}</span>, instead of {{ m.usual_dose }} at {{ m.usual_time }}.</li>
+  {% elif m.kind == "changed" and m.dose_changed %}
+  <li>Your doctor has advised you to take {{ m.name }} {{ m.dose }} at <span class="time">{{ m.time }}</span>, instead of {{ m.usual_dose }}.</li>
+  {% elif m.kind == "changed" %}
+  <li>Your doctor has advised you to take {{ m.name }} {{ m.dose }} at <span class="time">{{ m.time }}</span>, instead of at {{ m.usual_time }}.</li>
+  {% elif m.kind == "added" %}
+  <li>Your doctor has added {{ m.name }} {{ m.dose }} at <span class="time">{{ m.time }}</span> to your plan.</li>
+  {% elif m.kind == "removed" %}
+  <li>Your doctor has advised you not to take {{ m.name }} {{ m.dose }} at {{ m.time }} during this fast.</li>
+  {% else %}
+  <li>Please take {{ m.name }} {{ m.dose }} at <span class="time">{{ m.time }}</span> as usual.</li>
+  {% endif %}
+{% endfor %}
+</ul>
+{% else %}
+<p>Your plan does not include any medicines for this fast.</p>
+{% endif %}
+
+<h2>Your meals</h2>
+<ul>
+{% for meal in meals %}
+  <li><span class="time">{{ meal.time }}</span>: {{ meal.label }}, with about {{ meal.carbs }} g of carbohydrate.</li>
+{% endfor %}
+</ul>
+{% if breaking_meal_time %}
+<p>Your fast will end with the meal at {{ breaking_meal_time }}. Please start this meal with water and a small portion of food. Please eat sweets only in a small amount.</p>
+{% endif %}
+
+<h2>Your doctor</h2>
+<p>If you have any questions about this plan, please contact Dr {{ doctor }}.{% if contact %} The contact details are: {{ contact }}.{% endif %}</p>
+<p class="approval">Approved by Dr {{ doctor }} on {{ approved_on }}</p>
+
+<p class="note">Rozmarra, a research prototype, produced this plan for a synthetic patient. The plan does not replace the advice of your doctor.</p>
+{% endblock %}

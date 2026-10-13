@@ -1,43 +1,128 @@
 # Words and phrases to avoid in English text, from docs/prd.md, Section 17.3.
-# The command "rozmarra check-language" reads this list. Each entry gives a
-# pattern (a regular expression that matches whole words, ignoring case) and the
-# words to use instead.
+# The command "rozmarra check-language" reads this list. Each entry gives a pattern (a
+# regular expression that matches whole words, ignoring case unless case_sensitive is true)
+# and the words to use instead.
 #
-# The check skips this file itself, the "Not:" examples in the writing standard,
-# the original titles of references, the names of other projects and the column
-# names of the datasets, because these must keep their original wording.
+# The check skips this file itself, the "Not:" examples in the writing standard, the original
+# titles of references, the names of other projects and the column names of the datasets,
+# because these must keep their original wording.
 
-- pattern: '\bhypos?\b'
-  use_instead: low blood sugar (for patients), or hypoglycaemia (for doctors)
-- pattern: '\bhyper\b'
-  use_instead: high blood sugar, or hyperglycaemia
-- pattern: '\bspikes?\b'
-  use_instead: a sharp rise in glucose
-- pattern: '\b(BG|BGL)\b'
-  use_instead: blood glucose, or blood sugar
-- pattern: '\bsugars\b'
-  use_instead: blood glucose, or blood sugar
-- pattern: '\b(SU|OHA)\b'
-  use_instead: sulfonylurea; oral diabetes medicine
-- pattern: '\b(pt|pts)\b'
-  use_instead: patient, patients
-- pattern: '\bmeds\b'
-  use_instead: medicines
-- pattern: '\bRx\b'
-  use_instead: prescription
-- pattern: '\bw/o?(?=\s)'
-  use_instead: with, without
-- pattern: '\bapprox\.'
-  use_instead: about
-- pattern: '\bASAP\b'
-  use_instead: as soon as possible
-- pattern: '\bguaranteed?\b'
-  use_instead: may reduce, helps identify, or the measured accuracy
-- pattern: '\bprevents\b'
-  use_instead: may reduce, or helps identify
-- pattern: '\b100% accurate\b'
-  use_instead: the measured accuracy
-- pattern: '\bAI (decides|knows)\b'
-  use_instead: the model estimates
-- pattern: '\bsigns? off\b'
-  use_instead: approves
+words:
+  - pattern: '\bhypos?\b'
+    use_instead: low blood sugar (for patients), or hypoglycaemia (for doctors)
+  - pattern: '\bhyper\b'
+    use_instead: high blood sugar, or hyperglycaemia
+  - pattern: '\bspikes?\b'
+    use_instead: a sharp rise in glucose
+  - pattern: '\b(BG|BGL)\b'
+    use_instead: blood glucose, or blood sugar
+    case_sensitive: true
+  - pattern: '\bsugars\b'
+    use_instead: blood glucose, or blood sugar
+  - pattern: '\b(SU|SUs|OHA)\b'
+    use_instead: sulfonylurea; oral diabetes medicine
+    case_sensitive: true
+  - pattern: '\b(pt|pts)\b'
+    use_instead: patient, patients
+    case_sensitive: true
+  - pattern: '\bmeds\b'
+    use_instead: medicines
+  - pattern: '\bRx\b'
+    use_instead: prescription
+    case_sensitive: true
+  - pattern: '(?<![\w/])w/o?(?=\s)'
+    use_instead: with, without
+  - pattern: '\bapprox\.'
+    use_instead: about
+  - pattern: '\bASAP\b'
+    use_instead: as soon as possible
+  - pattern: '\bguaranteed?\b'
+    use_instead: may reduce, helps identify, or the measured accuracy
+  - pattern: '\bprevents\b'
+    use_instead: may reduce, or helps identify
+  - pattern: '\b100% accurate\b'
+    use_instead: the measured accuracy
+  - pattern: '\bAI (decides|knows)\b'
+    use_instead: the model estimates
+  - pattern: '\bsigns? off\b'
+    use_instead: approves
+
+# The project uses Indian English, which follows British spelling (docs/prd.md, Section 17.4).
+spellings:
+  - pattern: '\bhypoglycemi(a|c)\b'
+    use_instead: hypoglycaemia
+  - pattern: '\bhyperglycemi(a|c)\b'
+    use_instead: hyperglycaemia
+  - pattern: '\bglycemi(a|c)\b'
+    use_instead: glycaemic
+  - pattern: '\bcolor(s|ed|ful)?\b'
+    use_instead: colour
+  - pattern: '\bbehavior(s|al)?\b'
+    use_instead: behaviour
+  - pattern: '\b(personaliz|optimiz|summariz|randomiz|normaliz|recogniz|organiz|minimiz|maximiz|prioritiz|harmoniz|standardiz|visualiz|categoriz)(e|ed|es|ing|ation|ations)\b'
+    use_instead: the spelling with "s", for example "personalised"
+  - pattern: '\banalyz(e|ed|es|ing)\b'
+    use_instead: analyse
+  - pattern: '\b(center|centers|centered)\b'
+    use_instead: centre
+  - pattern: '\b(modeling|modeled|labeling|labeled|traveling|canceled)\b'
+    use_instead: the spelling with "ll", for example "modelling"
+  - pattern: '\bfavor(ite|s|ed)?\b'
+    use_instead: favour
+
+skip:
+  # The files that hold English text for people. Other files are code or data.
+  include_files:
+    - '\.md$'
+    - '^frontend/src/i18n/en\.json$'
+    - '^frontend/src/.*\.tsx?$'
+    - '^backend/src/.*\.py$'
+    - '^backend/tests/.*\.py$'
+    - '^backend/src/rozmarra/plans/templates/en/.*\.j2$'
+    - '^scripts/.*\.(ps1|sh)$'
+    - '^\.github/workflows/.*\.yml$'
+    - '^backend/pyproject\.toml$'
+  exclude_files:
+    - '^backend/src/rozmarra/language/words_to_avoid\.yaml$'
+    - '^frontend/src/components/ui/'
+    - '^frontend/node_modules/'
+    - '^frontend/README\.md$'
+    - '^data/(raw|processed)/'
+  # Markdown sections that keep their original wording.
+  sections:
+    - file: '^docs/prd\.md$'
+      heading: '### 17.3 Words to avoid'
+    - file: '^README\.md$'
+      heading: '## 13. References'
+    - file: '^docs/prd\.md$'
+      heading: '## 24. References'
+    - file: '^docs/(model_card|data_card)\.md$'
+      heading: '## References'
+  # Lines that quote a word to avoid as an example, or that hold a title or a column name.
+  line_patterns:
+    - file: '^docs/prd\.md$'
+      line: '^\s*-?\s*Not:'
+    - file: '^docs/prd\.md$'
+      line: ', not "'
+    - file: '\.md$'
+      line: '^\s*\d+\.\s.*(Journal|Diabetes Care|Scientific Data|PhysioNet|Circulation|IEEE|Lancet)'
+    - file: '\.md$'
+      line: '\b(column|columns)\b'
+    - file: '\.py$'
+      line: '\b(column|numeric)\("'
+  # Names of datasets, projects and libraries that keep their original spelling.
+  original_wording:
+    - 'BIG IDEAs Lab Glycemic Variability[\w\s]*'
+    - 'stanford-hypoglycemia-forecasting'
+    - 'Stanford hypoglycemia forecasting'
+    - 'hypoglycemia forecasting project'
+    - 'week-ahead hypoglycemia prediction'
+    - '\bcolor-scheme\b'
+    - 'big-ideas-glycemic-wearable'
+    - 'scipy\.optimize[\w.]*'
+    - 'Pharmacogenomics and Personalized Medicine'
+    - '"center"'
+  # Alerts and patient text use a full stop, never an exclamation mark.
+  no_exclamation_files:
+    - '^frontend/src/i18n/en\.json$'
+    - '^backend/src/rozmarra/plans/templates/en/'

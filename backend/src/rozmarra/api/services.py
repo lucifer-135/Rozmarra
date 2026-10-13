@@ -407,6 +407,12 @@ def daily_history(patient_id: str, days: int = 14) -> dict:
     }
 
 
+def lowest_glucose_time(patient_id: str, plan: FastingPlan) -> datetime | None:
+    """The time of the twin's predicted lowest glucose for a plan, for the patient plan checks."""
+    text = simulate(patient_id, plan, samples=50)["summary"]["lowest_glucose_time"]
+    return datetime.fromisoformat(text) if text else None
+
+
 @lru_cache(maxsize=8)
 def default_summary(patient_id: str) -> dict:
     """The simulation of the usual plan (Plan A), used by the patient list."""

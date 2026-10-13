@@ -265,7 +265,15 @@ def serve(
 @app.command("check-language")
 def check_language() -> None:
     """Check the English text against the list of words to avoid in docs/prd.md, Section 17.3."""
-    _not_built("check-language")
+    from rozmarra.language.check import check
+
+    findings = check()
+    for finding in findings:
+        typer.echo(str(finding))
+    if findings:
+        typer.echo(f"The language check found {len(findings)} issues. Please correct them.")
+        raise typer.Exit(code=1)
+    typer.echo("The language check found no words to avoid and no American spellings.")
 
 
 if __name__ == "__main__":

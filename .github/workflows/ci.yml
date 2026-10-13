@@ -21,6 +21,8 @@ jobs:
         run: uv run ruff check .
       - name: Run the tests
         run: uv run pytest
+      - name: Check the English text against the writing standard
+        run: uv run rozmarra check-language
 
   frontend:
     name: Dashboard tests and build
