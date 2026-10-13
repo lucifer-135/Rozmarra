@@ -22,7 +22,7 @@ interface Props {
   disabled?: boolean
   busy?: boolean
   error?: string | null
-  onApprove: (doctorName: string) => Promise<unknown>
+  onApprove: (doctorName: string, contact: string) => Promise<unknown>
 }
 
 export function ApproveDialog({ planName, disabled, busy, error, onApprove }: Props) {
@@ -30,6 +30,7 @@ export function ApproveDialog({ planName, disabled, busy, error, onApprove }: Pr
   const id = useId()
   const [open, setOpen] = useState(false)
   const [name, setName] = useState('')
+  const [contact, setContact] = useState('')
   const empty = name.replace(/^dr\b\.?\s*/i, '').trim() === ''
 
   return (
@@ -47,7 +48,7 @@ export function ApproveDialog({ planName, disabled, busy, error, onApprove }: Pr
           onSubmit={(e) => {
             e.preventDefault()
             if (empty) return
-            void onApprove(name.trim()).then(() => setOpen(false), () => undefined)
+            void onApprove(name.trim(), contact.trim()).then(() => setOpen(false), () => undefined)
           }}
         >
           <DialogHeader>
@@ -67,6 +68,20 @@ export function ApproveDialog({ planName, disabled, busy, error, onApprove }: Pr
               placeholder={t('approve.placeholder')}
             />
             <p className="text-muted-foreground">{t('approve.nameHelp')}</p>
+          </div>
+          <div className="grid gap-1">
+            <Label htmlFor={`${id}-contact`} className="text-base">
+              {t('approve.contact')}
+            </Label>
+            <Input
+              id={`${id}-contact`}
+              className="text-base md:text-base"
+              value={contact}
+              maxLength={200}
+              onChange={(e) => setContact(e.target.value)}
+              placeholder={t('approve.contactPlaceholder')}
+            />
+            <p className="text-muted-foreground">{t('approve.contactHelp')}</p>
           </div>
           {error && (
             <p role="alert" className="text-destructive">

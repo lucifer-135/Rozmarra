@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { fetchPlanOptions, fetchTemplates } from '@/api/client'
 import type { FastTemplate, MedicineOption } from '@/api/types'
@@ -31,4 +32,14 @@ export function useMedicineName(): (name: string) => string {
     if (!medicine) return name
     return i18n.language === 'hi' ? medicine.display_name_hi : medicine.display_name
   }
+}
+
+/** The value after it has stayed the same for a short time, to avoid a request for each step. */
+export function useDebouncedValue<T>(value: T, delay = 200): T {
+  const [settled, setSettled] = useState(value)
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSettled(value), delay)
+    return () => window.clearTimeout(timer)
+  }, [value, delay])
+  return settled
 }

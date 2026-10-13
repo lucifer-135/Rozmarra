@@ -36,12 +36,18 @@ const KEYS: PlanKey[] = ['plan_a', 'plan_b']
 
 /** The plan without its status and approval, to check whether the doctor changed it. */
 function content(plan: FastingPlan): string {
-  const { status: _status, approved_by: _by, approved_on: _on, ...rest } = plan
+  const {
+    status: _status,
+    approved_by: _by,
+    approved_on: _on,
+    approved_contact: _contact,
+    ...rest
+  } = plan
   return JSON.stringify(rest)
 }
 
 function asDraft(plan: FastingPlan): FastingPlan {
-  return { ...plan, status: 'draft', approved_by: null, approved_on: null }
+  return { ...plan, status: 'draft', approved_by: null, approved_on: null, approved_contact: null }
 }
 
 function Workspace({
@@ -73,8 +79,17 @@ function Workspace({
       planFromTemplate(patientId, templateId, date),
   })
   const approve = useMutation({
-    mutationFn: ({ key, plan, doctor }: { key: PlanKey; plan: FastingPlan; doctor: string }) =>
-      approvePlan(patientId, PLAN_IDS[key], plan, doctor),
+    mutationFn: ({
+      key,
+      plan,
+      doctor,
+      contact,
+    }: {
+      key: PlanKey
+      plan: FastingPlan
+      doctor: string
+      contact: string
+    }) => approvePlan(patientId, PLAN_IDS[key], plan, doctor, contact),
   })
 
   const refreshLists = () => {
@@ -104,6 +119,8 @@ function Workspace({
     if (started.current) return
     started.current = true
     run(false)
+    // The first run uses the plans as they are when the screen opens, so it runs only once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const update = (key: PlanKey, plan: FastingPlan) =>
@@ -122,11 +139,11 @@ function Workspace({
   const result = compare.data
   const scale = result ? sharedScale(result) : null
 
-  const onApprove = async (key: PlanKey, doctor: string) => {
+  const onApprove = async (key: PlanKey, doctor: string, contact: string) => {
     if (!tested) return
     setApproving(key)
     try {
-      const answer = await approve.mutateAsync({ key, plan: tested[key], doctor })
+      const answer = await approve.mutateAsync({ key, plan: tested[key], doctor, contact })
       // Only one plan can be approved, so the other plan goes back to a draft.
       setPlans((current) => {
         const other: PlanKey = key === 'plan_a' ? 'plan_b' : 'plan_a'
@@ -157,7 +174,7 @@ function Workspace({
         disabled={!tested || stale || compare.isPending}
         busy={approving === key}
         error={approve.isError && approve.variables?.key === key ? approve.error.message : null}
-        onApprove={(doctor) => onApprove(key, doctor)}
+        onApprove={(doctor, contact) => onApprove(key, doctor, contact)}
       />
     )
   }

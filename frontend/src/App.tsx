@@ -1,8 +1,10 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { Layout } from '@/components/Layout'
 import { PatientLayout } from '@/components/PatientLayout'
+import { AboutPage } from '@/pages/AboutPage'
+import { MonitorPage } from '@/pages/MonitorPage'
 import { PatientsPage } from '@/pages/PatientsPage'
-import { PlannedScreen } from '@/pages/PlannedScreen'
+import { PlanPage } from '@/pages/PlanPage'
 import { SimulatorPage } from '@/pages/SimulatorPage'
 import { VirtualPatientPage } from '@/pages/VirtualPatientPage'
 
@@ -16,10 +18,10 @@ export default function App() {
         <Route path="patients/:id" element={<PatientLayout />}>
           <Route index element={<VirtualPatientPage />} />
           <Route path="simulator" element={<SimulatorPage />} />
-          <Route path="monitor" element={<PlannedScreen screen="monitor" />} />
-          <Route path="plan" element={<PlannedScreen screen="plan" />} />
+          <Route path="monitor" element={<MonitorPage />} />
+          <Route path="plan" element={<PlanPage />} />
         </Route>
-        <Route path="about" element={<PlannedScreen screen="about" />} />
+        <Route path="about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to="/patients" replace />} />
       </Route>
     </Routes>

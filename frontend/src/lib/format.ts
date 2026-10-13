@@ -57,6 +57,14 @@ export function formatAxisTime(value: number, language: string): string {
     .replace('PM', 'pm')
 }
 
+/** A number with a fixed count of decimal places, for example "0.990" for a result. */
+export function formatFixed(value: number, language: string, digits: number): string {
+  return new Intl.NumberFormat(locale(language), {
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits,
+  }).format(value)
+}
+
 export function formatNumber(value: number, language: string, digits = 0): string {
   return new Intl.NumberFormat(locale(language), {
     maximumFractionDigits: digits,

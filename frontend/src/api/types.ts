@@ -224,6 +224,7 @@ export interface FastingPlan {
   status: 'draft' | 'approved'
   approved_by: string | null
   approved_on: string | null
+  approved_contact?: string | null
   notes: string[]
 }
 
@@ -307,4 +308,106 @@ export interface Comparison {
 export interface ApprovalResult {
   plan: FastingPlan
   approval_text: string
+}
+
+export interface ReplayAlert {
+  time: string
+  chance: Chance
+}
+
+export interface ReplayOverview {
+  fast_start: string
+  fast_end: string
+  times: string[]
+  chances: number[]
+  enough_data: boolean[]
+  alert_threshold: number
+  alerts: ReplayAlert[]
+}
+
+export interface Reason {
+  feature: string
+  contribution: number
+  en: string
+  hi: string
+}
+
+export interface ReplayMoment {
+  patient_id: string
+  source: string
+  time: string
+  time_text: string
+  enough_data: boolean
+  glucose: { times: string[]; values: (number | null)[] }
+  heart_rate: { times: string[]; values: (number | null)[] }
+  hrv_rmssd: { times: string[]; values: (number | null)[] }
+  steps: { times: string[]; values: (number | null)[] }
+  alerts_so_far: ReplayAlert[]
+  message?: string
+  chance_of_low_next_60_min?: Chance
+  alert?: boolean
+  above_alert_threshold?: boolean
+  forecast?: {
+    times: string[]
+    p10: (number | null)[]
+    p50: (number | null)[]
+    p90: (number | null)[]
+  }
+  predicted_lowest_mg_dl?: number
+  predicted_lowest_time?: string
+  predicted_lowest_time_text?: string
+  reasons?: Reason[]
+}
+
+export interface Metric {
+  auroc?: number
+  auprc?: number
+  confidence_intervals_95?: { auroc?: [number, number]; auprc?: [number, number] }
+}
+
+export interface ThresholdResult {
+  threshold: number
+  event_sensitivity: number
+  median_warning_minutes: number
+  false_alerts_per_patient_day: number
+}
+
+export interface ModelCard {
+  metrics: {
+    created_on: string
+    notes: string[]
+    synthetic: {
+      e1: Metric & {
+        patients: number
+        thresholds: { sensitivity_80: ThresholdResult; balanced: ThresholdResult }
+        baselines: Record<string, Metric>
+        ablation: Record<string, Metric>
+      }
+      e2: Metric & { baselines: Record<string, Metric> }
+      f1: {
+        f1_low: Metric & { twin_alone: Metric; idf_dar_alone: Metric }
+        f1_high: Metric
+      }
+    }
+    real: {
+      e1: {
+        all: Metric & { patients: number }
+        baselines: Record<string, Metric>
+        ablation: Record<string, Metric>
+      }
+    }
+  }
+  twin_fit: {
+    patients_fitted: number
+    median_rmse_mg_dl: { fitted_days: number; held_out_days: number }
+    median_forecast_rmse_mg_dl: Record<string, { twin: number; last_value: number }>
+  } | null
+  synthetic_cohort: {
+    virtual_patients: number
+    fasting_episodes: number
+    episodes_with_low_blood_sugar: { share_with_low_blood_sugar: number }
+  } | null
+  data_sources: { name: string; type: string; licence: string; use: string }[]
+  limitations: string[]
+  notice: string
 }

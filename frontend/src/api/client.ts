@@ -8,9 +8,12 @@ import type {
   FastingPlan,
   History,
   IdfDar,
+  ModelCard,
   PatientDetail,
   PatientRow,
   PlanOptions,
+  ReplayMoment,
+  ReplayOverview,
   SavedPlans,
   Timeseries,
   Twin,
@@ -79,8 +82,36 @@ export const comparePlans = (id: string, planA: FastingPlan, planB: FastingPlan)
 export const savePlan = (id: string, planId: string, plan: FastingPlan) =>
   post<FastingPlan>(`/patients/${id}/plans/${planId}`, plan, 'PUT')
 
-export const approvePlan = (id: string, planId: string, plan: FastingPlan, doctorName: string) =>
+export const approvePlan = (
+  id: string,
+  planId: string,
+  plan: FastingPlan,
+  doctorName: string,
+  doctorContact = '',
+) =>
   post<ApprovalResult>(`/patients/${id}/plans/${planId}/approve`, {
     doctor_name: doctorName,
+    doctor_contact: doctorContact,
     plan,
   })
+
+export const fetchReplay = (id: string) => request<ReplayOverview>(`/patients/${id}/replay`)
+
+export function fetchReplayAt(id: string, at: string) {
+  return request<ReplayMoment>(`/patients/${id}/replay?${new URLSearchParams({ at }).toString()}`)
+}
+
+export const fetchModelCard = () => request<ModelCard>('/model-card')
+
+/** The address of the printable patient plan, which the API returns as an HTML page. */
+export function documentUrl(id: string, planId: string, lang: string) {
+  return `/api/patients/${id}/plans/${planId}/document?lang=${lang}`
+}
+
+export async function fetchPlanMessage(id: string, planId: string, lang: string) {
+  const response = await fetch(`${documentUrl(id, planId, lang)}&format=text`)
+  if (!response.ok) {
+    throw new ApiError(response.status, `The Rozmarra service answered with status ${response.status}.`)
+  }
+  return response.text()
+}

@@ -19,12 +19,6 @@
     "plan": "Patient fasting plan",
     "about": "How Rozmarra makes predictions"
   },
-  "planned": {
-    "body": "The team will add this screen on 18 October 2026.",
-    "monitor": "This screen will replay a recorded fasting day with a time slider. It will show the forecasts and alerts as they would have appeared at each moment.",
-    "plan": "This screen will produce a printable fasting plan in English and Hindi after the doctor approves a plan.",
-    "about": "This screen will explain which data Rozmarra uses, how the team tested it, what the results were and what its limits are."
-  },
   "notice": {
     "clinical": "Rozmarra supports clinical decisions. It does not replace the judgement of a doctor.",
     "prototype": "Rozmarra is a research prototype. It is not a certified medical device.",
@@ -342,7 +336,10 @@
     "placeholder": "For example, Ananya Rao",
     "nameHelp": "Rozmarra adds the title \"Dr\" before the name.",
     "confirm": "Approve the plan",
-    "approvedText": "Approved by Dr {{name}} on {{date}}"
+    "approvedText": "Approved by Dr {{name}} on {{date}}",
+    "contact": "Contact details for the patient (optional)",
+    "contactPlaceholder": "For example, the name and telephone number of the clinic",
+    "contactHelp": "The printed plan shows these details. Please do not enter a personal telephone number in this demonstration."
   },
   "chart": {
     "targetRangeLegend": "Target range, 70 to 180 mg/dL",
@@ -360,6 +357,169 @@
       "meal": "Meals",
       "medicine": "Medicines",
       "activity": "Activity"
+    }
+  },
+  "monitor": {
+    "intro": "This screen replays a recorded fasting day of the virtual patient. Move the time slider to see the forecasts and alerts as Rozmarra would have shown them at each moment. Rozmarra uses only the data recorded up to that moment.",
+    "controls": "Time controls",
+    "sliderLabel": "Time in the recorded fasting day",
+    "timeOn": "{{time}} on {{date}}",
+    "fastStart": "The fast starts at {{time}}.",
+    "fastEnd": "The fast ends at {{time}}.",
+    "back30": "Back 30 minutes",
+    "back5": "Back 5 minutes",
+    "forward5": "Forward 5 minutes",
+    "forward30": "Forward 30 minutes",
+    "play": "Play the day",
+    "pause": "Pause",
+    "nextAlert": "Go to the next alert",
+    "loadingDay": "The dashboard is loading the recorded fasting day.",
+    "loading": "Rozmarra is preparing the forecast for this moment.",
+    "noPredictionTitle": "Rozmarra cannot make a prediction at this moment.",
+    "notEnoughData": "There is not enough recent CGM data to make a prediction. Please check that the sensor is working.",
+    "alertTitle": "Low glucose is likely within the next 60 minutes.",
+    "stillAboveTitle": "The chance of low glucose within the next 60 minutes is still above the alert level.",
+    "stillAboveDetail": "Rozmarra raised the last alert at {{time}}. A new alert follows after 30 minutes, or earlier if the chance rises by 10 percentage points.",
+    "noAlertTitle": "No alert at this moment.",
+    "estimatedChance": "Estimated chance of low glucose within the next 60 minutes:",
+    "lowest": "Predicted lowest value in the next 2 hours: {{value}} mg/dL at about {{time}}.",
+    "mainReasons": "Main reasons:",
+    "glucoseTitle": "Glucose and forecast",
+    "glucoseDescription": "The chart shows the glucose readings up to this moment and the forecast for the next 2 hours.",
+    "readingsSoFar": "Glucose readings so far",
+    "forecast": "Forecast for the next 2 hours (median)",
+    "forecastBand": "Forecast range (10th to 90th percentile)",
+    "readingsAfter": "Readings after this moment (for the demonstration only)",
+    "showAfter": "Show the readings after this moment",
+    "fastWindow": "Fasting window",
+    "now": "Now",
+    "glucoseSummary": "At {{time}}, the estimated chance of low glucose within the next 60 minutes is {{percent}}%. The predicted lowest value in the next 2 hours is {{value}} mg/dL.",
+    "timelineTitle": "Alert timeline",
+    "timelineDescription": "The chart shows the estimated chance of low glucose within the next 60 minutes at each moment so far. Each triangle marks an alert.",
+    "timelineSummary_one": "The chart shows the estimated chance of low glucose over the fast so far. Rozmarra has raised {{count}} alert so far.",
+    "timelineSummary_other": "The chart shows the estimated chance of low glucose over the fast so far. Rozmarra has raised {{count}} alerts so far.",
+    "alertLevel": "Alert level: {{value}}%",
+    "alertsSoFar": "Alerts so far",
+    "noAlertsYet": "Rozmarra has not raised any alert yet.",
+    "alertAt": "{{time}}: {{percent}}%",
+    "signalsTitle": "Smartwatch signals",
+    "signalsDescription": "The charts show the heart rate, the heart rate variability and the steps up to this moment.",
+    "heartRate": "Heart rate",
+    "hrv": "Heart rate variability (RMSSD)",
+    "steps": "Steps in each 5 minutes",
+    "ms": "ms",
+    "stepsUnit": "steps",
+    "signalSummary": "The chart shows the signal \"{{signal}}\" up to this moment."
+  },
+  "planScreen": {
+    "title": "Patient fasting plan",
+    "intro": "This screen shows the printable plan that the patient and family can follow. Every sentence comes from fixed templates that a person has reviewed. Rozmarra does not use AI to write medical advice.",
+    "approvedPlan": "{{plan}}. Approved by Dr {{name}} on {{date}}.",
+    "language": "Language of the patient plan",
+    "print": "Print or save as PDF",
+    "openNewTab": "Open the plan in a new tab",
+    "frameTitle": "Patient fasting plan in {{language}}",
+    "messageTitle": "Short version for SMS or WhatsApp (concept)",
+    "messageDescription": "This is a concept only. Rozmarra does not send any messages.",
+    "notApprovedTitle": "No plan is approved yet.",
+    "notApproved": "The doctor must approve a plan on the screen \"Test a fasting plan\" before Rozmarra can print it.",
+    "goToSimulator": "Go to the screen \"Test a fasting plan\""
+  },
+  "about": {
+    "intro": "This screen explains in plain language how Rozmarra makes its estimates, which data it uses, how the team tested it, what the results were and what its limits are.",
+    "valueWithInterval": "{{value}} (95% interval {{low}} to {{high}})",
+    "minutes_one": "{{count}} minute",
+    "minutes_other": "{{count}} minutes",
+    "notTestedYet": "The team has not run this test yet.",
+    "forecastValue": "{{minutes}} minutes: twin {{twin}} mg/dL, last value {{last}} mg/dL",
+    "fusionValue": "Full model {{full}}, best single data stream {{single}}",
+    "f1Value": "{{value}}. The twin alone scores {{twin}} and the IDF-DAR score alone scores {{score}}.",
+    "status": {
+      "met": "Met",
+      "notMet": "Not met",
+      "notTested": "Not tested yet",
+      "noTarget": "No target"
+    },
+    "layers": {
+      "title": "How Rozmarra makes its estimates",
+      "score": "The IDF-DAR 2021 risk score gives the standard clinical score for the risk of fasting. Rozmarra calculates it from the health record and the fasting plan.",
+      "twin": "The physiology twin is a model of glucose, insulin, meals and medicines for one patient. It shows how a fasting plan may change the patient's glucose, with a band that shows the uncertainty.",
+      "model": "The prediction model combines the twin's forecast with the recent glucose readings, the smartwatch data and the health record. It estimates the chance of low blood sugar within the next 60 minutes and the chance of high blood sugar after the fast. A short list of reasons explains each estimate.",
+      "doctor": "Rozmarra supports the doctor. It never changes medicines by itself, and it never judges the decision to fast."
+    },
+    "data": {
+      "title": "Which data Rozmarra uses",
+      "description": "All patients in the dashboard are synthetic. The real data comes only from open anonymised datasets.",
+      "name": "Data source",
+      "type": "Type",
+      "licence": "Licence",
+      "use": "Use",
+      "types": {
+        "real_open": "Real open data",
+        "synthetic": "Synthetic data"
+      }
+    },
+    "testing": {
+      "title": "How the team tested Rozmarra",
+      "real": "Real normal days: the team tested the model on held-out days of {{patients}} real patients from ShanghaiT2DM and CGMacros, with five-fold cross-validation grouped by person. These days contain no fasts.",
+      "synthetic": "Simulated fasting days: the team created {{patients}} virtual patients with {{episodes}} fasting days. The model learned from the training group and was tested on {{test}} virtual patients that it had never seen.",
+      "baselines": "The team compared the model with simpler methods: the last glucose value, a straight-line trend, the twin alone, the IDF-DAR score alone and a model that uses only CGM data.",
+      "intervals": "The 95% intervals come from bootstrapping by patient."
+    },
+    "results": {
+      "title": "Results and targets",
+      "description": "The targets come from the product requirements. The team reports every measured value, including the values that fall short of a target.",
+      "caption": "AUROC shows how well a method separates the moments before an event from other moments. A value of 1 is perfect, and a value of 0.5 is the same as guessing.",
+      "measure": "Measure",
+      "result": "Result",
+      "target": "Target",
+      "status": "Target met",
+      "e1Real": "Low blood sugar within 60 minutes, real normal days (AUROC)",
+      "e1Synthetic": "Low blood sugar within 60 minutes, simulated fasting days (AUROC)",
+      "detected": "Share of low blood sugar events detected in time, simulated fasting days",
+      "falseAlerts": "False alerts per patient per fasting day, simulated fasting days",
+      "warning": "Median warning time before low blood sugar, simulated fasting days",
+      "e2": "High blood sugar after the fast is broken, simulated fasting days (AUROC)",
+      "forecast": "Error of the twin's glucose forecasts on real held-out days (median RMSE)",
+      "fusionSynthetic": "Value of combining the data streams, simulated fasting days (AUPRC)",
+      "fusionReal": "Value of combining the data streams, real normal days (AUPRC)",
+      "parkes": "Share of 30-minute forecasts in zones A and B of the Parkes error grid",
+      "f1": "Forecast of low blood sugar during the whole fast, made before the fast (AUROC)"
+    },
+    "targets": {
+      "auroc80": "0.80 or higher",
+      "auroc85": "0.85 or higher",
+      "detected": "At least 80%",
+      "falseAlerts": "No more than 2",
+      "warning": "At least 30 minutes",
+      "forecast": "Lower than the last value at every time",
+      "fusion": "The full model scores higher than every single data stream",
+      "parkes": "95% or more",
+      "none": "The requirements set no target."
+    },
+    "compare": {
+      "title": "Comparison with simpler methods",
+      "description": "The charts compare the area under the precision-recall curve (AUPRC) for low blood sugar within 60 minutes. AUPRC shows how well a method finds the rare moments before low blood sugar. A higher value is better.",
+      "synthetic": "Simulated fasting days",
+      "real": "Real normal days"
+    },
+    "methods": {
+      "full model": "Full model",
+      "last glucose value": "Last glucose value",
+      "straight-line trend": "Straight-line trend",
+      "twin alone": "Twin alone",
+      "IDF-DAR score alone": "IDF-DAR score alone",
+      "model with CGM data only": "Model with CGM data only"
+    },
+    "meaning": {
+      "title": "What the results mean",
+      "twinAlone": "On simulated fasting days, the twin alone scored a higher AUPRC ({{twin}}) than the full model ({{full}}). The twin also created these simulated days, so this comparison partly favours the twin.",
+      "cgmOnly": "On real normal days, the model with CGM data only scored a higher AUPRC ({{cgm}}) than the full model ({{full}}). The real data does not yet show that the smartwatch data adds value.",
+      "falseAlerts": "At the alert level that detects 80% of events, the model raised {{value}} false alerts per patient per fasting day, which is more than the target of 2.",
+      "synthetic": "The results on simulated fasting days partly reflect the team's modelling assumptions. A clinical study with Indian patients would be needed to confirm them."
+    },
+    "limits": {
+      "title": "Limits of Rozmarra"
     }
   }
 }

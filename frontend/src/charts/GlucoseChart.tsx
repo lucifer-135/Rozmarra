@@ -36,10 +36,17 @@ export interface ChartWindow {
   label: string
 }
 
+/** A vertical line at one moment, for example "Now" in the live fasting monitor. */
+export interface ChartMoment {
+  time: string
+  label: string
+}
+
 interface Props {
   lines: GlucoseLine[]
   events?: ChartEvent[]
   windows?: ChartWindow[]
+  moments?: ChartMoment[]
   start?: string
   end?: string
   yMax?: number
@@ -76,6 +83,7 @@ export function GlucoseChart({
   lines,
   events = [],
   windows = [],
+  moments = [],
   start,
   end,
   yMax,
@@ -266,6 +274,11 @@ export function GlucoseChart({
               formatter: t('chart.veryLowLine'),
             },
           },
+          ...moments.map((m) => ({
+            xAxis: ms(m.time),
+            lineStyle: { color: COLOURS.ink, type: 'solid', width: 1.5 },
+            label: { ...AXIS_TEXT, color: COLOURS.ink, position: 'end', formatter: m.label },
+          })),
         ],
       },
     })
@@ -418,7 +431,7 @@ export function GlucoseChart({
       ],
       series,
     }
-  }, [lines, events, windows, start, end, yMax, multiDay, language, t])
+  }, [lines, events, windows, moments, start, end, yMax, multiDay, language, t])
 
   const stripRows = new Set(events.map((e) => e.kind)).size
   const totalHeight = height + (stripRows ? stripRows * STRIP_ROW + 40 : 0)
