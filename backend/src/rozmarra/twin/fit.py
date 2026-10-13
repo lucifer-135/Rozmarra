@@ -420,7 +420,8 @@ class FitProblem:
         return ((r[1:] - r[0]) / step).T
 
 
-def build_problem(data: PatientData) -> FitProblem:
+def twin_simulator(data: PatientData) -> WindowSimulator:
+    """The simulator of one patient with the fixed values of the patient's twin."""
     base = Parameters(
         G_b=baseline_glucose(data),
         I_b=data.I_b,
@@ -428,7 +429,11 @@ def build_problem(data: PatientData) -> FitProblem:
         renal_factor=min(data.egfr / 90.0, 1.0),
         cr_factor=data.cr_factor,
     )
-    simulator = WindowSimulator(data, base)
+    return WindowSimulator(data, base)
+
+
+def build_problem(data: PatientData) -> FitProblem:
+    simulator = twin_simulator(data)
     chosen = [p for p in FITTED if p.name != "gamma_su" or data.takes_secretagogue]
     sd = []
     for p in chosen:
@@ -509,25 +514,38 @@ def evaluate_fit(data: PatientData, problem: FitProblem, values: dict[str, float
     forecasts = forecast_windows(data)
     metrics["forecast_starts"] = len(forecasts)
     if len(forecasts):
-        G = simulator.run(arrays, forecasts)[0]
         result = {}
-        for horizon in FORECAST_HORIZONS:
-            hit = (forecasts.offsets == horizon) & forecasts.mask
-            rows, cols = np.nonzero(hit)
-            if len(rows) == 0:
-                continue
-            measured = forecasts.values[rows, cols]
-            twin = G[rows, horizon]
-            last = forecasts.g0[rows]
-            line = np.clip(forecasts.g0[rows] + forecasts.slope[rows] * horizon, 40, 400)
+        for horizon, pair in forecast_pairs(simulator, values, forecasts).items():
+            measured = pair["measured"]
             result[str(horizon)] = {
-                "twin": rmse(twin - measured),
-                "last_value": rmse(last - measured),
-                "straight_line": rmse(line - measured),
-                "count": int(len(rows)),
+                "twin": rmse(pair["twin"] - measured),
+                "last_value": rmse(pair["last_value"] - measured),
+                "straight_line": rmse(pair["straight_line"] - measured),
+                "count": int(len(measured)),
             }
         metrics["forecast_rmse_mg_dl"] = result
     return metrics
+
+
+def forecast_pairs(
+    simulator: WindowSimulator, values: dict[str, float], forecasts: Windows
+) -> dict[int, dict[str, np.ndarray]]:
+    """The measured value and each forecast of it, for every horizon with readings."""
+    arrays = {k: np.array([v]) for k, v in values.items()}
+    G = simulator.run(arrays, forecasts)[0]
+    pairs = {}
+    for horizon in FORECAST_HORIZONS:
+        hit = (forecasts.offsets == horizon) & forecasts.mask
+        rows, cols = np.nonzero(hit)
+        if len(rows) == 0:
+            continue
+        pairs[horizon] = {
+            "measured": forecasts.values[rows, cols],
+            "twin": G[rows, horizon],
+            "last_value": forecasts.g0[rows],
+            "straight_line": np.clip(forecasts.g0[rows] + forecasts.slope[rows] * horizon, 40, 400),
+        }
+    return pairs
 
 
 def rmse(error: np.ndarray) -> float:

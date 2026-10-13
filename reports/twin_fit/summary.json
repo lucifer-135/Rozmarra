@@ -53,5 +53,337 @@
     "meal_factor": 0.533,
     "gamma_su": 0.5
   },
-  "t2dsim_reference_rmse_mg_dl": 29.0
+  "t2dsim_reference_rmse_mg_dl": 29.0,
+  "parkes": {
+    "created_on": "2026-10-13",
+    "source": "real_open",
+    "grid": "Parkes consensus error grid for Type 2 Diabetes (Pf\u00fctzner et al., 2013)",
+    "target_share_a_and_b_30_min": 0.95,
+    "all": {
+      "patients": 89,
+      "30_min": {
+        "twin": {
+          "pairs": 6301,
+          "shares": {
+            "A": 0.9718,
+            "B": 0.0279,
+            "C": 0.0003,
+            "D": 0.0,
+            "E": 0.0
+          },
+          "share_a_and_b": 0.9997
+        },
+        "last_value": {
+          "pairs": 6301,
+          "shares": {
+            "A": 0.9552,
+            "B": 0.0446,
+            "C": 0.0002,
+            "D": 0.0,
+            "E": 0.0
+          },
+          "share_a_and_b": 0.9998
+        },
+        "straight_line": {
+          "pairs": 6301,
+          "shares": {
+            "A": 0.9114,
+            "B": 0.0884,
+            "C": 0.0002,
+            "D": 0.0,
+            "E": 0.0
+          },
+          "share_a_and_b": 0.9998
+        }
+      },
+      "60_min": {
+        "twin": {
+          "pairs": 6299,
+          "shares": {
+            "A": 0.9198,
+            "B": 0.0784,
+            "C": 0.0017,
+            "D": 0.0,
+            "E": 0.0
+          },
+          "share_a_and_b": 0.9983
+        },
+        "last_value": {
+          "pairs": 6299,
+          "shares": {
+            "A": 0.8759,
+            "B": 0.1218,
+            "C": 0.0024,
+            "D": 0.0,
+            "E": 0.0
+          },
+          "share_a_and_b": 0.9976
+        },
+        "straight_line": {
+          "pairs": 6299,
+          "shares": {
+            "A": 0.7455,
+            "B": 0.2424,
+            "C": 0.0119,
+            "D": 0.0002,
+            "E": 0.0
+          },
+          "share_a_and_b": 0.9879
+        }
+      },
+      "120_min": {
+        "twin": {
+          "pairs": 6298,
+          "shares": {
+            "A": 0.8536,
+            "B": 0.1358,
+            "C": 0.0106,
+            "D": 0.0,
+            "E": 0.0
+          },
+          "share_a_and_b": 0.9894
+        },
+        "last_value": {
+          "pairs": 6298,
+          "shares": {
+            "A": 0.7548,
+            "B": 0.2269,
+            "C": 0.0181,
+            "D": 0.0002,
+            "E": 0.0
+          },
+          "share_a_and_b": 0.9817
+        },
+        "straight_line": {
+          "pairs": 6298,
+          "shares": {
+            "A": 0.521,
+            "B": 0.3928,
+            "C": 0.0829,
+            "D": 0.0033,
+            "E": 0.0
+          },
+          "share_a_and_b": 0.9138
+        }
+      }
+    },
+    "by_dataset": {
+      "CGMacros": {
+        "patients": 14,
+        "30_min": {
+          "twin": {
+            "pairs": 766,
+            "shares": {
+              "A": 0.9621,
+              "B": 0.0379,
+              "C": 0.0,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 1.0
+          },
+          "last_value": {
+            "pairs": 766,
+            "shares": {
+              "A": 0.9621,
+              "B": 0.0379,
+              "C": 0.0,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 1.0
+          },
+          "straight_line": {
+            "pairs": 766,
+            "shares": {
+              "A": 0.9008,
+              "B": 0.0979,
+              "C": 0.0013,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9987
+          }
+        },
+        "60_min": {
+          "twin": {
+            "pairs": 766,
+            "shares": {
+              "A": 0.9151,
+              "B": 0.0849,
+              "C": 0.0,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 1.0
+          },
+          "last_value": {
+            "pairs": 766,
+            "shares": {
+              "A": 0.8943,
+              "B": 0.1044,
+              "C": 0.0013,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9987
+          },
+          "straight_line": {
+            "pairs": 766,
+            "shares": {
+              "A": 0.7376,
+              "B": 0.235,
+              "C": 0.0274,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9726
+          }
+        },
+        "120_min": {
+          "twin": {
+            "pairs": 765,
+            "shares": {
+              "A": 0.881,
+              "B": 0.1098,
+              "C": 0.0092,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9908
+          },
+          "last_value": {
+            "pairs": 765,
+            "shares": {
+              "A": 0.8118,
+              "B": 0.1686,
+              "C": 0.0196,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9804
+          },
+          "straight_line": {
+            "pairs": 765,
+            "shares": {
+              "A": 0.5399,
+              "B": 0.3438,
+              "C": 0.1111,
+              "D": 0.0052,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.8837
+          }
+        }
+      },
+      "ShanghaiT2DM": {
+        "patients": 75,
+        "30_min": {
+          "twin": {
+            "pairs": 5535,
+            "shares": {
+              "A": 0.9731,
+              "B": 0.0266,
+              "C": 0.0004,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9996
+          },
+          "last_value": {
+            "pairs": 5535,
+            "shares": {
+              "A": 0.9543,
+              "B": 0.0455,
+              "C": 0.0002,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9998
+          },
+          "straight_line": {
+            "pairs": 5535,
+            "shares": {
+              "A": 0.9129,
+              "B": 0.0871,
+              "C": 0.0,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 1.0
+          }
+        },
+        "60_min": {
+          "twin": {
+            "pairs": 5533,
+            "shares": {
+              "A": 0.9205,
+              "B": 0.0775,
+              "C": 0.002,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.998
+          },
+          "last_value": {
+            "pairs": 5533,
+            "shares": {
+              "A": 0.8733,
+              "B": 0.1242,
+              "C": 0.0025,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9975
+          },
+          "straight_line": {
+            "pairs": 5533,
+            "shares": {
+              "A": 0.7466,
+              "B": 0.2434,
+              "C": 0.0098,
+              "D": 0.0002,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9901
+          }
+        },
+        "120_min": {
+          "twin": {
+            "pairs": 5533,
+            "shares": {
+              "A": 0.8498,
+              "B": 0.1393,
+              "C": 0.0108,
+              "D": 0.0,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9892
+          },
+          "last_value": {
+            "pairs": 5533,
+            "shares": {
+              "A": 0.747,
+              "B": 0.235,
+              "C": 0.0179,
+              "D": 0.0002,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9819
+          },
+          "straight_line": {
+            "pairs": 5533,
+            "shares": {
+              "A": 0.5183,
+              "B": 0.3996,
+              "C": 0.079,
+              "D": 0.0031,
+              "E": 0.0
+            },
+            "share_a_and_b": 0.9179
+          }
+        }
+      }
+    }
+  }
 }

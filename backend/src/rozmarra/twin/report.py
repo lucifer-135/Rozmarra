@@ -215,6 +215,37 @@ def write_markdown(summary: dict, path: Path) -> None:
             f"{row['straight_line']} mg/dL | {row['patients_where_twin_beats_last_value']} of "
             f"{row['patients']} |"
         )
+    parkes = summary.get("parkes")
+    if parkes:
+        lines += [
+            "",
+            "## Parkes error grid",
+            "",
+            "The Parkes consensus error grid for Type 2 Diabetes (Pfützner and colleagues, 2013) "
+            "sorts each forecast into zones A to E by its possible effect on a treatment "
+            "decision. Zones A and B mean no effect or little effect on the outcome. The PRD "
+            f"target is {parkes['target_share_a_and_b_30_min']:.0%} or more of the 30-minute "
+            "forecasts in zones A and B. The values below pool all forecasts of all patients.",
+            "",
+            "Glucose changes little in 30 minutes, so the simple baselines also meet this target. "
+            "The share in zone A and the longer horizons show the differences between the "
+            "forecasts more clearly.",
+            "",
+            "| Horizon | Forecast | Pairs | Zone A | Zone B | Zone C | Zone D | Zone E | "
+            "Zones A and B |",
+            "|---|---|---|---|---|---|---|---|---|",
+        ]
+        names = {"twin": "Twin", "last_value": "Last value", "straight_line": "Straight line"}
+        for horizon in FORECAST_HORIZONS:
+            for key, name in names.items():
+                row = parkes["all"].get(f"{horizon}_min", {}).get(key)
+                if not row:
+                    continue
+                shares = " | ".join(f"{row['shares'][z]:.2%}" for z in "ABCDE")
+                lines.append(
+                    f"| {horizon} minutes | {name} | {row['pairs']:,} | {shares} | "
+                    f"{row['share_a_and_b']:.2%} |"
+                )
     lines += [
         "",
         "## Low blood sugar",
@@ -331,4 +362,7 @@ def fit_all(workers: int = 6, limit: int | None = None, figures: bool = True) ->
     write_markdown(summary, out / "summary.md")
     if figures:
         write_figures(payload["twins"])
+    from rozmarra.twin.parkes import run as run_parkes
+
+    summary["parkes"] = run_parkes(workers, datas, payload["twins"])
     return summary

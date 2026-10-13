@@ -126,6 +126,24 @@ def twin_fit(
     )
 
 
+@twin_app.command("parkes")
+def twin_parkes(
+    workers: int = typer.Option(6, help="The number of patients to process at the same time."),
+) -> None:
+    """Sort the twins' forecasts on held-out days into the zones of the Parkes error grid."""
+    from rozmarra.config import REPORTS_DIR
+    from rozmarra.twin.parkes import run
+
+    result = run(workers=workers)
+    row = result["all"]["30_min"]["twin"]
+    typer.echo(
+        f"{row['share_a_and_b']:.2%} of {row['pairs']:,} 30-minute twin forecasts fall in zones "
+        f"A and B of the Parkes error grid for Type 2 Diabetes. The PRD target is "
+        f"{result['target_share_a_and_b_30_min']:.0%} or more. The results are in "
+        f"{REPORTS_DIR / 'twin_fit'}."
+    )
+
+
 @synth_app.command("cohort")
 def synth_cohort(
     patients: int = typer.Option(500, help="The number of virtual patients to create."),
@@ -153,16 +171,18 @@ def model_train(
     """Build the feature tables for the models: time points, meals and fasting episodes."""
     import warnings
 
-    from rozmarra.ml.datasets import FEATURE_DIR, build_feature_tables
+    from rozmarra.ml.datasets import FEATURE_DIR, build_feature_tables, build_real_meal_table
     from rozmarra.ml.episodes import build_episode_table
 
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     counts = build_feature_tables(workers=workers)
+    real_meals = build_real_meal_table(workers=workers)
     episodes = build_episode_table(workers=workers)
     typer.echo(
         f"Rozmarra built {counts['e1_synthetic']:,} synthetic time points, "
         f"{counts['e2_synthetic']:,} meals that break a fast, {counts['e1_real']:,} real time "
-        f"points and {len(episodes):,} fasting episodes in {FEATURE_DIR}."
+        f"points, {real_meals:,} real meals after a night without food and "
+        f"{len(episodes):,} fasting episodes in {FEATURE_DIR}."
     )
 
 
@@ -184,9 +204,13 @@ def model_evaluate() -> None:
     write_figures(metrics)
     e1 = metrics["synthetic"]["e1"]
     real = metrics["real"]["e1"]["all"]
+    meals = metrics["real"].get("e2")
+    meal_text = (
+        f"Real meals after a night without food: E2 AUROC {meals['auroc']}. " if meals else ""
+    )
     typer.echo(
         f"Synthetic fasting days: E1 AUROC {e1['auroc']}, AUPRC {e1['auprc']}. "
-        f"Real normal days: E1 AUROC {real['auroc']}, AUPRC {real['auprc']}. "
+        f"Real normal days: E1 AUROC {real['auroc']}, AUPRC {real['auprc']}. {meal_text}"
         f"The full results are in {REPORTS_DIR / 'metrics.json'}."
     )
 
