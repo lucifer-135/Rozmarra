@@ -1,0 +1,841 @@
+{
+ "plan": {
+  "patient_id": "SY-0001",
+  "plan_name": "Plan A: usual medicines",
+  "template_id": "karva_chauth",
+  "fast_type": "karva_chauth",
+  "date": "2026-10-28",
+  "city": "Delhi",
+  "fast_start": "2026-10-28T05:00:00",
+  "fast_end": "2026-10-28T20:14:00",
+  "water_allowed": false,
+  "meals": [
+   {
+    "time": "2026-10-28T04:30:00",
+    "label": "Sargi before sunrise",
+    "label_hi": "सूर्योदय से पहले सरगी",
+    "food_category": "mixed",
+    "carbs_g": 60.0,
+    "breaks_fast": false
+   },
+   {
+    "time": "2026-10-28T20:24:00",
+    "label": "Meal that breaks the fast, with water and sweets",
+    "label_hi": "व्रत खोलने का भोजन, पानी और मिठाई के साथ",
+    "food_category": "fast_absorbing",
+    "carbs_g": 110.0,
+    "breaks_fast": true
+   }
+  ],
+  "medicines": [
+   {
+    "name": "glimepiride",
+    "dose": 2.0,
+    "time": "2026-10-28T08:00:00",
+    "usual_dose": 2.0,
+    "usual_time": "2026-10-28T08:00:00"
+   },
+   {
+    "name": "metformin",
+    "dose": 500.0,
+    "time": "2026-10-28T08:00:00",
+    "usual_dose": 500.0,
+    "usual_time": "2026-10-28T08:00:00"
+   },
+   {
+    "name": "dapagliflozin",
+    "dose": 10.0,
+    "time": "2026-10-28T08:00:00",
+    "usual_dose": 10.0,
+    "usual_time": "2026-10-28T08:00:00"
+   },
+   {
+    "name": "metformin",
+    "dose": 500.0,
+    "time": "2026-10-28T20:30:00",
+    "usual_dose": 500.0,
+    "usual_time": "2026-10-28T20:30:00"
+   }
+  ],
+  "activities": [
+   {
+    "start": "2026-10-28T17:00:00",
+    "end": "2026-10-28T18:30:00",
+    "label": "Evening puja and household work",
+    "mets": 2.5
+   }
+  ],
+  "status": "draft",
+  "approved_by": null,
+  "approved_on": null,
+  "notes": [
+   "The moonrise time is the published time for Delhi."
+  ]
+ },
+ "simulation": {
+  "patient_id": "SY-0001",
+  "source": "synthetic",
+  "plan": {
+   "patient_id": "SY-0001",
+   "plan_name": "Plan A: usual medicines",
+   "template_id": "karva_chauth",
+   "fast_type": "karva_chauth",
+   "date": "2026-10-28",
+   "city": "Delhi",
+   "fast_start": "2026-10-28T05:00:00",
+   "fast_end": "2026-10-28T20:14:00",
+   "water_allowed": false,
+   "meals": [
+    {
+     "time": "2026-10-28T04:30:00",
+     "label": "Sargi before sunrise",
+     "label_hi": "सूर्योदय से पहले सरगी",
+     "food_category": "mixed",
+     "carbs_g": 60.0,
+     "breaks_fast": false
+    },
+    {
+     "time": "2026-10-28T20:24:00",
+     "label": "Meal that breaks the fast, with water and sweets",
+     "label_hi": "व्रत खोलने का भोजन, पानी और मिठाई के साथ",
+     "food_category": "fast_absorbing",
+     "carbs_g": 110.0,
+     "breaks_fast": true
+    }
+   ],
+   "medicines": [
+    {
+     "name": "glimepiride",
+     "dose": 2.0,
+     "time": "2026-10-28T08:00:00",
+     "usual_dose": 2.0,
+     "usual_time": "2026-10-28T08:00:00"
+    },
+    {
+     "name": "metformin",
+     "dose": 500.0,
+     "time": "2026-10-28T08:00:00",
+     "usual_dose": 500.0,
+     "usual_time": "2026-10-28T08:00:00"
+    },
+    {
+     "name": "dapagliflozin",
+     "dose": 10.0,
+     "time": "2026-10-28T08:00:00",
+     "usual_dose": 10.0,
+     "usual_time": "2026-10-28T08:00:00"
+    },
+    {
+     "name": "metformin",
+     "dose": 500.0,
+     "time": "2026-10-28T20:30:00",
+     "usual_dose": 500.0,
+     "usual_time": "2026-10-28T20:30:00"
+    }
+   ],
+   "activities": [
+    {
+     "start": "2026-10-28T17:00:00",
+     "end": "2026-10-28T18:30:00",
+     "label": "Evening puja and household work",
+     "mets": 2.5
+    }
+   ],
+   "status": "draft",
+   "approved_by": null,
+   "approved_on": null,
+   "notes": [
+    "The moonrise time is the published time for Delhi."
+   ]
+  },
+  "curve": {
+   "times": [
+    "2026-10-28T02:30",
+    "2026-10-28T04:30",
+    "2026-10-28T06:30",
+    "2026-10-28T08:30",
+    "2026-10-28T10:30",
+    "2026-10-28T12:30",
+    "2026-10-28T14:30",
+    "2026-10-28T16:30",
+    "2026-10-28T18:30",
+    "2026-10-28T20:30",
+    "2026-10-28T22:30"
+   ],
+   "p10": [
+    145.5,
+    148.0,
+    213.6,
+    163.2,
+    112.9,
+    105.0,
+    106.9,
+    111.1,
+    107.1,
+    125.7,
+    217.3
+   ],
+   "p50": [
+    149.6,
+    150.0,
+    226.7,
+    173.2,
+    121.3,
+    112.0,
+    113.7,
+    117.7,
+    113.9,
+    133.0,
+    244.7
+   ],
+   "p90": [
+    154.5,
+    152.5,
+    238.0,
+    182.6,
+    130.2,
+    120.9,
+    122.7,
+    126.4,
+    121.0,
+    140.3,
+    275.3
+   ],
+   "most_likely": [
+    150.3,
+    149.7,
+    231.0,
+    177.6,
+    121.6,
+    110.9,
+    112.3,
+    116.3,
+    112.2,
+    131.0,
+    256.6
+   ],
+   "average_patient": [
+    153.8,
+    153.2,
+    216.4,
+    170.6,
+    128.9,
+    124.8,
+    126.7,
+    129.8,
+    126.4,
+    142.3,
+    240.6
+   ],
+   "samples": 100
+  },
+  "markers": {
+   "fast": {
+    "start": "2026-10-28T05:00",
+    "end": "2026-10-28T20:14",
+    "water_allowed": false,
+    "hours": 15.2
+   },
+   "meals": [
+    {
+     "time": "2026-10-28T04:30",
+     "label": "Sargi before sunrise",
+     "label_hi": "सूर्योदय से पहले सरगी",
+     "carbs_g": 60.0,
+     "food_category": "mixed",
+     "breaks_fast": false
+    },
+    {
+     "time": "2026-10-28T20:24",
+     "label": "Meal that breaks the fast, with water and sweets",
+     "label_hi": "व्रत खोलने का भोजन, पानी और मिठाई के साथ",
+     "carbs_g": 110.0,
+     "food_category": "fast_absorbing",
+     "breaks_fast": true
+    }
+   ],
+   "medicines": [
+    {
+     "time": "2026-10-28T08:00",
+     "name": "glimepiride",
+     "display_name": "Glimepiride",
+     "display_name_hi": "ग्लिमेपिराइड",
+     "dose": 2.0,
+     "unit": "mg",
+     "usual_dose": 2.0,
+     "changed": false
+    },
+    {
+     "time": "2026-10-28T08:00",
+     "name": "metformin",
+     "display_name": "Metformin",
+     "display_name_hi": "मेटफ़ॉर्मिन",
+     "dose": 500.0,
+     "unit": "mg",
+     "usual_dose": 500.0,
+     "changed": false
+    },
+    {
+     "time": "2026-10-28T08:00",
+     "name": "dapagliflozin",
+     "display_name": "Dapagliflozin",
+     "display_name_hi": "डैपाग्लिफ़्लोज़िन",
+     "dose": 10.0,
+     "unit": "mg",
+     "usual_dose": 10.0,
+     "changed": false
+    },
+    {
+     "time": "2026-10-28T20:30",
+     "name": "metformin",
+     "display_name": "Metformin",
+     "display_name_hi": "मेटफ़ॉर्मिन",
+     "dose": 500.0,
+     "unit": "mg",
+     "usual_dose": 500.0,
+     "changed": false
+    }
+   ],
+   "activities": [
+    {
+     "start": "2026-10-28T17:00",
+     "end": "2026-10-28T18:30",
+     "label": "Evening puja and household work",
+     "mets": 2.5
+    }
+   ]
+  },
+  "summary": {
+   "chance_of_low_during_fast": {
+    "value": 0.041,
+    "percent": 4,
+    "word": "Low"
+   },
+   "lowest_glucose_mg_dl": 112.0,
+   "lowest_glucose_time": "2026-10-28T12:46",
+   "lowest_glucose_time_text": "12:46 pm",
+   "expected_minutes_below_70": 0,
+   "chance_of_high_after_fast": {
+    "value": 0.8,
+    "percent": 80,
+    "word": "High"
+   }
+  },
+  "dehydration_caution": {
+   "title": "Dehydration caution",
+   "message": "This fast allows no water for 15.2 hours. The risk of dehydration may be higher for this patient. Please review the medicines and the plan for drinking water before and after the fast.",
+   "reasons": [
+    "The patient takes dapagliflozin, an SGLT2 inhibitor."
+   ]
+  },
+  "idf_dar": {
+   "total": 2.5,
+   "category": "low"
+  },
+  "notes": [
+   "Synthetic data. This patient does not represent a real person.",
+   "The IDF-DAR score was designed for Ramadan. Rozmarra applies it to other fasts as an approximation."
+  ]
+ },
+ "templates": [
+  {
+   "id": "navratri_one_meal",
+   "fast_type": "navratri",
+   "name": "Navratri: one meal a day in the evening",
+   "name_hi": "नवरात्रि: शाम को एक समय भोजन",
+   "short_name": "Navratri",
+   "word_hi": "व्रत",
+   "description": "The patient eats one vrat meal each evening and avoids grains. Water is allowed during the day.",
+   "water_allowed": true,
+   "glucose_notes": "Sabudana and potatoes can raise blood sugar quickly. Sweets and fried foods are common. Evening garba or dandiya dancing increases physical activity."
+  },
+  {
+   "id": "navratri_phalahar",
+   "fast_type": "navratri",
+   "name": "Navratri: fruit and milk during the day, with a vrat meal in the evening",
+   "name_hi": "नवरात्रि: दिन में फल और दूध, शाम को व्रत का भोजन",
+   "short_name": "Navratri",
+   "word_hi": "व्रत",
+   "description": "The patient eats fruit, milk and vrat foods three times a day and avoids grains. Water is allowed.",
+   "water_allowed": true,
+   "glucose_notes": "Sabudana and potatoes can raise blood sugar quickly. Sweets and fried foods are common."
+  },
+  {
+   "id": "karva_chauth",
+   "fast_type": "karva_chauth",
+   "name": "Karva Chauth: no food or water from sunrise to moonrise",
+   "name_hi": "करवा चौथ: सूर्योदय से चंद्रोदय तक बिना भोजन और पानी के",
+   "short_name": "Karva Chauth",
+   "word_hi": "व्रत",
+   "description": "The patient eats sargi before sunrise and then takes no food or water until moonrise. The patient breaks the fast with water and a meal that often includes sweets.",
+   "water_allowed": false,
+   "glucose_notes": "The fast without water lasts about 15 to 16 hours. The meal that breaks the fast is often large and sweet."
+  }
+ ],
+ "options": {
+  "medicines": [
+   {
+    "name": "acarbose",
+    "display_name": "Acarbose",
+    "display_name_hi": "एकार्बोज़",
+    "medicine_class": "alpha_glucosidase_inhibitor",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 50,
+    "max_single_dose": 100
+   },
+   {
+    "name": "aspirin",
+    "display_name": "Aspirin",
+    "display_name_hi": "एस्पिरिन",
+    "medicine_class": "other",
+    "for_diabetes": false,
+    "unit": "mg",
+    "standard_dose": 75,
+    "max_single_dose": 325
+   },
+   {
+    "name": "atorvastatin",
+    "display_name": "Atorvastatin",
+    "display_name_hi": "एटोरवास्टेटिन",
+    "medicine_class": "other",
+    "for_diabetes": false,
+    "unit": "mg",
+    "standard_dose": 10,
+    "max_single_dose": 80
+   },
+   {
+    "name": "biphasic_insulin_aspart_30",
+    "display_name": "Biphasic insulin aspart 30",
+    "display_name_hi": "बाइफ़ेज़िक इंसुलिन एस्पार्ट 30",
+    "medicine_class": "premixed_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 10,
+    "max_single_dose": 60
+   },
+   {
+    "name": "biphasic_insulin_aspart_50",
+    "display_name": "Biphasic insulin aspart 50",
+    "display_name_hi": "बाइफ़ेज़िक इंसुलिन एस्पार्ट 50",
+    "medicine_class": "premixed_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 10,
+    "max_single_dose": 60
+   },
+   {
+    "name": "bisoprolol",
+    "display_name": "Bisoprolol",
+    "display_name_hi": "बिसोप्रोलोल",
+    "medicine_class": "beta_blocker",
+    "for_diabetes": false,
+    "unit": "mg",
+    "standard_dose": 5,
+    "max_single_dose": 10
+   },
+   {
+    "name": "canagliflozin",
+    "display_name": "Canagliflozin",
+    "display_name_hi": "कैनाग्लिफ़्लोज़िन",
+    "medicine_class": "sglt2_inhibitor",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 100,
+    "max_single_dose": 300
+   },
+   {
+    "name": "dapagliflozin",
+    "display_name": "Dapagliflozin",
+    "display_name_hi": "डैपाग्लिफ़्लोज़िन",
+    "medicine_class": "sglt2_inhibitor",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 10,
+    "max_single_dose": 10
+   },
+   {
+    "name": "empagliflozin",
+    "display_name": "Empagliflozin",
+    "display_name_hi": "एम्पाग्लिफ़्लोज़िन",
+    "medicine_class": "sglt2_inhibitor",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 10,
+    "max_single_dose": 25
+   },
+   {
+    "name": "glibenclamide",
+    "display_name": "Glibenclamide",
+    "display_name_hi": "ग्लिबेनक्लामाइड",
+    "medicine_class": "sulfonylurea",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 5,
+    "max_single_dose": 10
+   },
+   {
+    "name": "gliclazide",
+    "display_name": "Gliclazide",
+    "display_name_hi": "ग्लिक्लाज़ाइड",
+    "medicine_class": "sulfonylurea",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 80,
+    "max_single_dose": 160
+   },
+   {
+    "name": "gliclazide_mr",
+    "display_name": "Gliclazide MR",
+    "display_name_hi": "ग्लिक्लाज़ाइड एमआर",
+    "medicine_class": "sulfonylurea",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 60,
+    "max_single_dose": 120
+   },
+   {
+    "name": "glimepiride",
+    "display_name": "Glimepiride",
+    "display_name_hi": "ग्लिमेपिराइड",
+    "medicine_class": "sulfonylurea",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 2,
+    "max_single_dose": 8
+   },
+   {
+    "name": "gliquidone",
+    "display_name": "Gliquidone",
+    "display_name_hi": "ग्लिक्विडोन",
+    "medicine_class": "sulfonylurea",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 30,
+    "max_single_dose": 60
+   },
+   {
+    "name": "hydrochlorothiazide",
+    "display_name": "Hydrochlorothiazide",
+    "display_name_hi": "हाइड्रोक्लोरोथियाज़ाइड",
+    "medicine_class": "diuretic",
+    "for_diabetes": false,
+    "unit": "mg",
+    "standard_dose": 12.5,
+    "max_single_dose": 50
+   },
+   {
+    "name": "insulin_aspart",
+    "display_name": "Insulin aspart",
+    "display_name_hi": "इंसुलिन एस्पार्ट",
+    "medicine_class": "rapid_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 4,
+    "max_single_dose": 40
+   },
+   {
+    "name": "insulin_degludec",
+    "display_name": "Insulin degludec",
+    "display_name_hi": "इंसुलिन डेग्लुडेक",
+    "medicine_class": "basal_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 10,
+    "max_single_dose": 80
+   },
+   {
+    "name": "insulin_detemir",
+    "display_name": "Insulin detemir",
+    "display_name_hi": "इंसुलिन डिटेमिर",
+    "medicine_class": "basal_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 10,
+    "max_single_dose": 80
+   },
+   {
+    "name": "insulin_glargine",
+    "display_name": "Insulin glargine",
+    "display_name_hi": "इंसुलिन ग्लार्जिन",
+    "medicine_class": "basal_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 10,
+    "max_single_dose": 80
+   },
+   {
+    "name": "insulin_glulisine",
+    "display_name": "Insulin glulisine",
+    "display_name_hi": "इंसुलिन ग्लूलिसिन",
+    "medicine_class": "rapid_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 4,
+    "max_single_dose": 40
+   },
+   {
+    "name": "linagliptin",
+    "display_name": "Linagliptin",
+    "display_name_hi": "लिनाग्लिप्टिन",
+    "medicine_class": "dpp4_inhibitor",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 5,
+    "max_single_dose": 5
+   },
+   {
+    "name": "liraglutide",
+    "display_name": "Liraglutide",
+    "display_name_hi": "लिराग्लूटाइड",
+    "medicine_class": "glp1_agonist",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 1.2,
+    "max_single_dose": 1.8
+   },
+   {
+    "name": "metformin",
+    "display_name": "Metformin",
+    "display_name_hi": "मेटफ़ॉर्मिन",
+    "medicine_class": "biguanide",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 1000,
+    "max_single_dose": 1000
+   },
+   {
+    "name": "metoprolol",
+    "display_name": "Metoprolol",
+    "display_name_hi": "मेटोप्रोलोल",
+    "medicine_class": "beta_blocker",
+    "for_diabetes": false,
+    "unit": "mg",
+    "standard_dose": 50,
+    "max_single_dose": 200
+   },
+   {
+    "name": "pioglitazone",
+    "display_name": "Pioglitazone",
+    "display_name_hi": "पियोग्लिटाज़ोन",
+    "medicine_class": "thiazolidinedione",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 15,
+    "max_single_dose": 45
+   },
+   {
+    "name": "premixed_insulin_30_70",
+    "display_name": "Premixed human insulin 30/70",
+    "display_name_hi": "प्रीमिक्स इंसुलिन 30/70",
+    "medicine_class": "premixed_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 10,
+    "max_single_dose": 60
+   },
+   {
+    "name": "premixed_insulin_40_60",
+    "display_name": "Premixed human insulin 40/60",
+    "display_name_hi": "प्रीमिक्स इंसुलिन 40/60",
+    "medicine_class": "premixed_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 10,
+    "max_single_dose": 60
+   },
+   {
+    "name": "regular_insulin",
+    "display_name": "Regular human insulin",
+    "display_name_hi": "रेगुलर इंसुलिन",
+    "medicine_class": "regular_insulin",
+    "for_diabetes": true,
+    "unit": "units",
+    "standard_dose": 4,
+    "max_single_dose": 40
+   },
+   {
+    "name": "repaglinide",
+    "display_name": "Repaglinide",
+    "display_name_hi": "रेपाग्लिनाइड",
+    "medicine_class": "glinide",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 1,
+    "max_single_dose": 4
+   },
+   {
+    "name": "sitagliptin",
+    "display_name": "Sitagliptin",
+    "display_name_hi": "सिटाग्लिप्टिन",
+    "medicine_class": "dpp4_inhibitor",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 100,
+    "max_single_dose": 100
+   },
+   {
+    "name": "telmisartan",
+    "display_name": "Telmisartan",
+    "display_name_hi": "टेल्मिसार्टन",
+    "medicine_class": "other",
+    "for_diabetes": false,
+    "unit": "mg",
+    "standard_dose": 40,
+    "max_single_dose": 80
+   },
+   {
+    "name": "teneligliptin",
+    "display_name": "Teneligliptin",
+    "display_name_hi": "टेनेलिग्लिप्टिन",
+    "medicine_class": "dpp4_inhibitor",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 20,
+    "max_single_dose": 40
+   },
+   {
+    "name": "vildagliptin",
+    "display_name": "Vildagliptin",
+    "display_name_hi": "विल्डाग्लिप्टिन",
+    "medicine_class": "dpp4_inhibitor",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 50,
+    "max_single_dose": 50
+   },
+   {
+    "name": "voglibose",
+    "display_name": "Voglibose",
+    "display_name_hi": "वोग्लिबोज़",
+    "medicine_class": "alpha_glucosidase_inhibitor",
+    "for_diabetes": true,
+    "unit": "mg",
+    "standard_dose": 0.2,
+    "max_single_dose": 0.3
+   }
+  ],
+  "food_categories": [
+   {
+    "id": "fast_absorbing",
+    "label": "Fast-absorbing food, such as sweets, sabudana or dates"
+   },
+   {
+    "id": "mixed",
+    "label": "An ordinary mixed meal"
+   },
+   {
+    "id": "slow_absorbing",
+    "label": "A meal that is high in fibre, fat or protein"
+   }
+  ],
+  "activities": [
+   {
+    "id": "walking",
+    "label": "Walking at an ordinary pace",
+    "mets": 3.5,
+    "minutes": 30
+   },
+   {
+    "id": "brisk_walking",
+    "label": "Brisk walking",
+    "mets": 4.3,
+    "minutes": 30
+   },
+   {
+    "id": "household_work",
+    "label": "Household work",
+    "mets": 2.5,
+    "minutes": 60
+   },
+   {
+    "id": "garba",
+    "label": "Garba or dandiya dancing",
+    "mets": 5.0,
+    "minutes": 90
+   }
+  ]
+ },
+ "patients": [
+  {
+   "patient_id": "SY-0002",
+   "label": "Ramesh Patel, Age 62",
+   "name": "Ramesh Patel",
+   "age": 62,
+   "source": "synthetic",
+   "fast": "Navratri",
+   "template_id": "navratri_one_meal",
+   "fast_date": "2026-10-15",
+   "fast_date_text": "15 October 2026",
+   "idf_dar_total": 11.0,
+   "idf_dar_category": "high",
+   "chance_of_low_during_fast": {
+    "value": 0.068,
+    "percent": 7,
+    "word": "Low"
+   },
+   "dehydration_caution": false,
+   "plan_status": "not_started"
+  },
+  {
+   "patient_id": "SY-0001",
+   "label": "Sunita Sharma, Age 54",
+   "name": "Sunita Sharma",
+   "age": 54,
+   "source": "synthetic",
+   "fast": "Karva Chauth",
+   "template_id": "karva_chauth",
+   "fast_date": "2026-10-28",
+   "fast_date_text": "28 October 2026",
+   "idf_dar_total": 2.5,
+   "idf_dar_category": "low",
+   "chance_of_low_during_fast": {
+    "value": 0.04,
+    "percent": 4,
+    "word": "Low"
+   },
+   "dehydration_caution": true,
+   "plan_status": "approved"
+  },
+  {
+   "patient_id": "SY-0004",
+   "label": "Kamla Devi, Age 71",
+   "name": "Kamla Devi",
+   "age": 71,
+   "source": "synthetic",
+   "fast": "Ekadashi",
+   "template_id": "ekadashi_phalahar",
+   "fast_date": "2026-11-05",
+   "fast_date_text": "5 November 2026",
+   "idf_dar_total": 7.5,
+   "idf_dar_category": "high",
+   "chance_of_low_during_fast": {
+    "value": 0.018,
+    "percent": 2,
+    "word": "Low"
+   },
+   "dehydration_caution": false,
+   "plan_status": "not_started"
+  },
+  {
+   "patient_id": "SY-0003",
+   "label": "Abdul Rahman, Age 58",
+   "name": "Abdul Rahman",
+   "age": 58,
+   "source": "synthetic",
+   "fast": "Ramadan",
+   "template_id": "ramadan",
+   "fast_date": "2027-02-20",
+   "fast_date_text": "20 February 2027",
+   "idf_dar_total": 8.5,
+   "idf_dar_category": "high",
+   "chance_of_low_during_fast": {
+    "value": 0.005,
+    "percent": 0,
+    "word": "Low"
+   },
+   "dehydration_caution": false,
+   "plan_status": "not_started"
+  }
+ ]
+}

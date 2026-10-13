@@ -4,7 +4,26 @@
     "subtitle": "Rozmarra helps doctors plan safer fasts for people with Type 2 Diabetes in India.",
     "language": "Language of the dashboard",
     "languageEnglish": "English",
-    "languageHindi": "हिन्दी"
+    "languageHindi": "हिन्दी",
+    "skipToContent": "Skip to the main content"
+  },
+  "nav": {
+    "main": "Main navigation",
+    "patients": "Patients who plan to fast",
+    "about": "How Rozmarra makes predictions"
+  },
+  "screens": {
+    "virtualPatient": "Virtual patient",
+    "simulator": "Test a fasting plan",
+    "monitor": "Live fasting monitor",
+    "plan": "Patient fasting plan",
+    "about": "How Rozmarra makes predictions"
+  },
+  "planned": {
+    "body": "The team will add this screen on 18 October 2026.",
+    "monitor": "This screen will replay a recorded fasting day with a time slider. It will show the forecasts and alerts as they would have appeared at each moment.",
+    "plan": "This screen will produce a printable fasting plan in English and Hindi after the doctor approves a plan.",
+    "about": "This screen will explain which data Rozmarra uses, how the team tested it, what the results were and what its limits are."
   },
   "notice": {
     "clinical": "Rozmarra supports clinical decisions. It does not replace the judgement of a doctor.",
@@ -12,26 +31,335 @@
     "synthetic": "Synthetic data",
     "syntheticDetail": "All patients in this prototype are synthetic. They do not represent real people."
   },
-  "placeholder": {
-    "title": "The dashboard is being built",
-    "body": "This page is a placeholder. The screens in the list below will appear here as the team builds them.",
-    "screensTitle": "Planned screens",
-    "screens": {
-      "patients": "Patients who plan to fast",
-      "virtualPatient": "Virtual patient",
-      "simulator": "Test a fasting plan",
-      "monitor": "Live fasting monitor",
-      "plan": "Patient fasting plan",
-      "about": "How Rozmarra makes predictions"
-    }
-  },
   "service": {
-    "title": "Connection to the Rozmarra service",
-    "statusChecking": "Checking",
-    "statusOnline": "Connected",
-    "statusOffline": "Not connected",
     "checking": "The dashboard is checking the connection to the Rozmarra service.",
     "online": "The Rozmarra service is running. The service version is {{version}}.",
     "offline": "The dashboard cannot reach the Rozmarra service. Please start the service with the command \"uv run rozmarra serve\" in the backend folder."
+  },
+  "common": {
+    "loading": "The dashboard is loading the data.",
+    "errorTitle": "The data could not be loaded.",
+    "errorBody": "Something went wrong while the dashboard loaded the data.",
+    "retry": "Try again",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "listSeparator": ", "
+  },
+  "units": {
+    "mg": "mg",
+    "units": "units",
+    "g": "g"
+  },
+  "risk": {
+    "low": "Low",
+    "moderate": "Moderate",
+    "high": "High",
+    "chance": "{{percent}}% ({{word}})"
+  },
+  "planStatus": {
+    "not_started": "Not started",
+    "draft": "Draft",
+    "approved": "Approved"
+  },
+  "idfDar": {
+    "title": "IDF-DAR 2021 risk score",
+    "description": "The International Diabetes Federation and the DAR International Alliance published this score in 2021 to estimate the risk of fasting during Ramadan.",
+    "category": {
+      "low": "Low risk",
+      "moderate": "Moderate risk",
+      "high": "High risk"
+    },
+    "categoryWithPoints_one": "IDF-DAR: {{category}}, {{count}} point",
+    "categoryWithPoints_other": "IDF-DAR: {{category}}, {{count}} points",
+    "categoryPoints_one": "{{category}}, {{count}} point",
+    "categoryPoints_other": "{{category}}, {{count}} points",
+    "item": "Item",
+    "detail": "Detail",
+    "points": "Points",
+    "pointsOf": "{{points}} of {{max}}",
+    "total": "Total score",
+    "bands": "A total of 0 to 3 points means low risk, 3.5 to 6 points means moderate risk, and more than 6 points means high risk.",
+    "missing": "Some items are missing, so the total may lie anywhere from {{range}} points.",
+    "otherFasts": "The IDF-DAR score was designed for Ramadan. Rozmarra applies it to other fasts as an approximation.",
+    "items": {
+      "diabetes_type": "Type of diabetes",
+      "years_with_diabetes": "Years with diabetes",
+      "hypoglycaemia": "Low blood sugar",
+      "hba1c_percent": "HbA1c",
+      "treatments": "Treatment",
+      "self_monitoring": "Self-monitoring of blood glucose",
+      "acute_complications": "Acute complications (DKA or HHS)",
+      "macrovascular": "Heart and blood vessel disease",
+      "egfr": "Kidney function (eGFR)",
+      "pregnancy": "Pregnancy",
+      "frailty": "Frailty and cognition",
+      "physical_labour": "Physical work",
+      "previous_fasting": "Previous fasting experience",
+      "fasting_hours": "Fasting hours"
+    }
+  },
+  "patients": {
+    "title": "Patients who plan to fast",
+    "intro": "This list helps you see which patients need attention first. The patients are sorted by the predicted chance of low blood sugar during the fast, from the highest chance to the lowest.",
+    "loading": "The dashboard is loading the list of patients.",
+    "caption": "All patients in this list are synthetic.",
+    "columns": {
+      "patient": "Patient",
+      "fast": "Fast and date",
+      "idfDar": "IDF-DAR risk",
+      "chance": "Predicted chance of low blood sugar during the fast",
+      "status": "Plan status",
+      "notes": "Cautions",
+      "open": "Actions"
+    },
+    "dehydration": "Dehydration caution",
+    "noNotes": "None",
+    "testPlan": "Test a fasting plan",
+    "forPatient": "for {{name}}",
+    "chanceNote": "The predicted chance comes from a simulation of each patient's usual plan (Plan A) on the virtual patient. It is an estimate from a research prototype, not a diagnosis."
+  },
+  "patient": {
+    "backToList": "Back to the list of patients",
+    "nameAndAge": "{{name}}, Age {{age}}",
+    "fastOn": "{{fast}} on {{date}}",
+    "notFoundTitle": "The patient was not found.",
+    "notFound": "Rozmarra does not know this patient. Please choose a patient from the list.",
+    "screens": "Screens for this patient"
+  },
+  "virtual": {
+    "intro": "This screen shows what the twin knows about {{name}}, who plans to keep {{fast}} on {{date}}.",
+    "record": {
+      "title": "Health record summary",
+      "description": "The synthetic health record is saved in the FHIR R4 format.",
+      "sex": "Sex",
+      "sexValue": {
+        "female": "Female",
+        "male": "Male"
+      },
+      "city": "City",
+      "occupation": "Occupation",
+      "fastWord": "The patient's word for the fast",
+      "yearsWithDiabetes": "Years with diabetes",
+      "years_one": "{{count}} year",
+      "years_other": "{{count}} years",
+      "hba1c": "HbA1c",
+      "fastingGlucose": "Fasting glucose",
+      "egfr": "Kidney function (eGFR)",
+      "creatinine": "Creatinine",
+      "body": "Weight, height and BMI",
+      "bodyValue": "{{weight}} kg, {{height}} cm, BMI {{bmi}} kg/m²",
+      "bloodPressure": "Blood pressure",
+      "restingHeartRate": "Resting heart rate",
+      "beatsPerMinute": "{{value}} beats per minute",
+      "hypertension": "High blood pressure",
+      "kidneyDisease": "Chronic kidney disease",
+      "heartDisease": "Heart and blood vessel disease",
+      "heartDiseaseValue": {
+        "none": "None",
+        "stable": "Stable",
+        "unstable": "Unstable"
+      }
+    },
+    "medicines": {
+      "title": "Usual medicines",
+      "description": "The twin uses these doses and times on normal days.",
+      "doseAt": "{{dose}} at {{time}}"
+    },
+    "gene": {
+      "title": "Genetic marker CYP2C9",
+      "description": "The CYP2C9 enzyme clears sulfonylureas, such as glimepiride, from the body.",
+      "genotype": "Genotype:",
+      "usual": "This patient has the usual CYP2C9 genotype.",
+      "reduced": "This patient carries a reduced-function CYP2C9 gene variant. Glimepiride may stay in the body longer than usual.",
+      "clearance": "The twin assumes that this patient clears sulfonylureas at {{percent}}% of the usual speed."
+    },
+    "history": {
+      "title": "The last {{days}} days before the fast",
+      "description": "The synthetic glucose and smartwatch data covers {{from}} to {{to}}.",
+      "meanGlucose": "Average glucose",
+      "timeInRange": "Time from 70 to 180 mg/dL",
+      "timeBelow70": "Time below 70 mg/dL",
+      "meanSteps": "Average steps each day",
+      "meanSleep": "Average sleep each night",
+      "stepsValue": "{{value}} steps",
+      "hoursValue": "{{value}} hours",
+      "loadingSignals": "The dashboard is loading the glucose and smartwatch data.",
+      "glucoseTitle": "Glucose from the continuous glucose monitor",
+      "heartTitle": "Heart rate",
+      "stepsTitle": "Steps on each day",
+      "sleepTitle": "Sleep on each night",
+      "bpm": "beats per minute",
+      "stepsUnit": "steps",
+      "hoursUnit": "hours",
+      "glucoseSummary": "The chart shows the measured glucose from {{from}} to {{to}}. The average glucose was {{mean}} mg/dL. The glucose was from 70 to 180 mg/dL for {{inRange}}% of the time and below 70 mg/dL for {{below}}% of the time.",
+      "heartSummary": "The chart shows the heart rate from {{from}} to {{to}}.",
+      "stepsSummary": "The chart shows the steps on each day. The average was {{value}} steps each day.",
+      "sleepSummary": "The chart shows the hours of sleep on each night. The average was {{value}} hours each night."
+    },
+    "twin": {
+      "title": "Quality of the twin's fit",
+      "description": "The twin is a physiology model of glucose, insulin, meals and medicines.",
+      "donor": "This virtual patient's twin uses the fitted parameters of the real patient {{donor}} from the open {{dataset}} dataset.",
+      "fitSentence": "On that real patient's held-out days, the twin's 2-hour forecasts differed from the measured glucose by {{value}} mg/dL on average (root mean square error).",
+      "twoHourError": "Error of the 2-hour forecasts",
+      "heldOutError": "Error over 12 hours on held-out days",
+      "heldOutMard": "Mean relative error on held-out days",
+      "reference": "These errors come from open data from China and the United States, not from Indian patients.",
+      "parameters": "Twin parameters (technical details)",
+      "parameter": "Parameter",
+      "value": "Value",
+      "spread": "Spread on the log scale",
+      "spreadNote": "The spread is the standard deviation of the parameter on the log scale. A larger spread means that the twin is less certain about the value, so the band on the simulation is wider.",
+      "parameterNames": {
+        "S_G": "Glucose effectiveness (per minute)",
+        "S_I": "Insulin sensitivity (per minute per µU/mL)",
+        "beta": "Insulin release in response to glucose",
+        "k_abs_factor": "Meal absorption speed factor",
+        "meal_factor": "Meal size factor",
+        "gamma_su": "Sulfonylurea effect on insulin release"
+      }
+    },
+    "sources": {
+      "title": "Data sources",
+      "record": "The health record is synthetic and saved as a FHIR R4 Bundle.",
+      "twin": "The twin uses the fitted parameters of the real patient {{donor}} from open anonymised data.",
+      "history": "The glucose and smartwatch history is synthetic."
+    }
+  },
+  "simulator": {
+    "formTitle": "Plan form",
+    "formIntro": "Change the times, meals, medicines and activities of Plan A or Plan B. Then test both plans on the virtual patient.",
+    "run": "Test and compare both plans",
+    "fixProblems": "Please correct the marked fields before you test the plans.",
+    "tab": {
+      "plan_a": "Plan A",
+      "plan_b": "Plan B"
+    },
+    "reset": "Reset to the usual plan",
+    "copyA": "Copy Plan A into Plan B",
+    "planBName": "Plan B: changed plan",
+    "resultsTitle": "Results of the simulation",
+    "running": "Rozmarra is simulating both plans with 100 versions of the twin. This takes a few seconds.",
+    "stale": "The plans have changed since the last test. Please test them again before you approve a plan.",
+    "explainBand": "The shaded band shows the range in which 8 of 10 simulated versions of the twin stay, from the 10th to the 90th percentile.",
+    "explainAverage": "The grey dotted line shows an average patient with the same plan. It shows how this patient's own twin differs from an average patient.",
+    "explainChance": "The chances come from a model that combines the twin's simulations with the patient's recent glucose history. They are estimates from a research prototype."
+  },
+  "form": {
+    "planName": "Name of the plan",
+    "template": "Type of fast",
+    "date": "Date of the fast",
+    "templateNote": "If you change the type or the date of the fast, Rozmarra rebuilds the plan from the template with the usual medicines.",
+    "fastTitle": "Fasting window",
+    "fastStart": "Start of the fast",
+    "fastEnd": "End of the fast",
+    "waterAllowed": "Water is allowed during the fast",
+    "day": "Day",
+    "time": "Time",
+    "fieldDay": "{{name}}: day",
+    "fieldTime": "{{name}}: time",
+    "dayOffset": {
+      "-1": "Day before the fast",
+      "0": "Day of the fast",
+      "1": "Next day",
+      "2": "Day after next"
+    },
+    "dayOffsetOther": "{{count}} days from the date of the fast",
+    "mealsTitle": "Meals",
+    "addMeal": "Add a meal",
+    "newMeal": "New meal",
+    "noMeals": "This plan has no meals.",
+    "mealNumber": "Meal {{number}}",
+    "mealLabel": "Description",
+    "carbs": "Carbohydrate",
+    "foodType": "Type of food",
+    "food": {
+      "fast_absorbing": "Fast-absorbing food, such as sweets, sabudana or dates",
+      "mixed": "An ordinary mixed meal",
+      "slow_absorbing": "A meal that is high in fibre, fat or protein"
+    },
+    "breaksFast": "This meal breaks the fast",
+    "removeMeal": "Remove meal {{number}}",
+    "medicinesTitle": "Medicines",
+    "addMedicine": "Add a medicine",
+    "noMedicines": "This plan has no medicines.",
+    "medicineNumber": "Medicine {{number}}",
+    "medicine": "Medicine",
+    "dose": "Dose",
+    "usualDose": "Usual dose: {{dose}} {{unit}} at {{time}}.",
+    "addedMedicine": "The doctor added this medicine to the plan.",
+    "removeMedicine": "Remove medicine {{number}}, {{name}}",
+    "activitiesTitle": "Physical activity",
+    "addActivity": "Add an activity",
+    "noActivities": "This plan has no planned activity.",
+    "activityNumber": "Activity {{number}}",
+    "activity": "Activity",
+    "activityStart": "Start",
+    "activityEnd": "End",
+    "intensity": "Intensity: {{mets}} METs.",
+    "removeActivity": "Remove activity {{number}}",
+    "activities": {
+      "walking": "Walking at an ordinary pace",
+      "brisk_walking": "Brisk walking",
+      "household_work": "Household work",
+      "garba": "Garba or dandiya dancing"
+    },
+    "problems": {
+      "dose": "This dose is above the largest single dose that Rozmarra accepts ({{max}} {{unit}}).",
+      "fastEnd": "The end of the fast must be later than the start of the fast.",
+      "activityEnd": "The activity must end after it starts."
+    }
+  },
+  "results": {
+    "tableCaption": "The table compares the two plans. The values come from simulations on the virtual patient.",
+    "measure": "Measure",
+    "chanceOfLow": "Chance of low blood sugar during the fast",
+    "lowest": "Predicted lowest glucose",
+    "lowestAt": "{{value}} mg/dL at about {{time}}",
+    "minutesBelow70": "Expected minutes below 70 mg/dL",
+    "minutes_one": "{{count}} minute",
+    "minutes_other": "{{count}} minutes",
+    "chanceOfHigh": "Chance of high blood sugar after the fast is broken",
+    "noBreakingMeal": "No meal breaks the fast in this plan.",
+    "sentenceA": "With Plan A, the predicted lowest glucose is {{value}} mg/dL at about {{time}}.",
+    "sentenceB": "With Plan B, the predicted lowest glucose is {{value}} mg/dL at about {{time}}.",
+    "cautionTitle": "Dehydration caution",
+    "cautionBoth": "This caution applies to both plans.",
+    "cautionOne": "This caution applies to {{plan}}.",
+    "mealEvent": "{{label}}: {{carbs}} g of carbohydrate",
+    "medicineChanged": "{{name}} {{dose}} (changed from the usual plan)",
+    "activityEvent": "{{label}} ({{mets}} METs)",
+    "chartSummary": "The chart shows the simulated glucose for {{plan}}. The predicted lowest glucose is {{value}} mg/dL at about {{time}}. The chance of low blood sugar during the fast is {{percent}}%.",
+    "fromTo": "{{from}} to {{to}}"
+  },
+  "approve": {
+    "button": "Approve this plan",
+    "buttonContext": "({{plan}})",
+    "title": "Approve {{plan}}",
+    "description": "After you approve this plan, Rozmarra can print it for the patient. The plan will show your name and today's date.",
+    "doctorName": "Name of the doctor",
+    "placeholder": "For example, Ananya Rao",
+    "nameHelp": "Rozmarra adds the title \"Dr\" before the name.",
+    "confirm": "Approve the plan",
+    "approvedText": "Approved by Dr {{name}} on {{date}}"
+  },
+  "chart": {
+    "targetRangeLegend": "Target range, 70 to 180 mg/dL",
+    "lowLine": "70 mg/dL: low",
+    "veryLowLine": "54 mg/dL: very low",
+    "lowestLabel": "Lowest: {{value}} mg/dL at {{time}}",
+    "measuredGlucose": "Measured glucose",
+    "twinCurve": "This patient's twin (median)",
+    "band": "Likely range (10th to 90th percentile)",
+    "averagePatient": "Average patient with the same plan",
+    "fastWithWater": "Fasting window, water allowed",
+    "fastWithoutWater": "Fasting window, no food or water",
+    "andMore": "{{first}} and {{count}} more",
+    "strip": {
+      "meal": "Meals",
+      "medicine": "Medicines",
+      "activity": "Activity"
+    }
   }
 }

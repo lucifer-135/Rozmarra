@@ -50,16 +50,16 @@ Rozmarra will support Navratri, Karva Chauth, Ekadashi, Ramadan, Jain fasts and 
 
 ## 4. What Rozmarra does
 
-The doctor dashboard will have six screens:
+The doctor dashboard has six screens. The first three screens work now, and the team will add the other three screens on 18 October 2026.
 
-1. Patients who plan to fast
-2. Virtual patient
-3. Test a fasting plan (the fasting plan simulator)
-4. Live fasting monitor
-5. Patient fasting plan
-6. How Rozmarra makes predictions
+1. **Patients who plan to fast.** The list shows each patient's fast and date, the IDF-DAR risk, the predicted chance of low blood sugar during the fast and the plan status (Not started, Draft or Approved). The patients are sorted by the predicted chance.
+2. **Virtual patient.** The screen shows the health record summary, the usual medicines, the CYP2C9 marker, the IDF-DAR score with the points for each item, the last 14 days of glucose, heart rate, steps and sleep, and the quality of the twin's fit.
+3. **Test a fasting plan.** The doctor edits two plans (the fasting template, times, meals, water, medicines and activity) and tests both on the virtual patient. Each plan shows the glucose curve with its uncertainty band, the curve of an average patient with the same plan, the chance of low blood sugar during the fast, the predicted lowest glucose and its time, the expected minutes below 70 mg/dL and the chance of high blood sugar after the fast. The screen shows the dehydration caution when it applies. The doctor approves one plan with their name, and the approval shows the text "Approved by Dr [name] on [date]".
+4. Live fasting monitor (planned)
+5. Patient fasting plan (planned)
+6. How Rozmarra makes predictions (planned)
 
-The team will add screenshots of each screen here.
+The dashboard can switch between English and Hindi. The team will add screenshots of each screen here.
 
 ## 5. Architecture
 
@@ -187,8 +187,18 @@ uv run rozmarra data download    # Downloads the open datasets into data/raw (ab
 uv run rozmarra data prepare     # Converts them into the standard Parquet tables
 uv run rozmarra ehr generate     # Creates synthetic health records as FHIR R4 Bundles
 uv run rozmarra demo build       # Saves the synthetic demo patients and their draft plans
+uv run rozmarra demo reset       # Removes the saved plans and approvals before a new demo
 uv run rozmarra serve            # Starts the API at http://127.0.0.1:8000
 uv run pytest                    # Runs the backend tests
+```
+
+To work on the dashboard, start the API as above, and then run these commands in a second window:
+
+```powershell
+cd frontend
+npm install
+npm run dev                      # Opens the dashboard at http://localhost:5173
+npm run test                     # Runs the dashboard tests
 ```
 
 ## 9. Results
@@ -243,6 +253,7 @@ The team will add the presentation as a PDF in `docs/presentation/`.
 10. Dalla Man C, Rizza RA, Cobelli C. Meal simulation model of the glucose-insulin system. IEEE Transactions on Biomedical Engineering, 2007.
 11. Roquemen-Echeverri V, Mosquera-Lopez C. T2DSim AI: Hybrid Neural Digital-Twin Framework for Type 2 Diabetes. https://github.com/mosqueralopez/T2DSim_AI
 12. Giammarino F, et al. A machine learning model for week-ahead hypoglycemia prediction from continuous glucose monitoring data. Journal of Diabetes Science and Technology, 2024. https://github.com/flaviagiammarino/stanford-hypoglycemia-forecasting
+13. Ainsworth BE, et al. 2011 Compendium of Physical Activities: a second update of codes and MET values. Medicine & Science in Sports & Exercise, 2011;43(8):1575–1581.
 
 Rozmarra uses several simple ideas from the T2DSim AI project and the Stanford hypoglycemia forecasting project, which [`docs/techstack.md`](docs/techstack.md) describes. The team wrote its own code for every idea, and this repository contains no code or trained models from either project. The team thanks the authors of these projects and the creators of the open datasets.
 

@@ -4,7 +4,7 @@ This model card describes how Rozmarra makes its estimates, which assumptions it
 
 | Item | Details |
 |---|---|
-| Version | 0.3, updated on 13 October 2026 with the prediction models |
+| Version | 0.4, updated on 13 October 2026 with the fasting plan simulator in the dashboard |
 | Status | The clinical score, the safety rules, the physiology twin and the prediction models are built. |
 | Intended use | A research prototype that supports a doctor who plans a religious fast with a patient who has Type 2 Diabetes. It is not a certified medical device, and it must not be used for real patients. |
 | Clinical review | No doctor or pharmacist has reviewed the clinical content of this prototype. |
@@ -119,6 +119,12 @@ The real data identifies the sulfonylurea effect poorly. The 18 ShanghaiT2DM pat
 A plan simulation starts one usual day before the plan, with the patient's usual medicines and a usual Indian meal routine of 50 g, 70 g, 20 g and 70 g of carbohydrate at 8:30 am, 1:30 pm, 5:00 pm and 8:30 pm. This routine is a starting value. The simulation draws 100 parameter samples to create the band from the 10th to the 90th percentile, and the first sample is always the most likely twin. The average-patient curve uses the median parameters of the fitted twins with the patient's own fasting glucose, body weight, kidney function, medicines and plan.
 
 On the team's Windows laptop, one Karva Chauth day with 100 samples, the average patient and the usual day before it took a median of 0.66 seconds over five runs. The target is less than 1 second.
+
+In the fasting plan simulator of the dashboard, the doctor can add four activities. Their intensities are approximate values from the Compendium of Physical Activities (Ainsworth and colleagues, 2011): walking at an ordinary pace at 3.5 METs, brisk walking at 4.3 METs, household work at 2.5 METs, and garba or dandiya dancing at 5.0 METs. The garba value matches the Navratri template.
+
+Rozmarra does not simulate a plan in three cases: a dose is above the largest single dose in the medicine catalogue, the fast ends before it starts, or the plan covers more than 60 hours. The dashboard explains the problem to the doctor instead. These limits catch typing errors. They are not clinical dose limits.
+
+The doctor's tested plans are saved as drafts. A patient has at most one approved plan. If the doctor approves another plan, the first plan becomes a draft again, and if the doctor changes an approved plan, the plan loses its approval.
 
 ### 5.7 Virtual patients
 

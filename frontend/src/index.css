@@ -12,6 +12,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+    /* The minimum text size on every screen is 16 pixels, so the two small text sizes
+       that the components use are raised to 16 pixels. */
+    --text-xs: 1rem;
+    --text-xs--line-height: 1.5;
+    --text-sm: 1rem;
+    --text-sm--line-height: 1.5;
+}
+
 @theme inline {
     --font-heading: var(--font-sans);
     /* Noto Sans covers Latin text and Noto Sans Devanagari covers Hindi text. */
