@@ -432,6 +432,8 @@
     "minutes_other": "{{count}} minutes",
     "notTestedYet": "The team has not run this test yet.",
     "forecastValue": "{{minutes}} minutes: twin {{twin}} mg/dL, last value {{last}} mg/dL",
+    "parkesValue": "{{twin}} of {{pairs}} forecasts. The last value alone reaches {{last}}.",
+    "e2RealValue": "{{value}}. The glucose value 2 hours before the meal alone scores {{glucose}}.",
     "fusionValue": "Full model {{full}}, best single data stream {{single}}",
     "f1Value": "{{value}}. The twin alone scores {{twin}} and the IDF-DAR score alone scores {{score}}.",
     "status": {
@@ -467,6 +469,7 @@
     "testing": {
       "title": "How the team tested Rozmarra",
       "real": "Real normal days: the team tested the model on held-out days of {{patients}} real patients from ShanghaiT2DM and CGMacros, with five-fold cross-validation grouped by person. These days contain no fasts.",
+      "realMeals": "Real meals: the team applied the model for high blood sugar after a fast, which learned only from simulated fasting days, to {{meals}} real meals of {{patients}} patients. Each meal came after at least 8 hours without food, on a held-out day.",
       "synthetic": "Simulated fasting days: the team created {{patients}} virtual patients with {{episodes}} fasting days. The model learned from the training group and was tested on {{test}} virtual patients that it had never seen.",
       "baselines": "The team compared the model with simpler methods: the last glucose value, a straight-line trend, the twin alone, the IDF-DAR score alone and a model that uses only CGM data.",
       "intervals": "The 95% intervals come from bootstrapping by patient."
@@ -485,6 +488,7 @@
       "falseAlerts": "False alerts per patient per fasting day, simulated fasting days",
       "warning": "Median warning time before low blood sugar, simulated fasting days",
       "e2": "High blood sugar after the fast is broken, simulated fasting days (AUROC)",
+      "e2Real": "High blood sugar after the first meal that follows a night without food, real meals (AUROC)",
       "forecast": "Error of the twin's glucose forecasts on real held-out days (median RMSE)",
       "fusionSynthetic": "Value of combining the data streams, simulated fasting days (AUPRC)",
       "fusionReal": "Value of combining the data streams, real normal days (AUPRC)",
@@ -521,7 +525,11 @@
       "twinAlone": "On simulated fasting days, the twin alone scored a higher AUPRC ({{twin}}) than the full model ({{full}}). The twin also created these simulated days, so this comparison partly favours the twin.",
       "cgmOnly": "On real normal days, the model with CGM data only scored a higher AUPRC ({{cgm}}) than the full model ({{full}}). The real data does not yet show that the smartwatch data adds value.",
       "falseAlerts": "At the alert level that detects 80% of events, the model raised {{value}} false alerts per patient per fasting day, which is more than the target of 2.",
-      "synthetic": "The results on simulated fasting days partly reflect the team's modelling assumptions. A clinical study with Indian patients would be needed to confirm them."
+      "falseAlertsWithin": "At the alert level that detects 80% of events, the model raised {{value}} false alerts per patient per fasting day, which is within the target of 2.",
+      "warning": "The median warning time was {{minutes}} minutes, which is shorter than the target of 30 minutes. A lower alert level would give earlier warnings, but it would also raise more false alerts.",
+      "synthetic": "The results on simulated fasting days partly reflect the team's modelling assumptions. A clinical study with Indian patients would be needed to confirm them.",
+      "parkes": "Glucose changes little in 30 minutes, so the last glucose value alone also meets the Parkes target. At 120 minutes, {{twin}} of the twin's forecasts fall in zone A, compared with {{last}} for the last value.",
+      "realMeals": "On real meals after a night without food, the model scored an AUROC of {{model}}, and the glucose value 2 hours before the meal alone scored {{glucose}}. These meals do not end a festival fast, so this check shows only how the model behaves on real glucose data."
     },
     "limits": {
       "title": "Limits of Rozmarra",

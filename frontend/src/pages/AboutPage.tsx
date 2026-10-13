@@ -52,9 +52,15 @@ function Card({ card }: { card: ModelCard }) {
         })
       : n(m[key])
   }
+  const percent = (v: number, digits = 2) => `${formatFixed(v * 100, language, digits)}%`
   const synthetic = card.metrics.synthetic
   const real = card.metrics.real.e1
+  const realMeals = card.metrics.real.e2
+  const mealGlucose = realMeals?.baselines['glucose 2 hours before the meal']?.auroc
   const alerts = synthetic.e1.thresholds.sensitivity_80
+  const parkes = card.twin_fit?.parkes
+  const parkes30 = parkes?.all['30_min']
+  const parkes120 = parkes?.all['120_min']
   const forecast = card.twin_fit?.median_forecast_rmse_mg_dl
   const horizons = ['30', '60', '120'].filter((h) => forecast?.[h])
   const twinBeatsLastValue = horizons.every((h) => forecast![h].twin < forecast![h].last_value)
@@ -102,6 +108,19 @@ function Card({ card }: { card: ModelCard }) {
       target: t('about.targets.auroc80'),
       status: (synthetic.e2.auroc ?? 0) >= 0.8 ? 'met' : 'notMet',
     },
+    ...(realMeals
+      ? [
+          {
+            measure: t('about.results.e2Real'),
+            result: t('about.e2RealValue', {
+              value: withInterval(realMeals, 'auroc'),
+              glucose: n(mealGlucose),
+            }),
+            target: t('about.targets.none'),
+            status: 'noTarget' as Status,
+          },
+        ]
+      : []),
     {
       measure: t('about.results.forecast'),
       result: horizons
@@ -136,9 +155,19 @@ function Card({ card }: { card: ModelCard }) {
     },
     {
       measure: t('about.results.parkes'),
-      result: t('about.notTestedYet'),
+      result: parkes30
+        ? t('about.parkesValue', {
+            twin: percent(parkes30.twin.share_a_and_b),
+            pairs: formatNumber(parkes30.twin.pairs, language),
+            last: percent(parkes30.last_value.share_a_and_b),
+          })
+        : t('about.notTestedYet'),
       target: t('about.targets.parkes'),
-      status: 'notTested',
+      status: !parkes30
+        ? 'notTested'
+        : parkes30.twin.share_a_and_b >= parkes!.target_share_a_and_b_30_min
+          ? 'met'
+          : 'notMet',
     },
     {
       measure: t('about.results.f1'),
@@ -210,6 +239,14 @@ function Card({ card }: { card: ModelCard }) {
               patients: real.all.patients,
             })}
           </li>
+          {realMeals && (
+            <li>
+              {t('about.testing.realMeals', {
+                meals: realMeals.meals,
+                patients: realMeals.patients,
+              })}
+            </li>
+          )}
           <li>
             {t('about.testing.synthetic', {
               patients: card.synthetic_cohort?.virtual_patients ?? 0,
@@ -279,10 +316,36 @@ function Card({ card }: { card: ModelCard }) {
             })}
           </li>
           <li>
-            {t('about.meaning.falseAlerts', {
-              value: n(alerts.false_alerts_per_patient_day, 1),
-            })}
+            {t(
+              alerts.false_alerts_per_patient_day <= 2
+                ? 'about.meaning.falseAlertsWithin'
+                : 'about.meaning.falseAlerts',
+              { value: n(alerts.false_alerts_per_patient_day, 1) },
+            )}
           </li>
+          {alerts.median_warning_minutes < 30 && (
+            <li>
+              {t('about.meaning.warning', {
+                minutes: formatFixed(alerts.median_warning_minutes, language, 0),
+              })}
+            </li>
+          )}
+          {parkes120 && (
+            <li>
+              {t('about.meaning.parkes', {
+                twin: percent(parkes120.twin.shares.A, 1),
+                last: percent(parkes120.last_value.shares.A, 1),
+              })}
+            </li>
+          )}
+          {realMeals && (
+            <li>
+              {t('about.meaning.realMeals', {
+                model: n(realMeals.auroc),
+                glucose: n(mealGlucose),
+              })}
+            </li>
+          )}
           <li>{t('about.meaning.synthetic')}</li>
         </ul>
       </Section>

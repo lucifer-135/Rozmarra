@@ -124,11 +124,19 @@ test('the model card screen reports every target honestly', async () => {
   mockApi({ '/api/model-card': () => json(sunday.model_card) })
   renderAt('/about')
   const table = await screen.findByRole('table', { name: /AUROC shows how well/ })
-  const falseAlerts = within(table).getByText(/False alerts per patient per fasting day/).closest('tr')!
-  expect(within(falseAlerts).getByText('Not met')).toBeInTheDocument()
-  const real = within(table).getByText(/real normal days \(AUROC\)/).closest('tr')!
+  const row = (text: RegExp) => within(table).getByText(text).closest('tr')!
+  expect(within(row(/False alerts per patient per fasting day/)).getByText('Met')).toBeInTheDocument()
+  expect(within(row(/Median warning time/)).getByText('Not met')).toBeInTheDocument()
+  const real = row(/real normal days \(AUROC\)/)
   expect(within(real).getByText(/0\.943 \(95% interval 0\.919 to 0\.964\)/)).toBeInTheDocument()
   expect(within(real).getByText('Met')).toBeInTheDocument()
-  expect(within(table).getByText('Not tested yet')).toBeInTheDocument()
+  const parkes = row(/Parkes error grid/)
+  expect(within(parkes).getByText(/99\.97% of 6,301 forecasts/)).toBeInTheDocument()
+  expect(within(parkes).getByText('Met')).toBeInTheDocument()
+  const meals = row(/real meals \(AUROC\)/)
+  expect(within(meals).getByText(/0\.828 \(95% interval 0\.725 to 0\.903\)/)).toBeInTheDocument()
+  expect(within(meals).getByText('No target')).toBeInTheDocument()
+  expect(within(table).queryByText('Not tested yet')).not.toBeInTheDocument()
   expect(screen.getByText(/the twin alone scored a higher AUPRC \(0\.554\)/)).toBeInTheDocument()
+  expect(screen.getByText(/The median warning time was 25 minutes/)).toBeInTheDocument()
 })
