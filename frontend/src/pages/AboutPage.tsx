@@ -194,7 +194,9 @@ function Card({ card }: { card: ModelCard }) {
                   {t(`about.data.types.${source.type}`, { defaultValue: source.type })}
                 </TableCell>
                 <TableCell className="whitespace-normal">{source.licence}</TableCell>
-                <TableCell className="whitespace-normal">{source.use}</TableCell>
+                <TableCell className="whitespace-normal">
+                  {t(`about.data.uses.${source.id}`, { defaultValue: source.use })}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -288,7 +290,7 @@ function Card({ card }: { card: ModelCard }) {
       <Section title={t('about.limits.title')}>
         <ul className="grid list-disc gap-2 pl-6">
           {card.limitations.map((limit) => (
-            <li key={limit}>{limit}</li>
+            <li key={limit.id}>{t(`about.limits.items.${limit.id}`, { defaultValue: limit.text })}</li>
           ))}
         </ul>
         <p className="flex items-start gap-2 font-medium">

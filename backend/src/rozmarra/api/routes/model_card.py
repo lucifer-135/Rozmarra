@@ -13,31 +13,50 @@ router = APIRouter(tags=["Model card"])
 
 DATA_SOURCES = [
     {
+        "id": "shanghai",
         "name": "ShanghaiT2DM",
         "type": "real_open",
         "licence": "CC BY 4.0 (article)",
         "use": "Fitting the twins and testing predictions on normal days",
     },
     {
+        "id": "cgmacros",
         "name": "CGMacros",
         "type": "real_open",
         "licence": "CC BY-NC-SA 4.0",
         "use": "Fitting the twins and testing the fusion of CGM and smartwatch data",
     },
     {
+        "id": "synthetic",
         "name": "Rozmarra synthetic cohort",
         "type": "synthetic",
         "licence": "Apache License 2.0",
         "use": "Simulated fasting days of 500 virtual patients for training and testing",
     },
 ]
+# Each limit has an identifier, so that the dashboard can show it in Hindi.
 LIMITATIONS = [
-    "Rozmarra is a research prototype. It is not a certified medical device.",
-    "The real data comes from China and the United States, not from India.",
-    "No open dataset contains CGM data from Indian festival fasts. The fasting results come "
-    "from simulated fasting days, which reflect the team's modelling assumptions.",
-    "No doctor or pharmacist has reviewed the clinical content of this prototype.",
-    "The twin's sulfonylurea effect is modest, and the real data identifies it poorly.",
+    {
+        "id": "prototype",
+        "text": "Rozmarra is a research prototype. It is not a certified medical device.",
+    },
+    {
+        "id": "real_data",
+        "text": "The real data comes from China and the United States, not from India.",
+    },
+    {
+        "id": "fasting_data",
+        "text": "No open dataset contains CGM data from Indian festival fasts. The fasting results "
+        "come from simulated fasting days, which reflect the team's modelling assumptions.",
+    },
+    {
+        "id": "clinical_review",
+        "text": "No doctor or pharmacist has reviewed the clinical content of this prototype.",
+    },
+    {
+        "id": "sulfonylurea",
+        "text": "The twin's sulfonylurea effect is modest, and the real data identifies it poorly.",
+    },
 ]
 
 

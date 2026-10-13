@@ -407,7 +407,7 @@ export interface ModelCard {
     fasting_episodes: number
     episodes_with_low_blood_sugar: { share_with_low_blood_sugar: number }
   } | null
-  data_sources: { name: string; type: string; licence: string; use: string }[]
-  limitations: string[]
+  data_sources: { id: string; name: string; type: string; licence: string; use: string }[]
+  limitations: { id: string; text: string }[]
   notice: string
 }

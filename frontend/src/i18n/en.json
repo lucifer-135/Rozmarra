@@ -457,6 +457,11 @@
       "types": {
         "real_open": "Real open data",
         "synthetic": "Synthetic data"
+      },
+      "uses": {
+        "shanghai": "Fitting the twins and testing predictions on normal days",
+        "cgmacros": "Fitting the twins and testing the fusion of CGM and smartwatch data",
+        "synthetic": "Simulated fasting days of 500 virtual patients for training and testing"
       }
     },
     "testing": {
@@ -519,7 +524,14 @@
       "synthetic": "The results on simulated fasting days partly reflect the team's modelling assumptions. A clinical study with Indian patients would be needed to confirm them."
     },
     "limits": {
-      "title": "Limits of Rozmarra"
+      "title": "Limits of Rozmarra",
+      "items": {
+        "prototype": "Rozmarra is a research prototype. It is not a certified medical device.",
+        "real_data": "The real data comes from China and the United States, not from India.",
+        "fasting_data": "No open dataset contains CGM data from Indian festival fasts. The fasting results come from simulated fasting days, which reflect the team's modelling assumptions.",
+        "clinical_review": "No doctor or pharmacist has reviewed the clinical content of this prototype.",
+        "sulfonylurea": "The twin's sulfonylurea effect is modest, and the real data identifies it poorly."
+      }
     }
   }
 }
