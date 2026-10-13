@@ -1,10 +1,10 @@
 # Rozmarra: Data Card
 
-This data card describes the data that Rozmarra uses, how the team processes it, and every assumption that the processing makes. The team will update it as the work continues.
+This data card describes the data that Rozmarra uses, how the team processes it, and every assumption that the processing makes.
 
 | Item | Details |
 |---|---|
-| Version | 0.2, updated on 12 October 2026 with the synthetic fasting days |
+| Version | 0.3, updated on 13 October 2026 for the first complete version of Rozmarra |
 | Data types | Open anonymised datasets and synthetic data. Rozmarra uses no real patient data from India. |
 | Related documents | `docs/model_card.md` describes the models. `docs/techstack.md`, Section 4, describes the data formats. |
 
@@ -14,7 +14,7 @@ This data card describes the data that Rozmarra uses, how the team processes it,
 |---|---|---|---|
 | ShanghaiT2DM (Zhao and colleagues, Scientific Data, 2023) | Figshare article 21600933, version 5, file `diabetes_datasets.zip` (3.6 MB, MD5 `4bfb61cfa506b48155fd9e841ee48e21`) | The 109 recording periods in the `Shanghai_T2DM` folder and the file `Shanghai_T2DM_Summary.xlsx`. Rozmarra does not use the Type 1 Diabetes files. | The article uses CC BY 4.0. The data files do not state a separate licence. |
 | CGMacros (PhysioNet) | Version 1.0.0, file `CGMacros_dateshifted365.zip` (626.7 MB) | The minute-level file of each of the 45 participants and the file `bio.csv`. | CC BY-NC-SA 4.0 |
-| BIG IDEAs Lab Glycemic Variability and Wearable Device Data (PhysioNet) | Version 1.1.3. Rozmarra downloads 65 of the 130 files (396.6 MB): the Dexcom, heart rate, inter-beat interval and food log files of the 16 participants, and `Demographics.csv`. | Rozmarra will use the inter-beat intervals to calculate heart rate variability (a Should item). The loader is not built yet. | Open Data Commons Attribution License v1.0 |
+| BIG IDEAs Lab Glycemic Variability and Wearable Device Data (PhysioNet) | Version 1.1.3. Rozmarra downloads 65 of the 130 files (396.6 MB): the Dexcom, heart rate, inter-beat interval and food log files of the 16 participants, and `Demographics.csv`. | The team planned to use the inter-beat intervals to calculate heart rate variability (a Should item). This version of Rozmarra does not use the dataset. The heart rate variability in the synthetic data comes from the signal model in Section 7. | Open Data Commons Attribution License v1.0 |
 | Synthetic health records | Created by the Rozmarra generator | The static data stream for all synthetic and virtual patients | Apache License 2.0, released with the code |
 
 The repository does not contain any raw dataset. The command `rozmarra data download` fetches each file from its original source.

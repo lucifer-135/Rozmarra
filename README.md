@@ -8,7 +8,7 @@ Rozmarra (रोज़मर्रा) is a Hindi and Urdu word that means "ever
 
 > **Safety notice.** Rozmarra is a research prototype for the Digital Twin Challenge 2026. It is not a certified medical device, and it must not be used to make decisions about real patients. Rozmarra supports clinical decisions. It does not replace the judgement of a doctor.
 
-> **Project status.** The team is building Rozmarra between 12 and 20 October 2026. This README describes the planned system. The team will update each section as the work is completed, and it will not report any result before that result exists.
+> **Project status.** The team built Rozmarra between 12 and 18 October 2026. The models, the API, the six dashboard screens and the printable patient plan work. The team will add the demonstration video, the presentation and the architecture diagram on 19 October 2026.
 
 ## 1. Team
 
@@ -46,18 +46,18 @@ Doctors can use the IDF-DAR 2021 risk score to place a person into low, moderate
 2. **During the fast,** Rozmarra aims to predict low blood sugar at least 60 minutes before it happens, and high blood sugar after the fast is broken at least 2 hours before it happens.
 3. **After the doctor approves the plan,** Rozmarra prints a clear fasting plan for the patient in English or Hindi.
 
-Rozmarra will support Navratri, Karva Chauth, Ekadashi, Ramadan, Jain fasts and custom fasts. Rozmarra never judges the decision to fast, and it never changes medicines by itself.
+Rozmarra supports Navratri, Karva Chauth, Ekadashi, Nirjala Ekadashi, Ramadan, Jain upvas, Jain ekasana, Chhath Puja and custom fasts. Rozmarra never judges the decision to fast, and it never changes medicines by itself.
 
 ## 4. What Rozmarra does
 
-The doctor dashboard has six screens. The first three screens work now, and the team will add the other three screens on 18 October 2026.
+The doctor dashboard has six screens.
 
 1. **Patients who plan to fast.** The list shows each patient's fast and date, the IDF-DAR risk, the predicted chance of low blood sugar during the fast and the plan status (Not started, Draft or Approved). The patients are sorted by the predicted chance.
 2. **Virtual patient.** The screen shows the health record summary, the usual medicines, the CYP2C9 marker, the IDF-DAR score with the points for each item, the last 14 days of glucose, heart rate, steps and sleep, and the quality of the twin's fit.
 3. **Test a fasting plan.** The doctor edits two plans (the fasting template, times, meals, water, medicines and activity) and tests both on the virtual patient. Each plan shows the glucose curve with its uncertainty band, the curve of an average patient with the same plan, the chance of low blood sugar during the fast, the predicted lowest glucose and its time, the expected minutes below 70 mg/dL and the chance of high blood sugar after the fast. The screen shows the dehydration caution when it applies. The doctor approves one plan with their name, and the approval shows the text "Approved by Dr [name] on [date]".
-4. Live fasting monitor (planned)
-5. Patient fasting plan (planned)
-6. How Rozmarra makes predictions (planned)
+4. **Live fasting monitor.** A time slider replays a recorded fasting day. At each moment, the screen shows the glucose readings so far, the forecast for the next 2 hours, the estimated chance of low glucose within the next 60 minutes, an alert timeline with the main reasons for each alert, and the heart rate, heart rate variability and steps. Rozmarra uses only the data recorded up to that moment.
+5. **Patient fasting plan.** After the doctor approves a plan, Rozmarra produces a printable plan in English or Hindi, with the patient's own word for the fast, such as व्रत, उपवास or रोज़ा. The plan lists the times to check blood sugar, the rule for breaking the fast, the medicine changes that the doctor approved, advice on water and on the meal that breaks the fast, and the doctor's contact details. The screen also shows a short version for SMS or WhatsApp as a concept. Rozmarra does not send any messages.
+6. **How Rozmarra makes predictions.** The screen explains the model card in plain language: the data, the tests, every result against its target, and the limits.
 
 The dashboard can switch between English and Hindi. The team will add screenshots of each screen here.
 
@@ -68,7 +68,7 @@ flowchart LR
   subgraph Sources["Data sources"]
     S1["ShanghaiT2DM<br/>(real, open)"]
     S2["CGMacros<br/>(real, open)"]
-    S3["BIG IDEAs Lab<br/>(real, open)"]
+    S3["BIG IDEAs Lab<br/>(real, open; downloaded,<br/>not used yet)"]
     S4["Synthetic health records<br/>(FHIR R4)"]
     S5["Fasting templates<br/>(Navratri, Karva Chauth,<br/>Ekadashi, Ramadan, Jain)"]
   end
@@ -89,7 +89,7 @@ flowchart LR
   end
   S1 --> A
   S2 --> A
-  S3 --> A
+  S3 -.-> A
   S4 --> A
   A --> B
   B --> C
@@ -121,10 +121,10 @@ The team will add the architecture diagram as a PDF in `docs/architecture/`.
 | Dashboard | React, TypeScript, Vite, Tailwind CSS, shadcn/ui, Apache ECharts, TanStack Query and i18next |
 | Tests and checks | pytest, Ruff, Vitest and GitHub Actions |
 
-Rozmarra will use three layers that work together:
+Rozmarra uses three layers that work together:
 
 1. **Physiology twin.** A personalised glucose and insulin model extends the Bergman minimal model with a two-compartment meal model and the effects of medicines that are common in India. These medicines include sulfonylureas, metformin, DPP-4 inhibitors, SGLT2 inhibitors, basal insulin and premixed insulin. The twin uses the CYP2C9 genotype to adjust how quickly the body clears sulfonylureas. The twin answers "what if" questions about a fasting plan.
-2. **Prediction model.** LightGBM classifiers will combine the twin's forecasts with CGM, wearable, health record and fasting information to estimate the chance of each adverse event. SHAP values will turn the largest contributions into plain-language reasons.
+2. **Prediction model.** LightGBM classifiers combine the twin's forecasts with CGM, wearable, health record and fasting information to estimate the chance of each adverse event. SHAP values turn the largest contributions into plain-language reasons.
 3. **Clinical score and safety rules.** The IDF-DAR 2021 risk score and simple rules, such as a dehydration caution for long fasts without water, anchor Rozmarra in clinical practice.
 
 The full design is in [`docs/techstack.md`](docs/techstack.md), and the requirements are in [`docs/prd.md`](docs/prd.md).
@@ -137,7 +137,7 @@ Rozmarra uses only open anonymised data and synthetic data. The repository does 
 |---|---|---|
 | ShanghaiT2DM (Scientific Data, 2023) | Fitting the twin's responses to meals and medicines, and testing predictions on real patients | The article uses CC BY 4.0. |
 | CGMacros, version 1.0.0 (PhysioNet, 2025) | Fitting responses to meals and activity, and testing the fusion of CGM and smartwatch data | CC BY-NC-SA 4.0 |
-| BIG IDEAs Lab Glycemic Variability and Wearable Device Data, version 1.1.3 (PhysioNet) | Calculating heart rate variability from inter-beat intervals | Open Data Commons Attribution License v1.0 |
+| BIG IDEAs Lab Glycemic Variability and Wearable Device Data, version 1.1.3 (PhysioNet) | The team downloaded this dataset to calculate heart rate variability from inter-beat intervals. This version of Rozmarra does not use it yet. | Open Data Commons Attribution License v1.0 |
 | Synthetic health records and synthetic fasting days | The static data stream and the fasting days for all virtual patients | Apache License 2.0, released with the code |
 
 Every synthetic record, chart and table in Rozmarra is labelled as synthetic.
@@ -189,6 +189,7 @@ uv run rozmarra ehr generate     # Creates synthetic health records as FHIR R4 B
 uv run rozmarra demo build       # Saves the synthetic demo patients and their draft plans
 uv run rozmarra demo reset       # Removes the saved plans and approvals before a new demo
 uv run rozmarra serve            # Starts the API at http://127.0.0.1:8000
+uv run rozmarra check-language   # Checks the English text against the writing standard
 uv run pytest                    # Runs the backend tests
 ```
 
@@ -222,7 +223,8 @@ These results have important limits:
 ## 10. Safety, ethics and limitations
 
 - Rozmarra supports the doctor. The doctor makes and approves every treatment decision.
-- Every patient plan shows the rule for breaking the fast: the patient should break the fast if blood sugar is below 70 mg/dL or above 300 mg/dL, or if they feel unwell.
+- Every patient plan shows the rule for breaking the fast in a box near the top: the patient should break the fast if blood sugar is below 70 mg/dL or above 300 mg/dL, or if they feel unwell.
+- The doctor must approve a plan before Rozmarra can print it. The times to check blood sugar follow fixed rules, which the model card describes.
 - Patient plan text comes only from fixed templates. Rozmarra does not use AI to write medical advice.
 - No doctor or pharmacist has reviewed the clinical content of this prototype. The thresholds, plan templates and medicine assumptions are based on the cited guidelines and studies.
 - The real data comes from China and the United States, not from India. The simulated fasting data reflects the team's modelling assumptions.

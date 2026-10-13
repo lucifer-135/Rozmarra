@@ -4,7 +4,7 @@ This model card describes how Rozmarra makes its estimates, which assumptions it
 
 | Item | Details |
 |---|---|
-| Version | 0.4, updated on 13 October 2026 with the fasting plan simulator in the dashboard |
+| Version | 0.5, updated on 13 October 2026 with the live fasting monitor and the patient plan |
 | Status | The clinical score, the safety rules, the physiology twin and the prediction models are built. |
 | Intended use | A research prototype that supports a doctor who plans a religious fast with a patient who has Type 2 Diabetes. It is not a certified medical device, and it must not be used for real patients. |
 | Clinical review | No doctor or pharmacist has reviewed the clinical content of this prototype. |
@@ -241,16 +241,39 @@ The command `rozmarra model sensitivity` repeated the synthetic cohort and the E
 - The false alert rate at threshold A is above the target of 2 per patient per fasting day on synthetic data, and much higher on the 15-minute ShanghaiT2DM data. A clinical team would need to choose an alert level that balances missed events and false alerts.
 - The Parkes error grid, the Kalman filter and the LSTM comparison are not done.
 
-## 7. Ideas from other projects
+## 7. The live fasting monitor and the patient plan
+
+### 7.1 The live fasting monitor
+
+The live fasting monitor replays the recorded demo fasting day of each patient. At each 5-minute step, it shows only what the model knew at that moment: the glucose readings so far, the forecast of the twin for the next 2 hours with its band, and the estimated chance of low glucose within the next 60 minutes. The alerts follow the rules in Section 6.1, and each alert lists the three main reasons from SHAP. The monitor makes no prediction when there is no current CGM reading or when less than 70% of the readings of the last 2 hours are present. It then asks the doctor to check the sensor.
+
+For the demonstration, the doctor can show the readings that came after the chosen moment. These readings are labelled clearly, and the model never uses them.
+
+### 7.2 The patient plan
+
+The printable patient plan comes only from fixed Jinja2 templates in English and Hindi. Rozmarra fills in the patient's own facts: the name, the date, the patient's word for the fast, the times of the fast and the meals, the doses and the doctor's approval. The plan states each medicine with the name on the strip and the dose, for example "Glimepiride 1 mg", as `docs/prd.md`, Section 17.2, describes. A usual dose that the approved plan no longer contains appears as a dose that the doctor advised the patient not to take.
+
+The plan asks the patient to check blood sugar at times that follow fixed rules:
+
+1. During the fast, the first check is 2 hours after the fast starts, and one check follows every 3 hours.
+2. One check is 1 hour before the fast ends.
+3. One check is 30 minutes before the time at which the twin predicts the lowest glucose, when that time falls inside the fast.
+4. One check is 2 hours after the meal that breaks the fast.
+
+Checks from rules 1 to 3 fall only between 6:00 am and 10:00 pm. Each time is rounded to the nearest half hour, and when two checks are less than 75 minutes apart, only one stays, in the order of priority rule 4, rule 2, rule 3 and rule 1. The IDF-DAR 2021 guidelines recommend several checks on each day of Ramadan. These rules apply the same idea to every fast. A clinical expert should review them.
+
+The plan always shows the rule for breaking the fast from the IDF-DAR 2021 guidelines: below 70 mg/dL or above 300 mg/dL, or when the patient feels unwell. The short message for SMS or WhatsApp is a concept only, and Rozmarra does not send any messages.
+
+## 8. Ideas from other projects
 
 Rozmarra uses several simple ideas from two published open-source projects. The team writes its own code for every idea, and the repository contains no code or trained models from either project.
 
 - From T2DSim AI (Roquemen-Echeverri and Mosquera-Lopez, Oregon Health & Science University), Rozmarra takes medicine activity curves, a starting state that matches the CGM trend, fitting with safety weights and slope matching in 12-hour windows, and an average-patient curve in the simulator.
 - From the Stanford hypoglycemia forecasting project (Giammarino and colleagues), Rozmarra takes a 70% data completeness rule, reporting at 54 mg/dL, recent CGM history features and a balanced alert threshold.
 
-## 8. Limitations
+## 9. Limitations
 
 - The real data comes from China and the United States, not from India.
-- No open dataset contains CGM data from Indian festival fasts. The fasting results will therefore come from simulated fasting days, which reflect the team's modelling assumptions.
+- No open dataset contains CGM data from Indian festival fasts. The fasting results therefore come from simulated fasting days, which reflect the team's modelling assumptions.
 - The thresholds, plan templates and medicine assumptions come from cited guidelines and studies, but no clinician has reviewed them.
 - A real product would need clinical studies with Indian patients and approval as a medical device.
