@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { CircleCheck, ExternalLink, MessageSquareText, Printer } from 'lucide-react'
 import { useRef, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useParams, useSearchParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { documentUrl, fetchPatient, fetchPlanMessage, fetchSavedPlans } from '@/api/client'
 import { LoadError, Loading } from '@/components/QueryState'
@@ -19,7 +19,12 @@ export function PlanPage() {
   const [height, setHeight] = useState(1100)
   const patient = useQuery({ queryKey: ['patient', id], queryFn: () => fetchPatient(id) })
   const saved = useQuery({ queryKey: ['saved-plans', id], queryFn: () => fetchSavedPlans(id) })
-  const [chosen, setChosen] = useState<DocumentLanguage | null>(null)
+  const [searchParams] = useSearchParams()
+  // A link such as "?lang=hi" opens the plan in that language.
+  const [chosen, setChosen] = useState<DocumentLanguage | null>(() => {
+    const asked = searchParams.get('lang')
+    return asked === 'en' || asked === 'hi' ? asked : null
+  })
   const approved = saved.data
     ? Object.entries(saved.data.plans).find(([, plan]) => plan.status === 'approved')
     : undefined

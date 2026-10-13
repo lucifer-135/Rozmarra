@@ -13,7 +13,7 @@ import {
   TriangleAlert,
 } from 'lucide-react'
 import { useEffect, useId, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams, useSearchParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { fetchReplay, fetchReplayAt, fetchTimeseries } from '@/api/client'
 import type { Chance, ReplayMoment, ReplayOverview } from '@/api/types'
@@ -103,12 +103,19 @@ function AlertPanel({ moment, firstAlert }: { moment: ReplayMoment; firstAlert?:
   )
 }
 
+/** The step of a link such as "?at=19:30" or "?at=2026-10-15T19:30", or the first step. */
+function startIndex(times: string[], at: string | null) {
+  if (!at) return 0
+  return Math.max(0, times.findIndex((time) => time === at || time.slice(11, 16) === at))
+}
+
 function Monitor({ patientId, overview }: { patientId: string; overview: ReplayOverview }) {
   const { t, i18n } = useTranslation()
   const language = i18n.language
   const momentText = useMomentText()
   const sliderId = useId()
-  const [index, setIndex] = useState(0)
+  const [searchParams] = useSearchParams()
+  const [index, setIndex] = useState(() => startIndex(overview.times, searchParams.get('at')))
   const [playing, setPlaying] = useState(false)
   const [showAfter, setShowAfter] = useState(false)
   const last = overview.times.length - 1
