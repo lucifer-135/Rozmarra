@@ -92,6 +92,9 @@ export function GlucoseChart({
   summary,
 }: Props) {
   const { t, i18n } = useTranslation()
+  // With a "Now" line, the forecast fills the right side, so the limit labels move to the left.
+  const lowPosition = moments.length ? 'insideStartTop' : 'insideEndTop'
+  const veryLowPosition = moments.length ? 'insideStartBottom' : 'insideEndBottom'
   const language = i18n.language
 
   const option = useMemo(() => {
@@ -260,7 +263,7 @@ export function GlucoseChart({
             label: {
               ...AXIS_TEXT,
               color: COLOURS.low,
-              position: 'insideEndTop',
+              position: lowPosition,
               formatter: t('chart.lowLine'),
             },
           },
@@ -270,7 +273,7 @@ export function GlucoseChart({
             label: {
               ...AXIS_TEXT,
               color: COLOURS.veryLow,
-              position: 'insideEndBottom',
+              position: veryLowPosition,
               formatter: t('chart.veryLowLine'),
             },
           },

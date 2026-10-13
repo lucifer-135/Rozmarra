@@ -93,7 +93,7 @@ export function PatientsPage() {
                           <span className="text-muted-foreground">{t('patients.noNotes')}</span>
                         )}
                       </TableCell>
-                      <TableCell className="whitespace-normal">
+                      <TableCell className="whitespace-nowrap">
                         <Link
                           to={`/patients/${row.patient_id}/simulator`}
                           className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-primary underline-offset-4 hover:underline"
