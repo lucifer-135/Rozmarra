@@ -26,6 +26,7 @@ import pandas as pd
 from sklearn.isotonic import IsotonicRegression
 
 from rozmarra.config import MODELS_DIR, RANDOM_SEED
+from rozmarra.ml.alerts import threshold_for_events
 
 LGB_SETTINGS = dict(
     n_estimators=300,
@@ -172,7 +173,15 @@ def fit_model(
     target: str,
     patient_column: str = "patient_id",
     seed: int = RANDOM_SEED,
+    event_step=None,
 ) -> TrainedModel:
+    """Train, calibrate and choose the alert levels on the validation patients.
+
+    When event_step is given (the minutes between time points, for all rows or for each row),
+    alert level A is the highest level that detects at least 80% of the events of the
+    validation patients (ml/alerts.py). Otherwise, it is the level that flags 80% of the
+    positive time points.
+    """
     fit_mask, validation_mask = split_patients(train[patient_column], seed=seed)
     fitting, validation = train[fit_mask], train[validation_mask]
     model = lgb.LGBMClassifier(**LGB_SETTINGS)
@@ -184,15 +193,25 @@ def fit_model(
     calibration_x = list(map(float, isotonic.X_thresholds_))
     calibration_y = list(map(float, isotonic.y_thresholds_))
     p = np.interp(raw, calibration_x, calibration_y)
+    point_threshold = threshold_for_sensitivity(y, p, TARGET_SENSITIVITY)
+    threshold_a, rule = point_threshold, "80% of the positive time points"
+    if event_step is not None:
+        step = event_step[validation_mask] if np.ndim(event_step) else event_step
+        # The same tie-break as predict(), so that the level matches the predicted chances.
+        chosen = threshold_for_events(validation, y, p + 1e-6 * raw, step)
+        if chosen is not None:
+            threshold_a, rule = chosen, "80% of the events"
     return TrainedModel(
         target=target,
         features=features,
         model=model,
         calibration_x=calibration_x,
         calibration_y=calibration_y,
-        threshold_sensitivity=threshold_for_sensitivity(y, p, TARGET_SENSITIVITY),
+        threshold_sensitivity=threshold_a,
         threshold_balanced=threshold_balanced(y, p),
         info={
+            "alert_level_rule": f"The highest level that detects {rule} of the validation set",
+            "point_threshold_80": round(point_threshold, 4),
             "fitting_rows": int(len(fitting)),
             "validation_rows": int(len(validation)),
             "fitting_positives": int(fitting[label].sum()),

@@ -7,7 +7,8 @@
 - Metrics: AUROC, AUPRC, the Brier score, a calibration curve, sensitivity, specificity and
   balanced accuracy at both alert thresholds, the share of low blood sugar events with an
   alert in the hour before them, the median warning time, and false alerts per patient per
-  day. An alert is not repeated within 30 minutes.
+  day. An alert is not repeated within 30 minutes unless the chance rises by 10 percentage
+  points (ml/alerts.py). Alert level A detects 80% of the events of the validation patients.
 - Confidence intervals: 95% intervals from bootstrap samples drawn by patient.
 - Baselines: the last glucose value, a straight-line trend, the IDF-DAR score alone, a model
   that uses only CGM data, and the twin alone. The ablation study compares models that use
@@ -25,6 +26,7 @@ import pandas as pd
 from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_score
 
 from rozmarra.config import MODELS_DIR, RANDOM_SEED, REPORTS_DIR
+from rozmarra.ml.alerts import event_runs, raise_alerts
 from rozmarra.ml.datasets import FEATURE_DIR
 from rozmarra.ml.features import (
     ALL_POINT_FEATURES,
@@ -38,7 +40,6 @@ from rozmarra.ml.train import TrainedModel, fit_model
 
 BOOTSTRAPS = 1000
 BOOTSTRAPS_SMALL = 200
-SUPPRESS_MIN = 30
 HORIZON = {"e1": 60, "e1_54": 60, "e1_120": 120, "e3": 60}
 
 # On real data, the full model leaves out the health record. The real records are sparse and
@@ -74,43 +75,6 @@ def ranking_metrics(y: np.ndarray, score: np.ndarray) -> dict:
         "auroc": _safe(roc_auc_score, y, score),
         "auprc": _safe(average_precision_score, y, score),
     }
-
-
-def raise_alerts(frame: pd.DataFrame, p: np.ndarray, threshold: float) -> np.ndarray:
-    """An alert is raised when the chance crosses the threshold, at most once in 30 minutes."""
-    alert = np.zeros(len(frame), dtype=bool)
-    order = np.lexsort((frame["minute"].to_numpy(), frame["patient_id"].to_numpy()))
-    last_patient, last_alert = None, -np.inf
-    patients = frame["patient_id"].to_numpy()
-    minutes = frame["minute"].to_numpy()
-    for i in order:
-        if patients[i] != last_patient:
-            last_patient, last_alert = patients[i], -np.inf
-        if p[i] >= threshold and minutes[i] - last_alert >= SUPPRESS_MIN:
-            alert[i] = True
-            last_alert = minutes[i]
-    return alert
-
-
-def event_runs(frame: pd.DataFrame, label: np.ndarray, step: int) -> np.ndarray:
-    """Number the runs of positive time points. Each run is the hour before one event."""
-    run = np.full(len(frame), -1)
-    order = np.lexsort((frame["minute"].to_numpy(), frame["patient_id"].to_numpy()))
-    patients, minutes = frame["patient_id"].to_numpy(), frame["minute"].to_numpy()
-    current, previous = -1, None
-    for i in order:
-        if label[i] != 1:
-            previous = None
-            continue
-        if (
-            previous is None
-            or patients[i] != patients[previous]
-            or minutes[i] - minutes[previous] > 1.5 * step
-        ):
-            current += 1
-        run[i] = current
-        previous = i
-    return run
 
 
 def threshold_metrics(
@@ -300,7 +264,7 @@ def evaluate_synthetic_point_target(
     label, usable = f"label_{target}", f"usable_{target}"
     rows = table[table[usable] & table[label].notna()].copy()
     train, test = rows[rows.group == "training"], rows[rows.group == "test"].copy()
-    model = fit_model(train, ALL_POINT_FEATURES, label, target)
+    model = fit_model(train, ALL_POINT_FEATURES, label, target, event_step=5)
     test["p"] = model.predict(test)
     thresholds = {
         "sensitivity_80": model.threshold_sensitivity,
@@ -433,7 +397,8 @@ def evaluate_real(table: pd.DataFrame) -> dict:
         test = rows[(rows.fold == fold) & rows.held_out_day].copy()
         if test.empty or train.label_e1.sum() < 10:
             continue
-        model = fit_model(train, REAL_FEATURES, "label_e1", f"e1_real_fold{fold}")
+        steps = np.where(train.dataset == "ShanghaiT2DM", 15, 5)
+        model = fit_model(train, REAL_FEATURES, "label_e1", f"e1_real_fold{fold}", event_step=steps)
         test["p"] = model.predict(test)
         test["alert_threshold_sensitivity"] = model.threshold_sensitivity
         test["alert_threshold_balanced"] = model.threshold_balanced

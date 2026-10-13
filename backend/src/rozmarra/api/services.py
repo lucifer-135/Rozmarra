@@ -13,6 +13,7 @@ from rozmarra.api.store import STORE
 from rozmarra.fasting.plan import FastingPlan
 from rozmarra.formatting import clock_12h, long_date
 from rozmarra.medicines import get_medicine
+from rozmarra.ml.alerts import raise_alerts
 from rozmarra.ml.datasets import record_features, synthetic_series
 from rozmarra.ml.episodes import history_features, plan_features, twin_outcomes
 from rozmarra.ml.explain import explain
@@ -30,7 +31,6 @@ NOT_ENOUGH_DATA = (
     "the sensor is working."
 )
 SYNTHETIC_NOTE = "Synthetic data. This patient does not represent a real person."
-REPEAT_RISE = 0.1  # An alert repeats within 30 minutes only if the chance rises by 10 points.
 
 
 def _round(values) -> list[float | None]:
@@ -236,16 +236,11 @@ class Replay:
         self.alerts = self._alerts()
 
     def _alerts(self) -> list[int]:
-        alerts, last_minute, last_chance = [], -np.inf, 0.0
-        threshold = self.model.threshold_sensitivity
-        for i, t in enumerate(self.points):
-            p = self.chances[i]
-            if not self.enough[i] or p < threshold:
-                continue
-            if t - last_minute >= 30 or p >= last_chance + REPEAT_RISE:
-                alerts.append(i)
-                last_minute, last_chance = t, p
-        return alerts
+        """The alerts follow the same rules as the evaluation (ml/alerts.py)."""
+        frame = pd.DataFrame({"patient_id": self.ps.patient_id, "minute": self.points})
+        chances = np.where(self.enough, self.chances, -np.inf)
+        flags = raise_alerts(frame, chances, self.model.threshold_sensitivity)
+        return [int(i) for i in np.flatnonzero(flags)]
 
     def time(self, minute: float) -> datetime:
         return (self.ps.start + pd.Timedelta(minutes=float(minute))).to_pydatetime()

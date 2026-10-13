@@ -5,6 +5,9 @@
 - Synthetic E2: each meal that breaks a fast, 2 hours before the meal.
 - Real E1 and E1 at 54 mg/dL: every CGM time point on the normal days of the real patients
   with a fitted twin. The real data contains no fasting days.
+- Real E2 (a check of the E2 model on real meals): each meal on the held-out days of a real
+  patient that comes after at least 8 hours without food, which is usually the breakfast
+  after the night. Such a meal breaks a fast of the night, although not a religious fast.
 
 The estimated twins of the virtual patients come from the same seeds as the cohort, which
 is fully reproducible. The tables go to data/processed/features.
@@ -33,13 +36,15 @@ from rozmarra.ml.features import (
     point_features,
     profile_from_values,
 )
-from rozmarra.ml.labels import point_labels
+from rozmarra.ml.labels import breaking_meal_labels, point_labels
 from rozmarra.risk.idf_dar import Hypoglycaemia, Macrovascular, calculate
 from rozmarra.synth.split import fold_of
 from rozmarra.twin.medicines import Dose, Meal
 from rozmarra.twin.profiles import load_twins
 
 FEATURE_DIR = PROCESSED_DIR / "features"
+REAL_MEAL_GAP_MIN = 8 * 60
+REAL_MEAL_MIN_CARBS_G = 20.0
 SYNTHETIC_DIR = PROCESSED_DIR / "synthetic"
 HYPO_ORDER = [
     Hypoglycaemia.NONE,
@@ -293,13 +298,13 @@ def real_record_features(patient: pd.Series) -> dict:
     }
 
 
-def _real_job(job) -> pd.DataFrame:
+def _real_series(patient, timeseries, events, twin):
+    """The patient data and the patient series of one real patient, or None."""
     from rozmarra.twin.fit import load_patient
 
-    patient, timeseries, events, twin = job
     data = load_patient(patient, timeseries, events)
     if data is None:
-        return pd.DataFrame()
+        return None
     profile = profile_from_values(
         twin["fitted"],
         {
@@ -337,6 +342,14 @@ def _real_job(job) -> pd.DataFrame:
         profile=profile,
         wearables=wearables,
     )
+    return data, ps
+
+
+def _real_job(job) -> pd.DataFrame:
+    built = _real_series(*job)
+    if built is None:
+        return pd.DataFrame()
+    data, ps = built
     window = [(int(data.cgm_minute[0]) + 120, int(data.cgm_minute[-1]) - 60)]
     labels = point_labels(
         data.cgm_minute, data.cgm_value, data.interval_min, window, step_min=data.interval_min
@@ -363,6 +376,55 @@ def _real_job(job) -> pd.DataFrame:
     table["label_e1_54"] = table["minute"].map(by_minute["label"])
     table["usable_e1_54"] = table["minute"].map(by_minute["usable"]).fillna(False).astype(bool)
     return table
+
+
+def real_breaking_meals(data) -> list[Fast]:
+    """Meals on the held-out days that come after at least 8 hours without food."""
+    fasts, previous = [], None
+    first_prediction = float(data.cgm_minute[0]) + 120 + 120
+    for meal in sorted(data.meals, key=lambda m: m.minute):
+        if (
+            previous is not None
+            and meal.minute - previous >= REAL_MEAL_GAP_MIN
+            and meal.carbs_g >= REAL_MEAL_MIN_CARBS_G
+            and meal.minute >= data.split_minute
+            and meal.minute >= first_prediction
+        ):
+            minute = int(round(meal.minute))
+            # A fast of the night is closest to the "custom" fast type of the model.
+            fasts.append(Fast(int(previous), minute, "custom", True, minute))
+        previous = meal.minute
+    return fasts
+
+
+def _real_meal_job(job) -> pd.DataFrame:
+    built = _real_series(*job)
+    if built is None:
+        return pd.DataFrame()
+    data, ps = built
+    ps.fasts = real_breaking_meals(data)
+    if not ps.fasts:
+        return pd.DataFrame()
+    table = breaking_meal_features(ps)
+    meal_minutes = [f.breaking_minute for f in ps.fasts]
+    labels = breaking_meal_labels(data.cgm_minute, data.cgm_value, data.interval_min, meal_minutes)
+    table.insert(0, "patient_id", ps.patient_id)
+    table.insert(1, "dataset", data.dataset)
+    table["meal_minute"] = labels["meal_minute"].to_numpy()
+    table["minute"] = labels["prediction_minute"].to_numpy()
+    table["label_e2"] = labels["label"].to_numpy()
+    table["usable_e2"] = labels["usable"].to_numpy()
+    return table
+
+
+def build_real_meal_table(workers: int = 6, out_dir: Path = FEATURE_DIR) -> int:
+    """The table for the check of the E2 model on real meals (data/processed/features)."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    with ProcessPoolExecutor(max_workers=workers) as pool:
+        parts = [t for t in pool.map(_real_meal_job, real_jobs(), chunksize=2) if len(t)]
+    table = pd.concat(parts, ignore_index=True)
+    table.to_parquet(out_dir / "e2_real.parquet", index=False)
+    return len(table)
 
 
 def real_jobs():
@@ -393,4 +455,4 @@ def build_feature_tables(workers: int = 6, out_dir: Path = FEATURE_DIR) -> dict[
     return {"e1_synthetic": len(e1), "e2_synthetic": len(e2), "e1_real": len(real_table)}
 
 
-__all__ = ["build_feature_tables", "record_features", "DAY"]
+__all__ = ["build_feature_tables", "build_real_meal_table", "record_features", "DAY"]
