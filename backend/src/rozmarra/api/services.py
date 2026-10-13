@@ -102,6 +102,37 @@ def _history(patient_id: str) -> dict:
     return history_features(minutes, cgm.value.to_numpy(), at)
 
 
+MAX_WINDOW_HOURS = 60
+
+
+def plan_problems(plan: FastingPlan) -> list[str]:
+    """Problems that stop Rozmarra from simulating a plan, written for the doctor."""
+    problems = []
+    if plan.fast_end <= plan.fast_start:
+        problems.append("The end of the fast must be later than the start of the fast.")
+    elif (plan.window_end - plan.window_start) / timedelta(hours=1) > MAX_WINDOW_HOURS:
+        problems.append(
+            f"The plan covers more than {MAX_WINDOW_HOURS} hours. Please check the dates of "
+            "the fast and the meals."
+        )
+    for dose in plan.medicines:
+        try:
+            medicine = get_medicine(dose.name)
+        except KeyError:
+            problems.append(f'Rozmarra does not know the medicine "{dose.name}".')
+            continue
+        if dose.dose > medicine.max_single_dose:
+            problems.append(
+                f"The dose of {medicine.display_name} ({dose.dose:g} {medicine.unit}) is above "
+                f"the largest single dose that Rozmarra accepts "
+                f"({medicine.max_single_dose:g} {medicine.unit})."
+            )
+    for activity in plan.activities:
+        if activity.end <= activity.start:
+            problems.append(f'The activity "{activity.label}" must end after it starts.')
+    return problems
+
+
 def simulate(patient_id: str, plan: FastingPlan, samples: int = 100) -> dict:
     record = STORE.record(patient_id)
     profile = STORE.profile(patient_id)
@@ -307,6 +338,73 @@ class Replay:
 @lru_cache(maxsize=8)
 def replay(patient_id: str) -> Replay:
     return Replay(patient_id)
+
+
+def daily_history(patient_id: str, days: int = 14) -> dict:
+    """A summary of each of the last days before the planned fast, for the virtual patient page.
+
+    Sleep is counted for the night that ends on the morning of each day.
+    """
+    fast = STORE.fast(patient_id)
+    series = STORE.fasting_days["timeseries"]
+    series = series[series.patient_id == patient_id]
+    first = fast.date - timedelta(days=days)
+    stamps = series.timestamp_local
+    day_of = stamps.dt.date
+    night_of = (stamps + pd.Timedelta(hours=12)).dt.date
+
+    def signal(name: str) -> pd.DataFrame:
+        return series[series.signal == name]
+
+    glucose, steps = signal("glucose_cgm"), signal("steps")
+    heart, sleep = signal("heart_rate"), signal("sleep_stage")
+    rows = []
+    for offset in range(days):
+        day = first + timedelta(days=offset)
+        g = glucose.value[day_of[glucose.index] == day].to_numpy()
+        s = steps.value[day_of[steps.index] == day].to_numpy()
+        h = heart.value[day_of[heart.index] == day].to_numpy()
+        asleep = sleep.value[(night_of[sleep.index] == day) & (sleep.value >= 1)]
+        rows.append(
+            {
+                "date": day.isoformat(),
+                "date_text": long_date(day),
+                "glucose_readings": int(len(g)),
+                "mean_glucose_mg_dl": round(float(g.mean()), 0) if len(g) else None,
+                "lowest_glucose_mg_dl": round(float(g.min()), 0) if len(g) else None,
+                "time_in_range_percent": round(100 * float(((g >= 70) & (g <= 180)).mean()), 0)
+                if len(g)
+                else None,
+                "time_below_70_percent": round(100 * float((g < 70).mean()), 1) if len(g) else None,
+                "steps": int(s.sum()) if len(s) else None,
+                "mean_heart_rate": round(float(h.mean()), 0) if len(h) else None,
+                "sleep_hours": round(len(asleep) * 5 / 60, 1),
+            }
+        )
+    window = glucose[(day_of[glucose.index] >= first) & (day_of[glucose.index] < fast.date)]
+    values = window.value.to_numpy()
+    with_steps = [r["steps"] for r in rows if r["steps"] is not None]
+    return {
+        "patient_id": patient_id,
+        "source": "synthetic",
+        "start": datetime.combine(first, datetime.min.time()).isoformat(timespec="minutes"),
+        "end": datetime.combine(fast.date, datetime.min.time()).isoformat(timespec="minutes"),
+        "days": rows,
+        "summary": {
+            "days": days,
+            "mean_glucose_mg_dl": round(float(values.mean()), 0) if len(values) else None,
+            "time_in_range_percent": round(
+                100 * float(((values >= 70) & (values <= 180)).mean()), 0
+            )
+            if len(values)
+            else None,
+            "time_below_70_percent": round(100 * float((values < 70).mean()), 1)
+            if len(values)
+            else None,
+            "mean_daily_steps": round(float(np.mean(with_steps)), -1) if with_steps else None,
+            "mean_sleep_hours": round(float(np.mean([r["sleep_hours"] for r in rows])), 1),
+        },
+    }
 
 
 @lru_cache(maxsize=8)

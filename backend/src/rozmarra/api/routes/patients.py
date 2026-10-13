@@ -2,19 +2,23 @@
 
 from __future__ import annotations
 
+import json
 import math
+import re
 from datetime import date, datetime
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Path, Query
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
 from rozmarra.api import services
 from rozmarra.api.store import STORE
+from rozmarra.fasting.activities import ACTIVITY_PRESETS
+from rozmarra.fasting.meals import FOOD_CATEGORY_LABELS
 from rozmarra.fasting.plan import FastingPlan
 from rozmarra.fasting.templates import TEMPLATES, build_plan
 from rozmarra.formatting import long_date
-from rozmarra.medicines import get_medicine
+from rozmarra.medicines import MEDICINES, NON_DIABETES_CLASSES, get_medicine
 from rozmarra.risk.idf_dar import NOTE_OTHER_FASTS, calculate
 
 router = APIRouter(tags=["Patients"])
@@ -28,11 +32,25 @@ CYP2C9_SENTENCES = {
 }
 
 
+PLAN_ID = Path(pattern=r"^[a-z0-9-]{1,20}$", description="For example plan-a or plan-b")
+
+
 def _record_or_404(patient_id: str):
     try:
         return STORE.record(patient_id)
     except KeyError:
         raise HTTPException(status_code=404, detail="The patient is not known.") from None
+
+
+def _check(*plans: FastingPlan) -> None:
+    problems = [p for plan in plans for p in services.plan_problems(plan)]
+    if problems:
+        raise HTTPException(status_code=422, detail=" ".join(problems))
+
+
+def _doctor_name(name: str) -> str:
+    """The doctor's name without a leading "Dr", because the approval text adds it."""
+    return re.sub(r"^dr\b\.?\s*", "", name.strip(), flags=re.IGNORECASE).strip()
 
 
 class ComparePlans(BaseModel):
@@ -68,6 +86,33 @@ def templates():
     ]
 
 
+@router.get("/plan-options", summary="The medicines, food types and activities for the plan form")
+def plan_options():
+    return {
+        "medicines": [
+            {
+                "name": m.name,
+                "display_name": m.display_name,
+                "display_name_hi": m.display_name_hi,
+                "medicine_class": m.medicine_class.value,
+                "for_diabetes": m.medicine_class not in NON_DIABETES_CLASSES,
+                "unit": m.unit,
+                "standard_dose": m.standard_dose,
+                "max_single_dose": m.max_single_dose,
+            }
+            for m in sorted(MEDICINES.values(), key=lambda m: m.display_name)
+        ],
+        "food_categories": [
+            {"id": category.value, "label": label}
+            for category, label in FOOD_CATEGORY_LABELS.items()
+        ],
+        "activities": [
+            {"id": a.id, "label": a.label, "mets": a.mets, "minutes": a.minutes}
+            for a in ACTIVITY_PRESETS
+        ],
+    }
+
+
 @router.get("/patients", summary="List the patients who plan to fast, sorted by risk")
 def patients():
     rows = []
@@ -83,6 +128,7 @@ def patients():
                 "age": record.age_on(fast.date),
                 "source": "synthetic",
                 "fast": summary["fast"],
+                "template_id": fast.template_id,
                 "fast_date": fast.date.isoformat(),
                 "fast_date_text": long_date(fast.date),
                 "idf_dar_total": summary["idf_dar_total"],
@@ -194,11 +240,17 @@ def timeseries(patient_id: str, start: datetime | None = None, end: datetime | N
                 "type": e.event_type,
                 "start": e.start.isoformat(timespec="minutes"),
                 "end": e.end.isoformat(timespec="minutes"),
-                "details": e.details,
+                "details": json.loads(e.details) if isinstance(e.details, str) else e.details,
             }
             for e in events.itertuples()
         ],
     }
+
+
+@router.get("/patients/{patient_id}/history", summary="A daily summary of the days before the fast")
+def history(patient_id: str, days: int = Query(14, ge=7, le=14)):
+    _record_or_404(patient_id)
+    return services.daily_history(patient_id, days)
 
 
 @router.get("/patients/{patient_id}/idf-dar", summary="The IDF-DAR 2021 risk score")
@@ -301,15 +353,36 @@ def plan_from_template(patient_id: str, request: TemplateRequest):
     return plan.model_dump(mode="json")
 
 
+@router.get("/patients/{patient_id}/plans", summary="The doctor's saved plans")
+def saved_plans(patient_id: str):
+    _record_or_404(patient_id)
+    return {
+        "status": STORE.plan_status(patient_id),
+        "plans": {
+            plan_id: plan.model_dump(mode="json")
+            for plan_id, plan in STORE.saved_plans(patient_id).items()
+        },
+    }
+
+
+@router.put("/patients/{patient_id}/plans/{plan_id}", summary="Save a plan as a draft")
+def save_plan(patient_id: str, plan: FastingPlan, plan_id: str = PLAN_ID):
+    _record_or_404(patient_id)
+    _check(plan)
+    return STORE.save_draft(patient_id, plan_id, plan).model_dump(mode="json")
+
+
 @router.post("/patients/{patient_id}/simulate", summary="Simulate one fasting plan")
 def simulate(patient_id: str, plan: FastingPlan):
     _record_or_404(patient_id)
+    _check(plan)
     return services.simulate(patient_id, plan)
 
 
 @router.post("/patients/{patient_id}/compare", summary="Simulate and compare two plans")
 def compare(patient_id: str, plans: ComparePlans):
     _record_or_404(patient_id)
+    _check(plans.plan_a, plans.plan_b)
     return {
         "plan_a": services.simulate(patient_id, plans.plan_a),
         "plan_b": services.simulate(patient_id, plans.plan_b),
@@ -324,11 +397,13 @@ def replay(patient_id: str, at: datetime | None = Query(None)):
 
 
 @router.post("/patients/{patient_id}/plans/{plan_id}/approve", summary="Approve a plan")
-def approve(patient_id: str, plan_id: str, approval: Approval):
+def approve(patient_id: str, approval: Approval, plan_id: str = PLAN_ID):
     _record_or_404(patient_id)
-    if not approval.doctor_name.strip():
+    doctor = _doctor_name(approval.doctor_name)
+    if not doctor:
         raise HTTPException(status_code=422, detail="Please enter the name of the doctor.")
-    plan = STORE.approve(patient_id, plan_id, approval.plan, approval.doctor_name.strip())
+    _check(approval.plan)
+    plan = STORE.approve(patient_id, plan_id, approval.plan, doctor)
     return {
         "plan": plan.model_dump(mode="json"),
         "approval_text": f"Approved by Dr {plan.approved_by} on {long_date(plan.approved_on)}",
@@ -340,7 +415,7 @@ def approve(patient_id: str, plan_id: str, approval: Approval):
     response_class=HTMLResponse,
     summary="The printable patient fasting plan",
 )
-def document(patient_id: str, plan_id: str, lang: str = "en"):
+def document(patient_id: str, plan_id: str = PLAN_ID, lang: str = "en"):
     _record_or_404(patient_id)
     if STORE.approved_plan(patient_id, plan_id) is None:
         raise HTTPException(

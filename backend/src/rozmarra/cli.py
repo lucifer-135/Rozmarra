@@ -241,6 +241,15 @@ def demo_build() -> None:
     typer.echo(f"Rozmarra saved the synthetic demo patients in {DEMO_DIR}.")
 
 
+@demo_app.command("reset")
+def demo_reset() -> None:
+    """Remove the saved plans and approvals, so that every demo plan starts as "Not started"."""
+    from rozmarra.api.store import STORE
+
+    removed = STORE.clear_saved_plans()
+    typer.echo(f"Rozmarra removed {removed} saved plans. Every demo plan is now not started.")
+
+
 @app.command("serve")
 def serve(
     host: str = typer.Option("127.0.0.1", help="The address on which the API listens."),

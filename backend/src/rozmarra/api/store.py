@@ -1,14 +1,16 @@
 """The data that the API serves: the synthetic demo patients and the trained models.
 
 The API reads everything from data/demo, models and reports, so the demo runs without the
-large datasets. Plan approvals are kept in a small SQLite file (data/demo/approvals.sqlite),
-which is not committed.
+large datasets. The doctor's saved plans and approvals are kept in a small SQLite file
+(data/demo/approvals.sqlite), which is not committed.
 """
 
 from __future__ import annotations
 
 import json
 import sqlite3
+from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import date, datetime
 from functools import cached_property
 from pathlib import Path
@@ -26,6 +28,17 @@ from rozmarra.twin.simulate import TwinProfile
 from rozmarra.twin.virtual_patients import training_twins
 
 APPROVALS_FILE = DEMO_DIR / "approvals.sqlite"
+
+
+def _content(plan: FastingPlan) -> dict:
+    """The plan without its status and approval, to check whether the doctor changed it."""
+    return plan.model_dump(exclude={"status", "approved_by", "approved_on"})
+
+
+def _as_draft(plan: FastingPlan) -> FastingPlan:
+    return plan.model_copy(
+        update={"status": PlanStatus.DRAFT, "approved_by": None, "approved_on": None}
+    )
 
 
 class DemoStore:
@@ -136,18 +149,52 @@ class DemoStore:
         path = REPORTS_DIR / "metrics.json"
         return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
-    # --- Approvals -----------------------------------------------------------------------
+    # --- Saved plans and approvals --------------------------------------------------------
+    #
+    # The doctor's plans are saved as drafts when the doctor tests them. A patient has at
+    # most one approved plan. If the doctor changes an approved plan, it becomes a draft
+    # again, because the approval no longer matches the plan.
 
-    def _connect(self) -> sqlite3.Connection:
+    @contextmanager
+    def _connect(self) -> Iterator[sqlite3.Connection]:
+        """A connection that saves the changes and then closes, so the file is never left open."""
         connection = sqlite3.connect(APPROVALS_FILE)
-        if not self._approvals_ready:
-            connection.execute(
-                "CREATE TABLE IF NOT EXISTS approvals (patient_id TEXT, plan_id TEXT, "
-                "plan TEXT, approved_by TEXT, approved_on TEXT, saved_at TEXT, "
-                "PRIMARY KEY (patient_id, plan_id))"
-            )
-            self._approvals_ready = True
-        return connection
+        try:
+            with connection:
+                if not self._approvals_ready:
+                    connection.execute(
+                        "CREATE TABLE IF NOT EXISTS plans (patient_id TEXT, plan_id TEXT, "
+                        "plan TEXT, status TEXT, saved_at TEXT, PRIMARY KEY (patient_id, plan_id))"
+                    )
+                    self._approvals_ready = True
+                yield connection
+        finally:
+            connection.close()
+
+    def _save(self, connection, patient_id: str, plan_id: str, plan: FastingPlan) -> None:
+        connection.execute(
+            "INSERT OR REPLACE INTO plans VALUES (?, ?, ?, ?, ?)",
+            (
+                patient_id,
+                plan_id,
+                plan.model_dump_json(),
+                plan.status.value,
+                datetime.now().isoformat(timespec="seconds"),
+            ),
+        )
+
+    def save_draft(self, patient_id: str, plan_id: str, plan: FastingPlan) -> FastingPlan:
+        saved = self.saved_plan(patient_id, plan_id)
+        if (
+            saved is not None
+            and saved.status is PlanStatus.APPROVED
+            and _content(saved) == _content(plan)
+        ):
+            return saved
+        draft = _as_draft(plan)
+        with self._connect() as connection:
+            self._save(connection, patient_id, plan_id, draft)
+        return draft
 
     def approve(self, patient_id: str, plan_id: str, plan: FastingPlan, doctor: str) -> FastingPlan:
         approved = plan.model_copy(
@@ -158,33 +205,41 @@ class DemoStore:
             }
         )
         with self._connect() as connection:
-            connection.execute(
-                "INSERT OR REPLACE INTO approvals VALUES (?, ?, ?, ?, ?, ?)",
-                (
-                    patient_id,
-                    plan_id,
-                    approved.model_dump_json(),
-                    doctor,
-                    approved.approved_on.isoformat(),
-                    datetime.now().isoformat(timespec="seconds"),
-                ),
-            )
+            # Any earlier approval of another plan for this patient goes back to a draft.
+            for other_id, other in self._saved(connection, patient_id).items():
+                if other_id != plan_id and other.status is PlanStatus.APPROVED:
+                    self._save(connection, patient_id, other_id, _as_draft(other))
+            self._save(connection, patient_id, plan_id, approved)
         return approved
 
-    def approved_plan(self, patient_id: str, plan_id: str) -> FastingPlan | None:
+    def _saved(self, connection, patient_id: str) -> dict[str, FastingPlan]:
+        rows = connection.execute(
+            "SELECT plan_id, plan FROM plans WHERE patient_id = ? ORDER BY plan_id", (patient_id,)
+        ).fetchall()
+        return {plan_id: FastingPlan.model_validate_json(plan) for plan_id, plan in rows}
+
+    def saved_plans(self, patient_id: str) -> dict[str, FastingPlan]:
         with self._connect() as connection:
-            row = connection.execute(
-                "SELECT plan FROM approvals WHERE patient_id = ? AND plan_id = ?",
-                (patient_id, plan_id),
-            ).fetchone()
-        return FastingPlan.model_validate_json(row[0]) if row else None
+            return self._saved(connection, patient_id)
+
+    def saved_plan(self, patient_id: str, plan_id: str) -> FastingPlan | None:
+        return self.saved_plans(patient_id).get(plan_id)
+
+    def approved_plan(self, patient_id: str, plan_id: str) -> FastingPlan | None:
+        plan = self.saved_plan(patient_id, plan_id)
+        return plan if plan is not None and plan.status is PlanStatus.APPROVED else None
+
+    def clear_saved_plans(self) -> int:
+        """Removes every saved plan and approval, and returns the number removed."""
+        with self._connect() as connection:
+            return connection.execute("DELETE FROM plans").rowcount
 
     def plan_status(self, patient_id: str) -> str:
-        with self._connect() as connection:
-            row = connection.execute(
-                "SELECT COUNT(*) FROM approvals WHERE patient_id = ?", (patient_id,)
-            ).fetchone()
-        return "Approved" if row and row[0] else "Draft"
+        """The plan status for the patient list: "not_started", "draft" or "approved"."""
+        plans = self.saved_plans(patient_id).values()
+        if any(p.status is PlanStatus.APPROVED for p in plans):
+            return "approved"
+        return "draft" if plans else "not_started"
 
 
 STORE = DemoStore()

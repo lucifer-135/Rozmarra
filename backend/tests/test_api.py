@@ -101,16 +101,85 @@ def test_a_plan_must_be_approved_before_printing():
     assert client.get("/api/patients/SY-0003/plans/plan-a/document").status_code == 409
     response = client.post(
         "/api/patients/SY-0003/plans/plan-a/approve",
-        json={"doctor_name": "Ananya Rao", "plan": plan},
+        json={"doctor_name": "Dr. Ananya Rao", "plan": plan},
     )
     assert response.status_code == 200
     assert response.json()["approval_text"].startswith("Approved by Dr Ananya Rao on ")
     statuses = {r["patient_id"]: r["plan_status"] for r in client.get("/api/patients").json()}
-    assert statuses["SY-0003"] == "Approved"
+    assert statuses["SY-0003"] == "approved"
+    assert statuses["SY-0001"] == "not_started"
     empty = client.post(
-        "/api/patients/SY-0003/plans/plan-a/approve", json={"doctor_name": " ", "plan": plan}
+        "/api/patients/SY-0003/plans/plan-a/approve", json={"doctor_name": " Dr ", "plan": plan}
     )
     assert empty.status_code == 422
+
+
+def test_saved_drafts_and_a_single_approved_plan():
+    plan_a = client.get("/api/patients/SY-0001/plans/default").json()
+    plan_b = {**plan_a, "plan_name": "Plan B"}
+    assert client.put("/api/patients/SY-0001/plans/plan-a", json=plan_a).status_code == 200
+    assert client.put("/api/patients/SY-0001/plans/plan-b", json=plan_b).status_code == 200
+    saved = client.get("/api/patients/SY-0001/plans").json()
+    assert saved["status"] == "draft" and set(saved["plans"]) == {"plan-a", "plan-b"}
+
+    approve = "/api/patients/SY-0001/plans/{}/approve"
+    client.post(approve.format("plan-a"), json={"doctor_name": "Meera Iyer", "plan": plan_a})
+    client.post(approve.format("plan-b"), json={"doctor_name": "Meera Iyer", "plan": plan_b})
+    plans = client.get("/api/patients/SY-0001/plans").json()["plans"]
+    assert plans["plan-a"]["status"] == "draft", "Approving Plan B withdraws Plan A's approval."
+    assert plans["plan-b"]["approved_by"] == "Meera Iyer"
+
+    # Saving the same plan again keeps the approval, and a changed plan becomes a draft.
+    same = client.put("/api/patients/SY-0001/plans/plan-b", json=plan_b).json()
+    assert same["status"] == "approved"
+    changed = client.put(
+        "/api/patients/SY-0001/plans/plan-b", json={**plan_b, "water_allowed": True}
+    ).json()
+    assert changed["status"] == "draft" and changed["approved_by"] is None
+    assert client.get("/api/patients/SY-0001/plans/plan-b/document").status_code == 409
+    assert client.put("/api/patients/SY-0001/plans/Plan B!", json=plan_b).status_code == 422
+
+    # The demo reset removes every saved plan.
+    assert store.STORE.clear_saved_plans() == 2
+    assert client.get("/api/patients/SY-0001/plans").json()["status"] == "not_started"
+
+
+def test_a_plan_with_a_problem_is_not_simulated():
+    plan = client.get("/api/patients/SY-0001/plans/default").json()
+    too_much = {**plan, "medicines": [{**plan["medicines"][0], "dose": 40}]}
+    response = client.post("/api/patients/SY-0001/simulate", json=too_much)
+    assert response.status_code == 422
+    assert "largest single dose" in response.json()["detail"]
+    backwards = {**plan, "fast_end": plan["fast_start"]}
+    response = client.post("/api/patients/SY-0001/simulate", json=backwards)
+    assert "later than the start" in response.json()["detail"]
+    unknown = {**plan, "medicines": [{**plan["medicines"][0], "name": "unknownamide"}]}
+    assert client.post("/api/patients/SY-0001/simulate", json=unknown).status_code == 422
+
+
+def test_the_history_summarises_the_14_days_before_the_fast():
+    body = client.get("/api/patients/SY-0001/history").json()
+    assert len(body["days"]) == 14 and body["source"] == "synthetic"
+    assert body["days"][-1]["date"] == "2026-10-27"
+    assert body["end"].startswith("2026-10-28")
+    day = body["days"][3]
+    assert 0 <= day["time_in_range_percent"] <= 100
+    assert day["steps"] > 0 and 3 <= day["sleep_hours"] <= 11
+    assert body["summary"]["mean_glucose_mg_dl"] > 70
+
+
+def test_the_plan_options_and_the_parsed_event_details():
+    options = client.get("/api/plan-options").json()
+    for_diabetes = {m["name"]: m["for_diabetes"] for m in options["medicines"]}
+    assert for_diabetes["glimepiride"] and for_diabetes["insulin_glargine"]
+    assert not for_diabetes["aspirin"]
+    assert len(options["food_categories"]) == 3 and options["activities"]
+    events = client.get(
+        "/api/patients/SY-0001/timeseries",
+        params={"start": "2026-10-28T00:00", "end": "2026-10-28T23:59"},
+    ).json()["events"]
+    fast = next(e for e in events if e["type"] == "fast")
+    assert fast["details"]["template_id"] == "karva_chauth"
 
 
 def test_the_templates_and_the_model_card_are_available():
