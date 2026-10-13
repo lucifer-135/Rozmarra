@@ -417,3 +417,16 @@ def lowest_glucose_time(patient_id: str, plan: FastingPlan) -> datetime | None:
 def default_summary(patient_id: str) -> dict:
     """The simulation of the usual plan (Plan A), used by the patient list."""
     return simulate(patient_id, STORE.default_plan(patient_id), samples=50)["summary"]
+
+
+def warm_up() -> None:
+    """Prepare the slow results once when the API starts, so that the first screens load quickly.
+
+    The patient list needs a simulation of each usual plan, and the live fasting monitor needs
+    the features of each recorded fasting day and the SHAP explainer.
+    """
+    for patient_id in STORE.summaries:
+        default_summary(patient_id)
+        monitor = replay(patient_id)
+        first = monitor.alerts[0] if monitor.alerts else 0
+        monitor.at(monitor.time(monitor.points[first]))

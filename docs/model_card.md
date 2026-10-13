@@ -249,6 +249,8 @@ The live fasting monitor replays the recorded demo fasting day of each patient. 
 
 For the demonstration, the doctor can show the readings that came after the chosen moment. These readings are labelled clearly, and the model never uses them.
 
+When the API starts, it prepares the simulations of the usual plans, the features of the recorded fasting days and the SHAP explainer in the background, which took about 7 seconds on the team's Windows laptop. After that, each request of the dashboard took less than 0.2 seconds, and testing two plans took about 1.3 seconds, within the target of 2 seconds for each screen.
+
 ### 7.2 The patient plan
 
 The printable patient plan comes only from fixed Jinja2 templates in English and Hindi. Rozmarra fills in the patient's own facts: the name, the date, the patient's word for the fast, the times of the fast and the meals, the doses and the doctor's approval. The plan states each medicine with the name on the strip and the dose, for example "Glimepiride 1 mg", as `docs/prd.md`, Section 17.2, describes. A usual dose that the approved plan no longer contains appears as a dose that the doctor advised the patient not to take.
