@@ -4,6 +4,8 @@
   the 100 test virtual patients, whose donors come only from the real test group.
 - Real data: five-fold cross-validation grouped by person. Each fold is tested only on the
   held-out days of its patients, on which the patients' twins were not fitted.
+- Real meals: the E2 model, trained only on synthetic fasting days, is applied without
+  retraining to real meals that end at least 8 hours without food on the held-out days.
 - Metrics: AUROC, AUPRC, the Brier score, a calibration curve, sensitivity, specificity and
   balanced accuracy at both alert thresholds, the share of low blood sugar events with an
   alert in the hour before them, the median warning time, and false alerts per patient per
@@ -27,7 +29,7 @@ from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_s
 
 from rozmarra.config import MODELS_DIR, RANDOM_SEED, REPORTS_DIR
 from rozmarra.ml.alerts import event_runs, raise_alerts
-from rozmarra.ml.datasets import FEATURE_DIR
+from rozmarra.ml.datasets import FEATURE_DIR, REAL_MEAL_GAP_MIN, REAL_MEAL_MIN_CARBS_G
 from rozmarra.ml.features import (
     ALL_POINT_FEATURES,
     CGM_FEATURES,
@@ -340,6 +342,14 @@ def evaluate_e2(table: pd.DataFrame) -> tuple[dict, TrainedModel]:
     features = ALL_POINT_FEATURES + E2_FEATURES
     train, test = rows[rows.group == "training"], rows[rows.group == "test"].copy()
     model = fit_model(train, features, "label_e2", "e2")
+    report = meal_report(test, model)
+    report["training"] = model.info
+    return report, model
+
+
+def meal_report(test: pd.DataFrame, model: TrainedModel) -> dict:
+    """Scores of the E2 model and its baselines on a table of meals that break a fast."""
+    test = test.copy()
     test["p"] = model.predict(test)
     y = test.label_e2.astype(int).to_numpy()
     report = {
@@ -349,7 +359,6 @@ def evaluate_e2(table: pd.DataFrame) -> tuple[dict, TrainedModel]:
         **{k: _round(v) for k, v in ranking_metrics(y, test.p.to_numpy()).items()},
         "brier": _round(brier_score_loss(y, test.p), 4),
         "calibration": calibration_curve(y, test.p.to_numpy(), bins=5),
-        "training": model.info,
     }
     report["thresholds"] = {}
     for name, t in (
@@ -383,7 +392,36 @@ def evaluate_e2(table: pd.DataFrame) -> tuple[dict, TrainedModel]:
             test, "label_e2", "baseline_cgm", BOOTSTRAPS_SMALL
         ),
     }
-    return report, model
+    return report
+
+
+def evaluate_e2_real(table: pd.DataFrame, model: TrainedModel) -> dict:
+    """Apply the E2 model, which learned only on synthetic fasting days, to real meals.
+
+    The real data contains no festival fasts. The closest real case is the first meal after a
+    night without food, usually breakfast, on the held-out days of the twins. The model is not
+    retrained on these meals."""
+    rows = table[table.usable_e2]
+    report = {
+        "note": (
+            "The E2 model learned only on synthetic fasting days and is not retrained here. "
+            f"Each real meal comes after at least {REAL_MEAL_GAP_MIN // 60} hours without food, "
+            f"contains at least {REAL_MEAL_MIN_CARBS_G:.0f} g of carbohydrate and falls on a "
+            "held-out day, on which the patient's twin was not fitted. These meals end a night "
+            "without food, not a festival fast."
+        ),
+        **meal_report(rows, model),
+    }
+    report["by_dataset"] = {}
+    for dataset, sub in rows.groupby("dataset"):
+        y = sub.label_e2.astype(int).to_numpy()
+        report["by_dataset"][dataset] = {
+            "meals": int(len(sub)),
+            "patients": int(sub.patient_id.nunique()),
+            "meals_with_e2": int(y.sum()),
+            **{k: _round(v) for k, v in ranking_metrics(y, model.predict(sub)).items()},
+        }
+    return report
 
 
 # --- Real data ---------------------------------------------------------------------------
@@ -493,6 +531,9 @@ def run_all(write: bool = True) -> dict:
     metrics["synthetic"]["e2"] = e2_report
     models["e2"] = e2_model
     metrics["real"] = {"e1": evaluate_real(real)}
+    real_meals = FEATURE_DIR / "e2_real.parquet"
+    if real_meals.exists():
+        metrics["real"]["e2"] = evaluate_e2_real(pd.read_parquet(real_meals), e2_model)
     if write:
         for model in models.values():
             model.save(MODELS_DIR)
