@@ -59,7 +59,35 @@ The doctor dashboard has six screens.
 5. **Patient fasting plan.** After the doctor approves a plan, Rozmarra produces a printable plan in English or Hindi, with the patient's own word for the fast, such as व्रत, उपवास or रोज़ा. The plan lists the times to check blood sugar, the rule for breaking the fast, the medicine changes that the doctor approved, advice on water and on the meal that breaks the fast, and the doctor's contact details. The screen also shows a short version for SMS or WhatsApp as a concept. Rozmarra does not send any messages.
 6. **How Rozmarra makes predictions.** The screen explains the model card in plain language: the data, the tests, every result against its target, and the limits.
 
-The dashboard can switch between English and Hindi. The team will add screenshots of each screen here.
+The dashboard can switch between English and Hindi.
+
+### Screenshots
+
+The screenshots show the synthetic demo patients. They do not represent real people.
+
+**Screen 1. Patients who plan to fast.** The list sorts the four demo patients by the predicted chance of low blood sugar during the fast.
+
+![Screen 1 shows the list of the four synthetic patients with their fast, IDF-DAR risk, predicted chance of low blood sugar, plan status and cautions.](docs/images/screen1_patients.png)
+
+**Screen 2. Virtual patient.** The screen shows what the twin knows about Sunita Sharma, Age 54, before Karva Chauth.
+
+![Screen 2 shows the health record summary, usual medicines, CYP2C9 marker and the last 14 days of glucose, heart rate, steps and sleep for Sunita Sharma.](docs/images/screen2_virtual_patient.png)
+
+**Screen 3. Test a fasting plan.** The doctor compares Plan A, Sunita's usual medicines, with Plan B, which has a lower glimepiride dose with sargi and dapagliflozin after the fast.
+
+![Screen 3 shows the plan form, the comparison table of Plan A and Plan B, the dehydration caution and the glucose curves of both plans with their uncertainty bands.](docs/images/screen3_simulator.png)
+
+**Screen 4. Live fasting monitor.** The replay of Ramesh Patel's Navratri fast shows the alert at 10:50 am, with the forecast for the next 2 hours and the three main reasons.
+
+![Screen 4 shows the time slider at 10:50 am, the alert with an estimated chance of 9% (Moderate), the glucose readings with the forecast, and the alert timeline.](docs/images/screen4_monitor.png)
+
+**Screen 5. Patient fasting plan.** The approved Plan B for Sunita is shown in Hindi, with her own word for the fast, व्रत.
+
+![Screen 5 shows the printable patient fasting plan in Hindi, with the rule for breaking the fast, the times to check blood sugar and the medicine changes.](docs/images/screen5_patient_plan_hindi.png)
+
+**Screen 6. How Rozmarra makes predictions.** The results table reports every result against its target, including the targets that were not met.
+
+![Screen 6 shows the table of results and targets from the model card, with the status of each target.](docs/images/screen6_model_card.png)
 
 ## 5. Architecture
 
