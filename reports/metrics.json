@@ -66,15 +66,15 @@
    ],
    "thresholds": {
     "sensitivity_80": {
-     "threshold": 0.0347,
-     "sensitivity_points": 0.957,
-     "specificity_points": 0.962,
-     "balanced_accuracy": 0.959,
+     "threshold": 0.0894,
+     "sensitivity_points": 0.866,
+     "specificity_points": 0.979,
+     "balanced_accuracy": 0.922,
      "events": 116,
-     "events_detected_in_time": 94,
-     "event_sensitivity": 0.81,
-     "median_warning_minutes": 30.0,
-     "false_alerts_per_patient_day": 2.546
+     "events_detected_in_time": 102,
+     "event_sensitivity": 0.879,
+     "median_warning_minutes": 25.0,
+     "false_alerts_per_patient_day": 1.923
     },
     "balanced": {
      "threshold": 0.0099,
@@ -82,10 +82,10 @@
      "specificity_points": 0.924,
      "balanced_accuracy": 0.959,
      "events": 116,
-     "events_detected_in_time": 99,
-     "event_sensitivity": 0.853,
+     "events_detected_in_time": 103,
+     "event_sensitivity": 0.888,
      "median_warning_minutes": 25.0,
-     "false_alerts_per_patient_day": 4.704
+     "false_alerts_per_patient_day": 5.064
     }
    },
    "confidence_intervals_95": {
@@ -102,15 +102,17 @@
      0.011
     ],
     "event_sensitivity": [
-     0.753,
-     0.905
+     0.836,
+     0.951
     ],
     "false_alerts_per_patient_day": [
-     1.593,
-     3.618
+     1.141,
+     2.872
     ]
    },
    "training": {
+    "alert_level_rule": "The highest level that detects 80% of the events of the validation set",
+    "point_threshold_80": 0.0347,
     "fitting_rows": 233899,
     "validation_rows": 56440,
     "fitting_positives": 2369,
@@ -276,113 +278,113 @@
     "insulin": {
      "auroc": 0.983,
      "auprc": 0.517,
-     "threshold": 0.0347,
-     "sensitivity_points": 0.971,
-     "specificity_points": 0.928,
-     "balanced_accuracy": 0.949,
+     "threshold": 0.0894,
+     "sensitivity_points": 0.897,
+     "specificity_points": 0.959,
+     "balanced_accuracy": 0.928,
      "events": 94,
-     "events_detected_in_time": 77,
-     "event_sensitivity": 0.819,
-     "median_warning_minutes": 30.0,
-     "false_alerts_per_patient_day": 4.835,
+     "events_detected_in_time": 83,
+     "event_sensitivity": 0.883,
+     "median_warning_minutes": 25.0,
+     "false_alerts_per_patient_day": 3.816,
      "patients": 33
     },
     "sulfonylurea without insulin": {
      "auroc": 0.988,
      "auprc": 0.267,
-     "threshold": 0.0347,
-     "sensitivity_points": 0.929,
-     "specificity_points": 0.968,
-     "balanced_accuracy": 0.948,
+     "threshold": 0.0894,
+     "sensitivity_points": 0.761,
+     "specificity_points": 0.981,
+     "balanced_accuracy": 0.871,
      "events": 20,
-     "events_detected_in_time": 15,
-     "event_sensitivity": 0.75,
-     "median_warning_minutes": 25.0,
-     "false_alerts_per_patient_day": 2.08,
+     "events_detected_in_time": 17,
+     "event_sensitivity": 0.85,
+     "median_warning_minutes": 20.0,
+     "false_alerts_per_patient_day": 1.552,
      "patients": 38
     },
     "neither": {
      "auroc": 0.969,
      "auprc": 0.105,
-     "threshold": 0.0347,
-     "sensitivity_points": 0.538,
-     "specificity_points": 0.992,
-     "balanced_accuracy": 0.765,
+     "threshold": 0.0894,
+     "sensitivity_points": 0.385,
+     "specificity_points": 0.997,
+     "balanced_accuracy": 0.691,
      "events": 2,
      "events_detected_in_time": 2,
      "event_sensitivity": 1.0,
-     "median_warning_minutes": 17.5,
-     "false_alerts_per_patient_day": 0.549,
+     "median_warning_minutes": 12.5,
+     "false_alerts_per_patient_day": 0.254,
      "patients": 29
     },
     "age 65 or over": {
      "auroc": 0.992,
      "auprc": 0.448,
-     "threshold": 0.0347,
+     "threshold": 0.0894,
      "sensitivity_points": 1.0,
-     "specificity_points": 0.967,
-     "balanced_accuracy": 0.983,
+     "specificity_points": 0.976,
+     "balanced_accuracy": 0.988,
      "events": 22,
-     "events_detected_in_time": 16,
-     "event_sensitivity": 0.727,
-     "median_warning_minutes": 30.0,
+     "events_detected_in_time": 19,
+     "event_sensitivity": 0.864,
+     "median_warning_minutes": 20.0,
      "false_alerts_per_patient_day": 2.303,
      "patients": 12
     },
     "age under 65": {
      "auroc": 0.989,
      "auprc": 0.49,
-     "threshold": 0.0347,
-     "sensitivity_points": 0.949,
-     "specificity_points": 0.961,
-     "balanced_accuracy": 0.955,
+     "threshold": 0.0894,
+     "sensitivity_points": 0.841,
+     "specificity_points": 0.979,
+     "balanced_accuracy": 0.91,
      "events": 94,
-     "events_detected_in_time": 78,
-     "event_sensitivity": 0.83,
-     "median_warning_minutes": 30.0,
-     "false_alerts_per_patient_day": 2.58,
+     "events_detected_in_time": 83,
+     "event_sensitivity": 0.883,
+     "median_warning_minutes": 25.0,
+     "false_alerts_per_patient_day": 1.87,
      "patients": 88
     },
     "eGFR 60 or above": {
      "auroc": 0.99,
      "auprc": 0.472,
-     "threshold": 0.0347,
-     "sensitivity_points": 0.957,
-     "specificity_points": 0.962,
-     "balanced_accuracy": 0.959,
+     "threshold": 0.0894,
+     "sensitivity_points": 0.866,
+     "specificity_points": 0.979,
+     "balanced_accuracy": 0.922,
      "events": 116,
-     "events_detected_in_time": 94,
-     "event_sensitivity": 0.81,
-     "median_warning_minutes": 30.0,
-     "false_alerts_per_patient_day": 2.546,
+     "events_detected_in_time": 102,
+     "event_sensitivity": 0.879,
+     "median_warning_minutes": 25.0,
+     "false_alerts_per_patient_day": 1.923,
      "patients": 100
     },
     "female": {
      "auroc": 0.985,
      "auprc": 0.413,
-     "threshold": 0.0347,
-     "sensitivity_points": 0.94,
-     "specificity_points": 0.96,
-     "balanced_accuracy": 0.95,
+     "threshold": 0.0894,
+     "sensitivity_points": 0.82,
+     "specificity_points": 0.974,
+     "balanced_accuracy": 0.897,
      "events": 69,
-     "events_detected_in_time": 53,
-     "event_sensitivity": 0.768,
-     "median_warning_minutes": 30.0,
-     "false_alerts_per_patient_day": 2.729,
+     "events_detected_in_time": 58,
+     "event_sensitivity": 0.841,
+     "median_warning_minutes": 20.0,
+     "false_alerts_per_patient_day": 2.421,
      "patients": 40
     },
     "male": {
      "auroc": 0.994,
      "auprc": 0.597,
-     "threshold": 0.0347,
-     "sensitivity_points": 0.98,
-     "specificity_points": 0.963,
-     "balanced_accuracy": 0.971,
+     "threshold": 0.0894,
+     "sensitivity_points": 0.93,
+     "specificity_points": 0.982,
+     "balanced_accuracy": 0.956,
      "events": 47,
-     "events_detected_in_time": 41,
-     "event_sensitivity": 0.872,
-     "median_warning_minutes": 30.0,
-     "false_alerts_per_patient_day": 2.434,
+     "events_detected_in_time": 44,
+     "event_sensitivity": 0.936,
+     "median_warning_minutes": 25.0,
+     "false_alerts_per_patient_day": 1.616,
      "patients": 60
     }
    },
@@ -494,15 +496,15 @@
     ],
     "thresholds": {
      "sensitivity_80": {
-      "threshold": 0.0347,
-      "sensitivity_points": 1.0,
-      "specificity_points": 0.942,
-      "balanced_accuracy": 0.971,
+      "threshold": 0.0894,
+      "sensitivity_points": 0.97,
+      "specificity_points": 0.96,
+      "balanced_accuracy": 0.965,
       "events": 54,
-      "events_detected_in_time": 43,
-      "event_sensitivity": 0.796,
-      "median_warning_minutes": 20.0,
-      "false_alerts_per_patient_day": 3.416
+      "events_detected_in_time": 44,
+      "event_sensitivity": 0.815,
+      "median_warning_minutes": 22.5,
+      "false_alerts_per_patient_day": 3.077
      },
      "balanced": {
       "threshold": 0.0099,
@@ -510,10 +512,10 @@
       "specificity_points": 0.905,
       "balanced_accuracy": 0.952,
       "events": 54,
-      "events_detected_in_time": 39,
-      "event_sensitivity": 0.722,
-      "median_warning_minutes": 30.0,
-      "false_alerts_per_patient_day": 5.552
+      "events_detected_in_time": 44,
+      "event_sensitivity": 0.815,
+      "median_warning_minutes": 22.5,
+      "false_alerts_per_patient_day": 6.186
      }
     },
     "confidence_intervals_95": {
@@ -531,11 +533,11 @@
      ],
      "event_sensitivity": [
       0.694,
-      0.863
+      0.927
      ],
      "false_alerts_per_patient_day": [
-      2.198,
-      4.818
+      1.797,
+      4.618
      ]
     }
    }
@@ -601,15 +603,15 @@
    ],
    "thresholds": {
     "sensitivity_80": {
-     "threshold": 0.0356,
-     "sensitivity_points": 0.919,
-     "specificity_points": 0.956,
-     "balanced_accuracy": 0.938,
+     "threshold": 0.0102,
+     "sensitivity_points": 0.994,
+     "specificity_points": 0.89,
+     "balanced_accuracy": 0.942,
      "events": 138,
-     "events_detected_in_time": 120,
-     "event_sensitivity": 0.87,
+     "events_detected_in_time": 121,
+     "event_sensitivity": 0.877,
      "median_warning_minutes": 30.0,
-     "false_alerts_per_patient_day": 2.719
+     "false_alerts_per_patient_day": 6.633
     },
     "balanced": {
      "threshold": 0.0196,
@@ -617,10 +619,10 @@
      "specificity_points": 0.921,
      "balanced_accuracy": 0.951,
      "events": 138,
-     "events_detected_in_time": 120,
-     "event_sensitivity": 0.87,
+     "events_detected_in_time": 122,
+     "event_sensitivity": 0.884,
      "median_warning_minutes": 30.0,
-     "false_alerts_per_patient_day": 4.647
+     "false_alerts_per_patient_day": 5.051
     }
    },
    "confidence_intervals_95": {
@@ -637,15 +639,17 @@
      0.017
     ],
     "event_sensitivity": [
-     0.824,
-     0.947
+     0.841,
+     0.931
     ],
     "false_alerts_per_patient_day": [
-     1.738,
-     3.822
+     4.959,
+     8.584
     ]
    },
    "training": {
+    "alert_level_rule": "The highest level that detects 80% of the events of the validation set",
+    "point_threshold_80": 0.0356,
     "fitting_rows": 231920,
     "validation_rows": 56101,
     "fitting_positives": 4336,
@@ -726,14 +730,14 @@
    "thresholds": {
     "sensitivity_80": {
      "threshold": 0.185,
-     "sensitivity_points": 0.684,
-     "specificity_points": 0.994,
-     "balanced_accuracy": 0.839,
+     "sensitivity_points": 0.595,
+     "specificity_points": 0.996,
+     "balanced_accuracy": 0.796,
      "events": 80,
-     "events_detected_in_time": 49,
-     "event_sensitivity": 0.613,
+     "events_detected_in_time": 57,
+     "event_sensitivity": 0.713,
      "median_warning_minutes": 20.0,
-     "false_alerts_per_patient_day": 0.548
+     "false_alerts_per_patient_day": 0.52
     },
     "balanced": {
      "threshold": 0.0565,
@@ -741,10 +745,10 @@
      "specificity_points": 0.977,
      "balanced_accuracy": 0.971,
      "events": 80,
-     "events_detected_in_time": 57,
-     "event_sensitivity": 0.713,
-     "median_warning_minutes": 30.0,
-     "false_alerts_per_patient_day": 1.649
+     "events_detected_in_time": 68,
+     "event_sensitivity": 0.85,
+     "median_warning_minutes": 27.5,
+     "false_alerts_per_patient_day": 2.084
     }
    },
    "confidence_intervals_95": {
@@ -761,15 +765,17 @@
      0.005
     ],
     "event_sensitivity": [
-     0.522,
-     0.694
+     0.578,
+     0.853
     ],
     "false_alerts_per_patient_day": [
-     0.372,
-     0.789
+     0.338,
+     0.769
     ]
    },
    "training": {
+    "alert_level_rule": "The highest level that detects 80% of the events of the validation set",
+    "point_threshold_80": 0.185,
     "fitting_rows": 232099,
     "validation_rows": 55067,
     "fitting_positives": 2066,
@@ -822,24 +828,6 @@
      "count": 58
     }
    ],
-   "training": {
-    "fitting_rows": 899,
-    "validation_rows": 231,
-    "fitting_positives": 439,
-    "validation_positives": 111,
-    "settings": {
-     "n_estimators": 300,
-     "learning_rate": 0.05,
-     "num_leaves": 15,
-     "min_child_samples": 200,
-     "subsample": 0.8,
-     "subsample_freq": 1,
-     "colsample_bytree": 0.6,
-     "reg_lambda": 5.0,
-     "random_state": 2026,
-     "n_jobs": 4
-    }
-   },
    "thresholds": {
     "sensitivity_80": {
      "threshold": 0.8,
@@ -904,6 +892,26 @@
        0.797
       ]
      }
+    }
+   },
+   "training": {
+    "alert_level_rule": "The highest level that detects 80% of the positive time points of the validation set",
+    "point_threshold_80": 0.8,
+    "fitting_rows": 899,
+    "validation_rows": 231,
+    "fitting_positives": 439,
+    "validation_positives": 111,
+    "settings": {
+     "n_estimators": 300,
+     "learning_rate": 0.05,
+     "num_leaves": 15,
+     "min_child_samples": 200,
+     "subsample": 0.8,
+     "subsample_freq": 1,
+     "colsample_bytree": 0.6,
+     "reg_lambda": 5.0,
+     "random_state": 2026,
+     "n_jobs": 4
     }
    }
   },
@@ -1041,14 +1049,14 @@
     "thresholds": {
      "sensitivity_80": {
       "threshold": 1.0,
-      "sensitivity_points": 0.5,
-      "specificity_points": 0.993,
-      "balanced_accuracy": 0.747,
+      "sensitivity_points": 0.111,
+      "specificity_points": 0.998,
+      "balanced_accuracy": 0.555,
       "events": 3,
-      "events_detected_in_time": 3,
-      "event_sensitivity": 1.0,
-      "median_warning_minutes": 45.0,
-      "false_alerts_per_patient_day": 0.499
+      "events_detected_in_time": 2,
+      "event_sensitivity": 0.667,
+      "median_warning_minutes": 22.5,
+      "false_alerts_per_patient_day": 0.187
      },
      "balanced": {
       "threshold": 1.0,
@@ -1058,8 +1066,8 @@
       "events": 3,
       "events_detected_in_time": 3,
       "event_sensitivity": 1.0,
-      "median_warning_minutes": 35.0,
-      "false_alerts_per_patient_day": 1.059
+      "median_warning_minutes": 45.0,
+      "false_alerts_per_patient_day": 1.683
      }
     }
    },
@@ -1073,14 +1081,14 @@
     "thresholds": {
      "sensitivity_80": {
       "threshold": 1.0,
-      "sensitivity_points": 0.807,
-      "specificity_points": 0.899,
-      "balanced_accuracy": 0.853,
+      "sensitivity_points": 0.535,
+      "specificity_points": 0.976,
+      "balanced_accuracy": 0.756,
       "events": 77,
-      "events_detected_in_time": 75,
-      "event_sensitivity": 0.974,
+      "events_detected_in_time": 61,
+      "event_sensitivity": 0.792,
       "median_warning_minutes": 45.0,
-      "false_alerts_per_patient_day": 5.569
+      "false_alerts_per_patient_day": 1.627
      },
      "balanced": {
       "threshold": 1.0,
@@ -1090,8 +1098,8 @@
       "events": 77,
       "events_detected_in_time": 77,
       "event_sensitivity": 1.0,
-      "median_warning_minutes": 45.0,
-      "false_alerts_per_patient_day": 9.439
+      "median_warning_minutes": 60.0,
+      "false_alerts_per_patient_day": 10.876
      }
     }
    },
@@ -1240,6 +1248,124 @@
     },
     "positive_time_points": 28
    }
+  },
+  "e2": {
+   "note": "The E2 model learned only on synthetic fasting days and is not retrained here. Each real meal comes after at least 8 hours without food, contains at least 20 g of carbohydrate and falls on a held-out day, on which the patient's twin was not fitted. These meals end a night without food, not a festival fast.",
+   "meals": 244,
+   "patients": 86,
+   "meals_with_e2": 34,
+   "auroc": 0.828,
+   "auprc": 0.41,
+   "brier": 0.1194,
+   "calibration": [
+    {
+     "mean_predicted": 0.0,
+     "observed_rate": 0.0204,
+     "count": 49
+    },
+    {
+     "mean_predicted": 0.0,
+     "observed_rate": 0.0204,
+     "count": 49
+    },
+    {
+     "mean_predicted": 0.0718,
+     "observed_rate": 0.1042,
+     "count": 48
+    },
+    {
+     "mean_predicted": 0.1157,
+     "observed_rate": 0.1224,
+     "count": 49
+    },
+    {
+     "mean_predicted": 0.6976,
+     "observed_rate": 0.4286,
+     "count": 49
+    }
+   ],
+   "thresholds": {
+    "sensitivity_80": {
+     "threshold": 0.8,
+     "sensitivity": 0.382,
+     "specificity": 0.929
+    },
+    "balanced": {
+     "threshold": 0.6056,
+     "sensitivity": 0.471,
+     "specificity": 0.91
+    }
+   },
+   "confidence_intervals_95": {
+    "auroc": [
+     0.725,
+     0.903
+    ],
+    "auprc": [
+     0.253,
+     0.6
+    ]
+   },
+   "baselines": {
+    "planned carbohydrates alone": {
+     "auroc": 0.55,
+     "auprc": 0.205,
+     "confidence_intervals_95": {
+      "auroc": [
+       0.412,
+       0.696
+      ],
+      "auprc": [
+       0.11,
+       0.374
+      ]
+     }
+    },
+    "twin peak alone": {
+     "auroc": 0.821,
+     "auprc": 0.416,
+     "confidence_intervals_95": {
+      "auroc": [
+       0.712,
+       0.905
+      ],
+      "auprc": [
+       0.251,
+       0.609
+      ]
+     }
+    },
+    "glucose 2 hours before the meal": {
+     "auroc": 0.865,
+     "auprc": 0.48,
+     "confidence_intervals_95": {
+      "auroc": [
+       0.779,
+       0.93
+      ],
+      "auprc": [
+       0.264,
+       0.704
+      ]
+     }
+    }
+   },
+   "by_dataset": {
+    "CGMacros": {
+     "meals": 27,
+     "patients": 13,
+     "meals_with_e2": 10,
+     "auroc": 0.876,
+     "auprc": 0.718
+    },
+    "ShanghaiT2DM": {
+     "meals": 217,
+     "patients": 73,
+     "meals_with_e2": 24,
+     "auroc": 0.854,
+     "auprc": 0.418
+    }
+   }
   }
  },
  "sensitivity_weak_sulfonylurea": {
@@ -1270,15 +1396,15 @@
    "time_points": 71191,
    "thresholds": {
     "sensitivity_80": {
-     "threshold": 0.043,
-     "sensitivity_points": 0.924,
-     "specificity_points": 0.971,
-     "balanced_accuracy": 0.948,
+     "threshold": 0.0611,
+     "sensitivity_points": 0.802,
+     "specificity_points": 0.985,
+     "balanced_accuracy": 0.893,
      "events": 117,
-     "events_detected_in_time": 98,
-     "event_sensitivity": 0.838,
+     "events_detected_in_time": 95,
+     "event_sensitivity": 0.812,
      "median_warning_minutes": 25.0,
-     "false_alerts_per_patient_day": 2.075
+     "false_alerts_per_patient_day": 1.525
     },
     "balanced": {
      "threshold": 0.0076,
@@ -1286,10 +1412,10 @@
      "specificity_points": 0.94,
      "balanced_accuracy": 0.963,
      "events": 117,
-     "events_detected_in_time": 97,
-     "event_sensitivity": 0.829,
-     "median_warning_minutes": 25.0,
-     "false_alerts_per_patient_day": 3.835
+     "events_detected_in_time": 96,
+     "event_sensitivity": 0.821,
+     "median_warning_minutes": 27.5,
+     "false_alerts_per_patient_day": 4.199
     }
    },
    "confidence_intervals_95": {
@@ -1306,12 +1432,12 @@
      0.011
     ],
     "event_sensitivity": [
-     0.779,
-     0.91
+     0.745,
+     0.898
     ],
     "false_alerts_per_patient_day": [
-     1.32,
-     2.942
+     0.974,
+     2.241
     ]
    }
   }

@@ -209,9 +209,11 @@ The team tested Rozmarra in two parts. No open dataset contains CGM data from In
 | Test | Result |
 |---|---|
 | Twin fit on 89 real patients | The median error in 12-hour windows on held-out days was 32.5 mg/dL. The median 2-hour forecast error was 30.2 mg/dL, against 38.8 mg/dL for the last glucose value. |
+| Twin forecasts on the Parkes error grid for Type 2 Diabetes | 99.97% of 6,301 forecasts 30 minutes ahead fell in zones A and B. The target was 95% or more. The last glucose value also met this target, but more of the twin's forecasts fell in zone A (97.2% against 95.5%). |
 | Low blood sugar 60 minutes ahead, real normal days (held-out days) | AUROC 0.943 (95% interval 0.919 to 0.964). The target was 0.80 or higher. |
-| Low blood sugar 60 minutes ahead, synthetic fasting days (100 test virtual patients) | AUROC 0.990 (0.984 to 0.994). 81% of events were detected in time, with a median warning of 30 minutes. There were 2.5 false alerts per patient per fasting day, which is above the target of 2. |
+| Low blood sugar 60 minutes ahead, synthetic fasting days (100 test virtual patients) | AUROC 0.990 (0.984 to 0.994). 88% of events were detected in time, with 1.9 false alerts per patient per fasting day. The median warning was 25 minutes, which is shorter than the target of 30 minutes. |
 | High blood sugar after the fast, synthetic fasting days | AUROC 0.958 (0.931 to 0.979) |
+| High blood sugar after a real meal that follows a night without food (244 meals, model not retrained) | AUROC 0.828 (0.725 to 0.903). The glucose value 2 hours before the meal alone reached 0.865. |
 | Whole-fast forecast of low blood sugar, before the fast | AUROC 0.973 (0.945 to 0.992), against 0.815 for the twin alone and 0.750 for the IDF-DAR score alone |
 
 These results have important limits:
@@ -219,6 +221,7 @@ These results have important limits:
 - The real data comes from normal days in China and the United States, not from fasting days in India.
 - On synthetic data, the twin alone reached a higher AUPRC than the full model. The twin also generated the synthetic data, so this strength is partly circular.
 - On real data, the model with CGM data only did better than the model that combines all data streams.
+- No alert rule met all three alert targets at once. A rule with fewer false alerts gave a shorter warning, and a rule with a longer warning gave more false alerts.
 
 ## 10. Safety, ethics and limitations
 

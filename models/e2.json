@@ -132,6 +132,8 @@
  "threshold_sensitivity": 0.8,
  "threshold_balanced": 0.6055509683299156,
  "info": {
+  "alert_level_rule": "The highest level that detects 80% of the positive time points of the validation set",
+  "point_threshold_80": 0.8,
   "fitting_rows": 899,
   "validation_rows": 231,
   "fitting_positives": 439,

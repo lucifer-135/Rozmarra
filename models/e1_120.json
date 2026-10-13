@@ -212,9 +212,11 @@
   1.0,
   1.0
  ],
- "threshold_sensitivity": 0.03559322033898305,
+ "threshold_sensitivity": 0.010222226024361604,
  "threshold_balanced": 0.019647696476964766,
  "info": {
+  "alert_level_rule": "The highest level that detects 80% of the events of the validation set",
+  "point_threshold_80": 0.0356,
   "fitting_rows": 231920,
   "validation_rows": 56101,
   "fitting_positives": 4336,
