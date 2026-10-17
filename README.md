@@ -281,6 +281,4 @@ The presentation covers the problem, the solution, the architecture, the results
 11. Giammarino F, et al. A machine learning model for week-ahead hypoglycemia prediction from continuous glucose monitoring data. Journal of Diabetes Science and Technology, 2024. https://github.com/flaviagiammarino/stanford-hypoglycemia-forecasting
 12. Ainsworth BE, et al. 2011 Compendium of Physical Activities: a second update of codes and MET values. Medicine & Science in Sports & Exercise, 2011;43(8):1575–1581.
 
-Rozmarra uses several simple ideas from the T2DSim AI project and the Stanford hypoglycemia forecasting project, which [`docs/techstack.md`](docs/techstack.md) describes. The team wrote its own code for every idea, and this repository contains no code or trained models from either project. The team thanks the authors of these projects and the creators of the open datasets.
-
 The full list of references is in [`docs/prd.md`](docs/prd.md), Section 24.
