@@ -184,6 +184,15 @@ uv installs Python 3.12 for the project automatically.
 
 ### 8.2 Setup and demo
 
+First, please download the repository and open its folder:
+
+```bash
+git clone https://github.com/lucifer-135/Rozmarra.git
+cd Rozmarra
+```
+
+You can also use **Code**, then **Download ZIP**, on the GitHub page and unzip the file.
+
 On Windows, please run these commands in PowerShell from the repository folder:
 
 ```powershell
