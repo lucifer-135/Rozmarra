@@ -267,7 +267,7 @@ The open datasets keep their own licences. CGMacros uses the CC BY-NC-SA 4.0 lic
 
 ## 12. Presentation
 
-The team will add the presentation as a PDF in `docs/presentation/`.
+The presentation covers the problem, the solution, the architecture, the results and the limits in 19 slides: [`docs/presentation/presentation.pdf`](docs/presentation/presentation.pdf). Its source is [`docs/presentation/presentation.html`](docs/presentation/presentation.html), which can be printed to PDF from a browser.
 
 ## 13. References and acknowledgements
 

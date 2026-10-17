@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rozmarra presentation</title>
+<!-- This page holds the source of the slides. Print it to PDF to update presentation.pdf. -->
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  :root {
+    --ink: #1f2933; --muted: #52606d; --line: #d9e2ec; --teal: #0b6e75; --teal-soft: #e0f2f1;
+    --amber: #b26a00; --amber-soft: #fff8e1; --red: #b42318; --red-soft: #fdecea;
+    --green: #2e7d32; --green-soft: #e8f5e9; --violet: #6a1b9a; --violet-soft: #f3e8fd;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #ffffff; color: var(--ink);
+    font-family: 'Segoe UI', 'Noto Sans', 'Noto Sans Devanagari', Arial, sans-serif; }
+  .slide { width: 1280px; height: 720px; padding: 56px 72px 64px; position: relative;
+    overflow: hidden; page-break-after: always; break-after: page; display: flex; flex-direction: column; }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+  h1 { font-size: 44px; line-height: 1.15; margin: 0 0 16px; }
+  h2 { font-size: 34px; line-height: 1.2; margin: 0 0 22px; color: var(--teal); }
+  h3 { font-size: 22px; margin: 0 0 10px; }
+  p, li { font-size: 21px; line-height: 1.45; margin: 0 0 10px; }
+  ul { margin: 0; padding-left: 26px; }
+  .muted { color: var(--muted); }
+  .small, .small li { font-size: 17px; }
+  .footer { position: absolute; left: 72px; right: 72px; bottom: 22px; display: flex;
+    justify-content: space-between; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; flex: 1; min-height: 0; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .grid2 > .card { align-self: start; }
+  .card { border: 2px solid var(--line); border-radius: 14px; padding: 18px 22px; background: #fbfcfd; }
+  .card.teal { border-color: var(--teal); background: var(--teal-soft); }
+  .card.amber { border-color: var(--amber); background: var(--amber-soft); }
+  .card.violet { border-color: var(--violet); background: var(--violet-soft); }
+  .card.green { border-color: var(--green); background: var(--green-soft); }
+  .card.red { border-color: var(--red); background: var(--red-soft); }
+  .stat { font-size: 54px; font-weight: 700; color: var(--teal); line-height: 1.05; margin-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 18px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tag { display: inline-block; font-size: 15px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+    border: 1.5px solid var(--violet); color: var(--violet); background: var(--violet-soft); }
+  .met { color: var(--green); font-weight: 600; } .notmet { color: var(--red); font-weight: 600; }
+  .shot { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fafafa; }
+  .shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+  .shot img.crop { height: auto; object-fit: initial; }
+  .caption { font-size: 15px; color: var(--muted); margin-top: 6px; }
+  .title-slide { justify-content: center; background: linear-gradient(135deg, #ffffff 55%, var(--teal-soft)); }
+  .title-slide h1 { font-size: 52px; max-width: 1050px; }
+  .title-slide .lead { font-size: 26px; color: var(--muted); max-width: 980px; }
+  .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 8px; }
+  .flow .card { border-radius: 0; } .flow .card:first-child { border-radius: 14px 0 0 14px; }
+  .flow .card:last-child { border-radius: 0 14px 14px 0; }
+  .bar { display: grid; grid-template-columns: 260px 1fr 70px; align-items: center; gap: 12px; margin: 7px 0; font-size: 17px; }
+  .bar .track { height: 20px; background: #eef2f6; border-radius: 4px; position: relative; }
+  .bar .fill { height: 100%; border-radius: 4px; background: #9aa5b1; }
+  .bar.full .fill { background: var(--teal); }
+</style>
+</head>
+<body>
+
+<!-- 1. Title -->
+<section class="slide title-slide">
+  <span class="tag" style="width:fit-content;margin-bottom:22px">Digital Twin Challenge 2026 by Happiest Health</span>
+  <h1>Rozmarra: A Digital Twin That Predicts Low and High Blood Sugar During Religious Fasting</h1>
+  <p class="lead">Rozmarra helps doctors plan safer fasts for people with Type 2 Diabetes in India.</p>
+  <p style="margin-top:36px">Team NOT_SOMEONE_IMPORTANT, Indian Institute of Technology (Indian School of Mines) Dhanbad</p>
+  <p class="muted">Shivansh Gautam (team leader), Aman Soni and Divy Sharma</p>
+  <p class="muted small" style="margin-top:28px">Rozmarra is a research prototype. It is not a certified medical device, and it must not be used to make decisions about real patients.</p>
+</section>
+
+<!-- 2. The problem -->
+<section class="slide">
+  <h2>Many people with diabetes in India fast, often without medical advice</h2>
+  <div class="grid3">
+    <div class="card"><div class="stat">101 million</div><p>people in India have diabetes, and 136 million have prediabetes (ICMR-INDIAB, 2023).</p></div>
+    <div class="card"><div class="stat">49%</div><p>of 300 adults with Type 2 Diabetes in North India had fasted in the previous year (2020 study).</p></div>
+    <div class="card"><div class="stat">1.35%</div><p>of them had discussed their diet with a doctor or dietitian before fasting, and only about 4% had checked their glucose during the fast.</p></div>
+  </div>
+  <p style="margin-top:30px">Navratri, Karva Chauth, Ekadashi, Ramadan, Jain fasts and Chhath Puja are a part of everyday life for millions of families. Fasting is a personal and religious decision. Rozmarra aims to help the doctor make each fast safer, and it never judges the decision to fast.</p>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>2</span></div>
+</section>
+
+<!-- 3. Why fasting changes risk -->
+<section class="slide">
+  <h2>Fasting changes the risk of low and high blood sugar</h2>
+  <div class="grid3">
+    <div class="card red"><h3>Medicines</h3><p>Sulfonylureas and insulin keep lowering glucose when a person does not eat for many hours. A slow CYP2C9 gene variant keeps glimepiride in the body for longer.</p></div>
+    <div class="card amber"><h3>Long hours without food or water</h3><p>Some fasts last from sunrise to moonrise, and some do not allow water. People who take SGLT2 inhibitors may become dehydrated.</p></div>
+    <div class="card violet"><h3>Large meals at the end</h3><p>The meal that breaks the fast is often large and sweet, and it can cause high blood sugar in the hours that follow.</p></div>
+  </div>
+  <p style="margin-top:30px">The EPIDIAR study of 12,243 people in 13 countries found that severe low blood sugar needing hospital care was 7.5 times more common during Ramadan for people with Type 2 Diabetes than in other months.</p>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>3</span></div>
+</section>
+
+<!-- 4. What doctors have today -->
+<section class="slide">
+  <h2>Doctors have a risk score, but it cannot show when and why the risk changes</h2>
+  <div class="grid2">
+    <div class="card"><h3>What doctors have today</h3>
+      <ul><li>The IDF-DAR 2021 risk score places a person into low, moderate or high fasting risk.</li>
+      <li>The IDF-DAR guide asks people to break the fast below 70 mg/dL or above 300 mg/dL, or when they feel unwell.</li>
+      <li>Continuous glucose monitors (CGM) and smartwatches record data, but nothing turns it into advice for a fast.</li></ul></div>
+    <div class="card teal"><h3>What is missing</h3>
+      <ul><li>The score is calculated once, so it cannot show the hour of highest risk.</li>
+      <li>The doctor cannot test how a lower dose or a new dose time may change the risk.</li>
+      <li>No early warning helps during the fast itself.</li>
+      <li>Patients rarely receive a written plan in their own language.</li></ul></div>
+  </div>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>4</span></div>
+</section>
+
+<!-- 5. Rozmarra in one picture -->
+<section class="slide">
+  <h2>Rozmarra supports the doctor before, during and after the fast</h2>
+  <div class="flow">
+    <div class="card teal"><h3>Before the fast</h3><p>The doctor tests a fasting plan on the patient's virtual twin and compares two options, such as a lower dose. Rozmarra shows the glucose curve with its uncertainty band.</p></div>
+    <div class="card amber"><h3>During the fast</h3><p>Rozmarra estimates the chance of low blood sugar in the next 60 minutes from the recent CGM readings, the smartwatch data and the twin. Each alert lists three reasons.</p></div>
+    <div class="card green"><h3>After approval</h3><p>The doctor approves one plan. Rozmarra prints a plan in English or Hindi with the times to check glucose and the rule for breaking the fast.</p></div>
+  </div>
+  <p style="margin-top:30px">Rozmarra never changes medicines by itself. The doctor makes and approves every treatment decision.</p>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>5</span></div>
+</section>
+
+<!-- 6. Two data streams -->
+<section class="slide">
+  <h2>Rozmarra combines two data streams</h2>
+  <div class="grid2">
+    <div class="card violet"><h3>The health record</h3>
+      <ul><li>Diagnosis, HbA1c, kidney function, weight and blood pressure</li>
+      <li>Medicines with doses and times, and the CYP2C9 genotype</li>
+      <li>The inputs of the IDF-DAR 2021 score</li>
+      <li>Stored as FHIR R4 bundles, and labelled as synthetic</li></ul></div>
+    <div class="card teal"><h3>Continuous data</h3>
+      <ul><li>CGM readings every 5 or 15 minutes</li>
+      <li>Heart rate, heart rate variability, steps and sleep from a smartwatch</li>
+      <li>Meals, medicine doses and activity in the fasting plan</li></ul></div>
+  </div>
+  <table style="margin-top:22px">
+    <tr><th>Data source</th><th>Type</th><th>Use</th></tr>
+    <tr><td>ShanghaiT2DM (CC BY 4.0)</td><td>Real open data</td><td>Fitting the twins and testing predictions on normal days</td></tr>
+    <tr><td>CGMacros (CC BY-NC-SA 4.0)</td><td>Real open data</td><td>Fitting the twins and testing the fusion of CGM and smartwatch data</td></tr>
+    <tr><td>Rozmarra synthetic cohort</td><td>Synthetic data</td><td>Simulated fasting days of 500 virtual patients for training and testing</td></tr>
+  </table>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>6</span></div>
+</section>
+
+<!-- 7. Fasting patterns -->
+<section class="slide">
+  <h2>Rozmarra supports ten fasting patterns from several faiths</h2>
+  <table>
+    <tr><th>Fasting pattern</th><th>Water allowed</th></tr>
+    <tr><td>Navratri: one meal a day in the evening</td><td>Yes</td></tr>
+    <tr><td>Navratri: fruit and milk during the day, with a vrat meal in the evening</td><td>Yes</td></tr>
+    <tr><td>Karva Chauth: no food or water from sunrise to moonrise</td><td>No</td></tr>
+    <tr><td>Ekadashi: fruit and milk, without grains or beans</td><td>Yes</td></tr>
+    <tr><td>Nirjala Ekadashi: no food or water from sunrise to the next sunrise</td><td>No</td></tr>
+    <tr><td>Ramadan: no food or water from dawn to sunset</td><td>No</td></tr>
+    <tr><td>Jain upvas: no food for the whole day, with boiled water during daylight</td><td>Yes</td></tr>
+    <tr><td>Jain ekasana: one meal a day, before sunset</td><td>Yes</td></tr>
+    <tr><td>Chhath Puja: about 36 hours without food or water</td><td>No</td></tr>
+    <tr><td>Custom fast: the doctor sets every time</td><td>Set by the doctor</td></tr>
+  </table>
+  <p class="small muted" style="margin-top:12px">The fasting times come from sunrise, sunset and moonrise for the patient's city. The patient plan uses the patient's own word for the fast, such as व्रत, उपवास or रोज़ा.</p>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>7</span></div>
+</section>
+
+<!-- 8. The digital twin -->
+<section class="slide">
+  <h2>The digital twin models glucose, insulin, meals and medicines</h2>
+  <div class="grid2">
+    <div>
+      <ul>
+        <li>A physiology model describes glucose, insulin action and insulin for one person, minute by minute.</li>
+        <li>Medicine activity curves cover sulfonylureas, premixed and basal insulin, metformin, SGLT2 inhibitors and more.</li>
+        <li>The CYP2C9 genotype slows the clearance of sulfonylureas. For example, the *1/*3 genotype gives 65% of the usual speed.</li>
+        <li>The team fitted one twin to each of 89 real patients from ShanghaiT2DM and CGMacros.</li>
+        <li>100 parameter samples give a band from the 10th to the 90th percentile.</li>
+      </ul>
+    </div>
+    <div class="card teal">
+      <h3>Forecast error on real held-out days (median RMSE)</h3>
+      <table>
+        <tr><th>Horizon</th><th>Twin</th><th>Last glucose value</th></tr>
+        <tr><td>30 minutes</td><td class="num">14.5 mg/dL</td><td class="num">16.0 mg/dL</td></tr>
+        <tr><td>60 minutes</td><td class="num">23.9 mg/dL</td><td class="num">26.8 mg/dL</td></tr>
+        <tr><td>120 minutes</td><td class="num">30.2 mg/dL</td><td class="num">38.8 mg/dL</td></tr>
+      </table>
+      <p class="small" style="margin-top:14px">On the Parkes error grid for Type 2 Diabetes, 99.97% of 6,301 forecasts 30 minutes ahead fell in zones A and B, and 97.2% fell in zone A.</p>
+    </div>
+  </div>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>8</span></div>
+</section>
+
+<!-- 9. Prediction model -->
+<section class="slide">
+  <h2>The prediction model explains each estimate in plain language</h2>
+  <div class="grid2">
+    <div>
+      <ul>
+        <li>LightGBM models estimate the chance of low blood sugar (below 70 mg/dL) within the next 60 minutes and the chance of high blood sugar after the fast is broken.</li>
+        <li>The features combine CGM readings, 14 days of CGM history, the twin's forecasts, smartwatch signals, the fasting context and the health record.</li>
+        <li>Isotonic calibration turns scores into estimated chances.</li>
+        <li>A prediction needs a current CGM reading and 70% of the readings of the last 2 hours.</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <h3>Example alert for Ramesh Patel, Age 62 (synthetic)</h3>
+      <p><strong>Low glucose is likely within the next 60 minutes.</strong></p>
+      <p>Estimated chance: 9% (Moderate). Predicted lowest value in the next 2 hours: 74 mg/dL at about 11:04 am.</p>
+      <ul class="small">
+        <li>The twin predicts a lowest value of 74 mg/dL in the next 2 hours.</li>
+        <li>The lowest glucose in the last 2 hours was 77 mg/dL.</li>
+        <li>Little food is still being absorbed.</li>
+      </ul>
+      <p class="caption">SHAP finds the main reasons, and fixed English and Hindi sentences describe them.</p>
+    </div>
+  </div>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>9</span></div>
+</section>
+
+<!-- 10. Architecture -->
+<section class="slide" style="padding-bottom:48px">
+  <h2 style="margin-bottom:10px">Architecture</h2>
+  <div class="shot" style="flex:1;min-height:0;border:none;background:#ffffff"><img src="assets/architecture.png" alt="The Rozmarra architecture: data sources, the offline pipeline, the core at run time and the applications." style="object-fit:contain;object-position:center"></div>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>10</span></div>
+</section>
+
+<!-- 11. How the team tested -->
+<section class="slide">
+  <h2>The team tested Rozmarra on real data and on simulated fasting days</h2>
+  <div class="grid3">
+    <div class="card teal"><h3>Real normal days</h3><p>Held-out days of 89 real patients, with five-fold cross-validation grouped by person. These days contain no fasts.</p></div>
+    <div class="card violet"><h3>Simulated fasting days</h3><p>500 virtual patients with 1,500 fasting episodes. The models learned from 400 patients and were tested on 100 patients they had never seen.</p></div>
+    <div class="card green"><h3>Real meals</h3><p>The model for high blood sugar, trained only on simulated fasts, was applied to 244 real meals that came after at least 8 hours without food.</p></div>
+  </div>
+  <ul style="margin-top:26px">
+    <li>The team compared the model with simpler methods: the last glucose value, a straight-line trend, the twin alone, the IDF-DAR score alone and a model that uses only CGM data.</li>
+    <li>The 95% intervals come from bootstrapping by patient.</li>
+    <li>No open dataset contains CGM data from Indian festival fasts, so the fasting results come from simulation.</li>
+  </ul>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>11</span></div>
+</section>
+
+<!-- 12. Results on real data -->
+<section class="slide">
+  <h2>Results on real data</h2>
+  <table>
+    <tr><th>Measure</th><th>Result</th><th>Target</th><th>Status</th></tr>
+    <tr><td>Low blood sugar within 60 minutes, real normal days (AUROC)</td><td class="num">0.943 (0.919 to 0.964)</td><td>0.80 or higher</td><td class="met">Met</td></tr>
+    <tr><td>Twin forecast error compared with the last glucose value</td><td>Lower at 30, 60 and 120 minutes</td><td>Lower at every time</td><td class="met">Met</td></tr>
+    <tr><td>30-minute forecasts in zones A and B of the Parkes error grid</td><td class="num">99.97%</td><td>95% or more</td><td class="met">Met</td></tr>
+    <tr><td>Value of combining data streams, real normal days (AUPRC)</td><td>Full model 0.247, CGM only 0.311</td><td>Full model higher</td><td class="notmet">Not met</td></tr>
+    <tr><td>High blood sugar after a real meal that ends a night without food (AUROC)</td><td class="num">0.828 (0.725 to 0.903)</td><td>No target</td><td class="muted">Reported</td></tr>
+  </table>
+  <ul class="small" style="margin-top:18px">
+    <li>Only the 14 CGMacros participants have smartwatch data, and they had very few low readings, so the real data does not yet show that smartwatch data adds value.</li>
+    <li>On real meals, the glucose value 2 hours before the meal alone reached an AUROC of 0.865, slightly higher than the model.</li>
+    <li>The real data comes from China and the United States, not from India.</li>
+  </ul>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>12</span></div>
+</section>
+
+<!-- 13. Results on simulated fasting days -->
+<section class="slide">
+  <h2>Results on simulated fasting days</h2>
+  <div class="grid2">
+    <div>
+      <table>
+        <tr><th>Measure</th><th>Result</th><th>Status</th></tr>
+        <tr><td>Low blood sugar within 60 minutes (AUROC)</td><td class="num">0.990</td><td class="met">Met</td></tr>
+        <tr><td>Events detected in time (target 80%)</td><td class="num">88%</td><td class="met">Met</td></tr>
+        <tr><td>False alerts per patient per fasting day (target 2)</td><td class="num">1.9</td><td class="met">Met</td></tr>
+        <tr><td>Median warning time (target 30 minutes)</td><td class="num">25 minutes</td><td class="notmet">Not met</td></tr>
+        <tr><td>High blood sugar after the fast (AUROC)</td><td class="num">0.958</td><td class="met">Met</td></tr>
+        <tr><td>Whole-fast forecast of low blood sugar (AUROC)</td><td class="num">0.973</td><td class="muted">Reported</td></tr>
+      </table>
+      <p class="small muted" style="margin-top:12px">The twin also created the simulated days, so these results partly reflect the team's modelling assumptions.</p>
+    </div>
+    <div class="card">
+      <h3>Ablation study (AUPRC, simulated fasting days)</h3>
+      <div class="bar full"><span>Full model</span><div class="track"><div class="fill" style="width:85.2%"></div></div><span>0.472</span></div>
+      <div class="bar"><span>Twin alone</span><div class="track"><div class="fill" style="width:100%"></div></div><span>0.554</span></div>
+      <div class="bar"><span>CGM data only</span><div class="track"><div class="fill" style="width:69.7%"></div></div><span>0.386</span></div>
+      <div class="bar"><span>CGM and wearables</span><div class="track"><div class="fill" style="width:68.8%"></div></div><span>0.381</span></div>
+      <div class="bar"><span>Last glucose value</span><div class="track"><div class="fill" style="width:50.4%"></div></div><span>0.279</span></div>
+      <div class="bar"><span>Wearables alone</span><div class="track"><div class="fill" style="width:10.1%"></div></div><span>0.056</span></div>
+      <div class="bar"><span>Health record alone</span><div class="track"><div class="fill" style="width:5.1%"></div></div><span>0.028</span></div>
+      <div class="bar"><span>IDF-DAR score alone</span><div class="track"><div class="fill" style="width:4.3%"></div></div><span>0.024</span></div>
+      <p class="caption">The full model scored higher than every model that uses one data stream, such as CGM data only or wearables alone. The twin alone scored higher than the full model, partly because the twin created these days.</p>
+    </div>
+  </div>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>13</span></div>
+</section>
+
+<!-- 14. Dashboard: test a fasting plan -->
+<section class="slide" style="padding-bottom:48px">
+  <h2 style="margin-bottom:12px">The doctor tests two fasting plans on the virtual patient</h2>
+  <div class="grid2" style="grid-template-columns: 1.55fr 1fr">
+    <div class="shot"><img src="../images/screen3_simulator.png" alt="The fasting plan simulator comparing Plan A and Plan B for Sunita Sharma." class="crop" style="margin-top:-28%"></div>
+    <div>
+      <p><span class="tag">Synthetic patient</span></p>
+      <p><strong>Sunita Sharma, Age 54, Karva Chauth</strong></p>
+      <ul class="small">
+        <li>Plan A, her usual medicines: the lowest glucose is 112 mg/dL at 12:46 pm, with a 4% chance (Low) of low blood sugar.</li>
+        <li>Plan B: glimepiride 1 mg with sargi, and dapagliflozin after the fast. The lowest glucose is 134 mg/dL at 6:30 pm, with a 1% chance (Low).</li>
+        <li>The dehydration caution appears, because the fast allows no water for 15.2 hours and she takes dapagliflozin.</li>
+        <li>The grey curve shows an average patient with the same plan, to show why her personal twin matters.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>14</span></div>
+</section>
+
+<!-- 15. Dashboard: live fasting monitor -->
+<section class="slide" style="padding-bottom:48px">
+  <h2 style="margin-bottom:12px">The live fasting monitor replays a fasting day</h2>
+  <div class="grid2" style="grid-template-columns: 1.55fr 1fr">
+    <div class="shot"><img src="../images/screen4_monitor.png" alt="The live fasting monitor at 10:50 am for Ramesh Patel, with an alert and the glucose forecast." class="crop" style="margin-top:-47%"></div>
+    <div>
+      <p><span class="tag">Synthetic patient</span></p>
+      <p><strong>Ramesh Patel, Age 62, Navratri</strong></p>
+      <ul class="small">
+        <li>A time slider moves through the recorded day. At each moment, Rozmarra uses only the data recorded up to that moment.</li>
+        <li>The first alert comes at 10:50 am, 41 minutes before glucose first falls below 70 mg/dL at 11:31 am.</li>
+        <li>The chart shows the readings so far, the twin's forecast for the next 2 hours and the alert timeline.</li>
+        <li>An alert is not repeated within 30 minutes unless the chance rises by 10 percentage points.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>15</span></div>
+</section>
+
+<!-- 16. Patient plan -->
+<section class="slide" style="padding-bottom:48px">
+  <h2 style="margin-bottom:12px">The patient receives a printed plan in English or Hindi</h2>
+  <div class="grid2" style="grid-template-columns: 1.55fr 1fr">
+    <div class="shot" style="align-self:start"><img src="../images/screen5_patient_plan_hindi.png" alt="The approved fasting plan for Sunita Sharma in Hindi." class="crop" style="margin-top:-41%"></div>
+    <div>
+      <ul class="small">
+        <li>The doctor approves a plan before Rozmarra can print it.</li>
+        <li>The plan shows the rule for breaking the fast near the top: below 70 mg/dL or above 300 mg/dL, or when the patient feels unwell.</li>
+        <li>It lists the times to check glucose, the medicine changes, advice on water and the meal that breaks the fast.</li>
+        <li>Every sentence comes from fixed templates. Rozmarra does not use AI to write medical advice.</li>
+        <li>The Hindi plan uses the patient's own word for the fast and the name in Devanagari.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>16</span></div>
+</section>
+
+<!-- 17. Safety and limitations -->
+<section class="slide">
+  <h2>Safety, ethics, respect for faith and limitations</h2>
+  <div class="grid2">
+    <div class="card teal"><h3>Safety and ethics</h3>
+      <ul class="small">
+        <li>Rozmarra supports the doctor. It never changes medicines by itself.</li>
+        <li>It never judges the decision to fast, and it uses each patient's own word for the fast.</li>
+        <li>All patients in the dashboard are synthetic, and the real data comes only from open anonymised datasets.</li>
+        <li>Patient plan text comes only from fixed templates.</li>
+      </ul></div>
+    <div class="card red"><h3>Limitations</h3>
+      <ul class="small">
+        <li>Rozmarra is a research prototype. It is not a certified medical device.</li>
+        <li>No doctor or pharmacist has reviewed the clinical content.</li>
+        <li>The real data comes from China and the United States, not from India.</li>
+        <li>The fasting results come from simulated fasting days.</li>
+        <li>The median warning time of 25 minutes is shorter than the target of 30 minutes.</li>
+        <li>The IDF-DAR score was designed for Ramadan, and Rozmarra applies it to other fasts as an approximation.</li>
+      </ul></div>
+  </div>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>17</span></div>
+</section>
+
+<!-- 18. Next steps -->
+<section class="slide">
+  <h2>Next steps</h2>
+  <div class="grid3">
+    <div class="card teal"><h3>A clinical study</h3><p>A study with Indian patients during real festival fasts would test the predictions and the alert levels, with clinicians reviewing the content.</p></div>
+    <div class="card violet"><h3>ABDM integration</h3><p>Health records could come from the Ayushman Bharat Digital Mission through FHIR, with the patient's consent.</p></div>
+    <div class="card green"><h3>More fasts and languages</h3><p>The team would add more regional fasts and plans in more Indian languages, such as Marathi, Bengali and Tamil.</p></div>
+  </div>
+  <p style="margin-top:30px">A real product would also need approval as a medical device, for example from the Central Drugs Standard Control Organisation (CDSCO).</p>
+  <div class="footer"><span>Rozmarra | Team NOT_SOMEONE_IMPORTANT</span><span>18</span></div>
+</section>
+
+<!-- 19. Team -->
+<section class="slide title-slide">
+  <h1>Thank you</h1>
+  <p class="lead">Team NOT_SOMEONE_IMPORTANT, Indian Institute of Technology (Indian School of Mines) Dhanbad</p>
+  <table style="margin-top:26px;max-width:1000px">
+    <tr><th>Member</th><th>Role</th></tr>
+    <tr><td style="white-space:nowrap">Shivansh Gautam</td><td>Team leader. Leads the digital twin and the prediction models.</td></tr>
+    <tr><td>Aman Soni</td><td>Leads the data loaders, the synthetic data, the API and the dashboard.</td></tr>
+    <tr><td>Divy Sharma</td><td>Leads the fasting templates, the architecture diagram, the presentation, the model card, the data card and testing.</td></tr>
+  </table>
+  <p class="muted small" style="margin-top:28px">The team thanks the authors of ShanghaiT2DM and CGMacros for sharing open data, and Happiest Health for organising the Digital Twin Challenge 2026. The code is released under the Apache License 2.0.</p>
+</section>
+
+</body>
+</html>
