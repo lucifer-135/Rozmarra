@@ -93,7 +93,6 @@ flowchart LR
   subgraph Sources["Data sources"]
     S1["ShanghaiT2DM<br/>(real, open)"]
     S2["CGMacros<br/>(real, open)"]
-    S3["BIG IDEAs Lab<br/>(real, open; downloaded,<br/>not used yet)"]
     S4["Synthetic health records<br/>(FHIR R4)"]
     S5["Fasting templates<br/>(Navratri, Karva Chauth,<br/>Ekadashi, Ramadan, Jain)"]
   end
@@ -114,7 +113,6 @@ flowchart LR
   end
   S1 --> A
   S2 --> A
-  S3 -.-> A
   S4 --> A
   A --> B
   B --> C
@@ -134,7 +132,7 @@ flowchart LR
   UI --> P
 ```
 
-The architecture diagram is available as a PDF: [`docs/architecture/architecture.pdf`](docs/architecture/architecture.pdf). Its source is [`docs/architecture/architecture.html`](docs/architecture/architecture.html), which can be printed to PDF from a browser.
+The architecture diagram is available as a PDF: [`docs/architecture/architecture.pdf`](docs/architecture/architecture.pdf).
 
 ## 6. Technical stack and AI/ML model
 
@@ -267,7 +265,7 @@ The open datasets keep their own licences. CGMacros uses the CC BY-NC-SA 4.0 lic
 
 ## 12. Presentation
 
-The presentation covers the problem, the solution, the architecture, the results and the limits in 19 slides: [`docs/presentation/presentation.pdf`](docs/presentation/presentation.pdf). Its source is [`docs/presentation/presentation.html`](docs/presentation/presentation.html), which can be printed to PDF from a browser.
+The presentation covers the problem, the solution, the architecture, the results and the limits in 19 slides: [`docs/presentation/presentation.pdf`](docs/presentation/presentation.pdf).
 
 ## 13. References and acknowledgements
 
