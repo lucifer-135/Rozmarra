@@ -23,7 +23,7 @@ Rozmarra (रोज़मर्रा) is a Hindi and Urdu word that means "ever
 
 ## 2. Demonstration video
 
-The team will add the link to the demonstration video here. The video will last at least 20 minutes and will be published on YouTube as an unlisted video.
+The team will add the link to the demonstration video here. The video will last between 15 and 20 minutes and will be published on YouTube as an unlisted video.
 
 ## 3. Problem statement and healthcare use case
 
@@ -134,7 +134,7 @@ flowchart LR
   UI --> P
 ```
 
-The team will add the architecture diagram as a PDF in `docs/architecture/`.
+The architecture diagram is available as a PDF: [`docs/architecture/architecture.pdf`](docs/architecture/architecture.pdf). Its source is [`docs/architecture/architecture.html`](docs/architecture/architecture.html), which can be printed to PDF from a browser.
 
 ## 6. Technical stack and AI/ML model
 
