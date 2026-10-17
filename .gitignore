@@ -1,5 +1,6 @@
 # Private planning file. It must never reach the public repository.
 handoff.md
+docs/video_script.md
 
 # Downloaded and processed datasets. Download scripts fetch them again.
 data/raw/
