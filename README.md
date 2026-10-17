@@ -57,7 +57,7 @@ The doctor dashboard has six screens.
 3. **Test a fasting plan.** The doctor edits two plans (the fasting template, times, meals, water, medicines and activity) and tests both on the virtual patient. Each plan shows the glucose curve with its uncertainty band, the curve of an average patient with the same plan, the chance of low blood sugar during the fast, the predicted lowest glucose and its time, the expected minutes below 70 mg/dL and the chance of high blood sugar after the fast. The screen shows the dehydration caution when it applies. The doctor approves one plan with their name, and the approval shows the text "Approved by Dr [name] on [date]".
 4. **Live fasting monitor.** A time slider replays a recorded fasting day. At each moment, the screen shows the glucose readings so far, the forecast for the next 2 hours, the estimated chance of low glucose within the next 60 minutes, an alert timeline with the main reasons for each alert, and the heart rate, heart rate variability and steps. Rozmarra uses only the data recorded up to that moment.
 5. **Patient fasting plan.** After the doctor approves a plan, Rozmarra produces a printable plan in English or Hindi, with the patient's own word for the fast, such as व्रत, उपवास or रोज़ा. The plan lists the times to check blood sugar, the rule for breaking the fast, the medicine changes that the doctor approved, advice on water and on the meal that breaks the fast, and the doctor's contact details. The screen also shows a short version for SMS or WhatsApp as a concept. Rozmarra does not send any messages.
-6. **How Rozmarra makes predictions.** The screen explains the model card in plain language: the data, the tests, every result against its target, and the limits.
+6. **How Rozmarra makes predictions.** The screen explains the model card in plain language: the data, the tests, a comparison with simpler methods, and the limits. The full results and targets are in the model card.
 
 The dashboard can switch between English and Hindi.
 
@@ -85,9 +85,9 @@ The screenshots show the synthetic demo patients. They do not represent real peo
 
 ![Screen 5 shows the printable patient fasting plan in Hindi, with the rule for breaking the fast, the times to check blood sugar and the medicine changes.](docs/images/screen5_patient_plan_hindi.png)
 
-**Screen 6. How Rozmarra makes predictions.** The results table reports every result against its target, including the targets that were not met.
+**Screen 6. How Rozmarra makes predictions.** The screen explains the three layers, the data sources, how the team tested Rozmarra, a comparison with simpler methods and the limits.
 
-![Screen 6 shows the table of results and targets from the model card, with the status of each target.](docs/images/screen6_model_card.png)
+![Screen 6 shows the three layers, the data sources, the tests, the comparison charts with simpler methods and the limits of Rozmarra.](docs/images/screen6_model_card.png)
 
 ## 5. Architecture
 

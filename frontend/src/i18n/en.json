@@ -426,22 +426,7 @@
     "goToSimulator": "Go to the screen \"Test a fasting plan\""
   },
   "about": {
-    "intro": "This screen explains in plain language how Rozmarra makes its estimates, which data it uses, how the team tested it, what the results were and what its limits are.",
-    "valueWithInterval": "{{value}} (95% interval {{low}} to {{high}})",
-    "minutes_one": "{{count}} minute",
-    "minutes_other": "{{count}} minutes",
-    "notTestedYet": "The team has not run this test yet.",
-    "forecastValue": "{{minutes}} minutes: twin {{twin}} mg/dL, last value {{last}} mg/dL",
-    "parkesValue": "{{twin}} of {{pairs}} forecasts. The last value alone reaches {{last}}.",
-    "e2RealValue": "{{value}}. The glucose value 2 hours before the meal alone scores {{glucose}}.",
-    "fusionValue": "Full model {{full}}, best single data stream {{single}}",
-    "f1Value": "{{value}}. The twin alone scores {{twin}} and the IDF-DAR score alone scores {{score}}.",
-    "status": {
-      "met": "Met",
-      "notMet": "Not met",
-      "notTested": "Not tested yet",
-      "noTarget": "No target"
-    },
+    "intro": "This screen explains in plain language how Rozmarra makes its estimates, which data it uses, how the team tested it, how it compares with simpler methods and what its limits are.",
     "layers": {
       "title": "How Rozmarra makes its estimates",
       "score": "The IDF-DAR 2021 risk score gives the standard clinical score for the risk of fasting. Rozmarra calculates it from the health record and the fasting plan.",
@@ -474,38 +459,6 @@
       "baselines": "The team compared the model with simpler methods: the last glucose value, a straight-line trend, the twin alone, the IDF-DAR score alone and a model that uses only CGM data.",
       "intervals": "The 95% intervals come from bootstrapping by patient."
     },
-    "results": {
-      "title": "Results and targets",
-      "description": "The targets come from the product requirements. The team reports every measured value, including the values that fall short of a target.",
-      "caption": "AUROC shows how well a method separates the moments before an event from other moments. A value of 1 is perfect, and a value of 0.5 is the same as guessing.",
-      "measure": "Measure",
-      "result": "Result",
-      "target": "Target",
-      "status": "Target met",
-      "e1Real": "Low blood sugar within 60 minutes, real normal days (AUROC)",
-      "e1Synthetic": "Low blood sugar within 60 minutes, simulated fasting days (AUROC)",
-      "detected": "Share of low blood sugar events detected in time, simulated fasting days",
-      "falseAlerts": "False alerts per patient per fasting day, simulated fasting days",
-      "warning": "Median warning time before low blood sugar, simulated fasting days",
-      "e2": "High blood sugar after the fast is broken, simulated fasting days (AUROC)",
-      "e2Real": "High blood sugar after the first meal that follows a night without food, real meals (AUROC)",
-      "forecast": "Error of the twin's glucose forecasts on real held-out days (median RMSE)",
-      "fusionSynthetic": "Value of combining the data streams, simulated fasting days (AUPRC)",
-      "fusionReal": "Value of combining the data streams, real normal days (AUPRC)",
-      "parkes": "Share of 30-minute forecasts in zones A and B of the Parkes error grid",
-      "f1": "Forecast of low blood sugar during the whole fast, made before the fast (AUROC)"
-    },
-    "targets": {
-      "auroc80": "0.80 or higher",
-      "auroc85": "0.85 or higher",
-      "detected": "At least 80%",
-      "falseAlerts": "No more than 2",
-      "warning": "At least 30 minutes",
-      "forecast": "Lower than the last value at every time",
-      "fusion": "The full model scores higher than every single data stream",
-      "parkes": "95% or more",
-      "none": "The requirements set no target."
-    },
     "compare": {
       "title": "Comparison with simpler methods",
       "description": "The charts compare the area under the precision-recall curve (AUPRC) for low blood sugar within 60 minutes. AUPRC shows how well a method finds the rare moments before low blood sugar. A higher value is better.",
@@ -519,17 +472,6 @@
       "twin alone": "Twin alone",
       "IDF-DAR score alone": "IDF-DAR score alone",
       "model with CGM data only": "Model with CGM data only"
-    },
-    "meaning": {
-      "title": "What the results mean",
-      "twinAlone": "On simulated fasting days, the twin alone scored a higher AUPRC ({{twin}}) than the full model ({{full}}). The twin also created these simulated days, so this comparison partly favours the twin.",
-      "cgmOnly": "On real normal days, the model with CGM data only scored a higher AUPRC ({{cgm}}) than the full model ({{full}}). The real data does not yet show that the smartwatch data adds value.",
-      "falseAlerts": "At the alert level that detects 80% of events, the model raised {{value}} false alerts per patient per fasting day, which is more than the target of 2.",
-      "falseAlertsWithin": "At the alert level that detects 80% of events, the model raised {{value}} false alerts per patient per fasting day, which is within the target of 2.",
-      "warning": "The median warning time was {{minutes}} minutes, which is shorter than the target of 30 minutes. A lower alert level would give earlier warnings, but it would also raise more false alerts.",
-      "synthetic": "The results on simulated fasting days partly reflect the team's modelling assumptions. A clinical study with Indian patients would be needed to confirm them.",
-      "parkes": "Glucose changes little in 30 minutes, so the last glucose value alone also meets the Parkes target. At 120 minutes, {{twin}} of the twin's forecasts fall in zone A, compared with {{last}} for the last value.",
-      "realMeals": "On real meals after a night without food, the model scored an AUROC of {{model}}, and the glucose value 2 hours before the meal alone scored {{glucose}}. These meals do not end a festival fast, so this check shows only how the model behaves on real glucose data."
     },
     "limits": {
       "title": "Limits of Rozmarra",

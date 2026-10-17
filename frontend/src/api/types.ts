@@ -372,14 +372,6 @@ export interface ThresholdResult {
   false_alerts_per_patient_day: number
 }
 
-export interface ParkesShares {
-  pairs: number
-  shares: Record<'A' | 'B' | 'C' | 'D' | 'E', number>
-  share_a_and_b: number
-}
-
-export type ParkesForecasts = Record<'twin' | 'last_value' | 'straight_line', ParkesShares>
-
 export interface ModelCard {
   metrics: {
     created_on: string
@@ -410,10 +402,6 @@ export interface ModelCard {
     patients_fitted: number
     median_rmse_mg_dl: { fitted_days: number; held_out_days: number }
     median_forecast_rmse_mg_dl: Record<string, { twin: number; last_value: number }>
-    parkes?: {
-      target_share_a_and_b_30_min: number
-      all: { patients: number; '30_min': ParkesForecasts; '60_min'?: ParkesForecasts; '120_min'?: ParkesForecasts }
-    }
   } | null
   synthetic_cohort: {
     virtual_patients: number
