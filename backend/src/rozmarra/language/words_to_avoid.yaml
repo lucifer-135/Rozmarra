@@ -112,13 +112,11 @@ skip:
       line: '\b(column|numeric)\("'
   # Names of datasets, projects and libraries that keep their original spelling.
   original_wording:
-    - 'BIG IDEAs Lab Glycemic Variability[\w\s]*'
     - 'stanford-hypoglycemia-forecasting'
     - 'Stanford hypoglycemia forecasting'
     - 'hypoglycemia forecasting project'
     - 'week-ahead hypoglycemia prediction'
     - '\bcolor-scheme\b'
-    - 'big-ideas-glycemic-wearable'
     - 'scipy\.optimize[\w.]*'
     - 'Pharmacogenomics and Personalized Medicine'
     - '"center"'

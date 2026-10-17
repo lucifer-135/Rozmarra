@@ -41,17 +41,8 @@ CGMACROS_BASE = f"{PHYSIONET}/cgmacros/1.0.0"
 CGMACROS_MIRROR = f"{PHYSIONET_MIRROR}/cgmacros/1.0.0"
 CGMACROS_ZIP = "CGMacros_dateshifted365.zip"
 
-# Rozmarra cites version 1.1.3. The mirror holds version 1.1.2. On 12 October 2026,
-# 62 of the 66 selected files were identical in both versions. The 4 food logs that
-# version 1.1.3 corrected fail the checksum check and come from PhysioNet instead.
-BIGIDEAS_BASE = f"{PHYSIONET}/big-ideas-glycemic-wearable/1.1.3"
-BIGIDEAS_MIRROR = f"{PHYSIONET_MIRROR}/big-ideas-glycemic-wearable/1.1.2"
-BIGIDEAS_PARTICIPANTS = range(1, 17)
-# Rozmarra needs only these BIG IDEAs Lab files. The other sensor files add about 30 GB.
-BIGIDEAS_FILE_KINDS = ("Dexcom", "HR", "IBI", "Food_Log")
-
-DATASETS = ("shanghai", "cgmacros", "bigideas")
-DATASET_FOLDERS = {"shanghai": "shanghai_t2dm", "cgmacros": "cgmacros", "bigideas": "bigideas"}
+DATASETS = ("shanghai", "cgmacros")
+DATASET_FOLDERS = {"shanghai": "shanghai_t2dm", "cgmacros": "cgmacros"}
 
 
 @dataclass(frozen=True)
@@ -102,21 +93,6 @@ def cgmacros_files(sums: dict[str, str]) -> list[RemoteFile]:
             extract=name.endswith(".zip"),
         )
         for name in (CGMACROS_ZIP, "LICENSE.txt")
-    ]
-
-
-def bigideas_files(sums: dict[str, str]) -> list[RemoteFile]:
-    names = ["Demographics.csv", "LICENSE.txt"]
-    for number in BIGIDEAS_PARTICIPANTS:
-        participant = f"{number:03d}"
-        names += [f"{participant}/{kind}_{participant}.csv" for kind in BIGIDEAS_FILE_KINDS]
-    return [
-        RemoteFile(
-            urls=(f"{BIGIDEAS_MIRROR}/{name}", f"{BIGIDEAS_BASE}/{name}"),
-            target=Path(DATASET_FOLDERS["bigideas"]) / name,
-            checksum=_sha256(sums, name),
-        )
-        for name in names
     ]
 
 
@@ -242,8 +218,6 @@ def files_for(dataset: str) -> list[RemoteFile]:
         return shanghai_files()
     if dataset == "cgmacros":
         return cgmacros_files(parse_checksums(_fetch_text(f"{CGMACROS_BASE}/SHA256SUMS.txt")))
-    if dataset == "bigideas":
-        return bigideas_files(parse_checksums(_fetch_text(f"{BIGIDEAS_BASE}/SHA256SUMS.txt")))
     raise ValueError(f"The dataset '{dataset}' is not known. Please choose one of {DATASETS}.")
 
 

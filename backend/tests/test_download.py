@@ -6,19 +6,12 @@ from rozmarra.data import download as dl
 
 
 def test_parse_checksums_reads_physionet_lines():
-    text = "abc123  Demographics.csv\nDEF456 *001/HR_001.csv\n\n"
-    assert dl.parse_checksums(text) == {"Demographics.csv": "abc123", "001/HR_001.csv": "def456"}
-
-
-def test_bigideas_selection_has_four_files_for_each_participant():
-    files = dl.bigideas_files({})
-    csv_files = [f for f in files if f.target.parts[1].isdigit()]
-    assert len(csv_files) == 16 * 4
-    assert not any("ACC_" in url or "BVP_" in url for f in files for url in f.urls)
+    text = "abc123  LICENSE.txt\nDEF456 *data.zip\n\n"
+    assert dl.parse_checksums(text) == {"LICENSE.txt": "abc123", "data.zip": "def456"}
 
 
 def test_physionet_files_try_the_mirror_first_and_physionet_second():
-    for remote in dl.cgmacros_files({}) + dl.bigideas_files({}):
+    for remote in dl.cgmacros_files({}):
         assert remote.urls[0].startswith(dl.PHYSIONET_MIRROR)
         assert remote.urls[1].startswith(dl.PHYSIONET)
 

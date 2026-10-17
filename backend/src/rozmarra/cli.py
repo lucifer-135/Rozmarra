@@ -50,7 +50,6 @@ class Dataset(StrEnum):
     all = "all"
     shanghai = "shanghai"
     cgmacros = "cgmacros"
-    bigideas = "bigideas"
 
 
 def _not_built(command: str) -> None:

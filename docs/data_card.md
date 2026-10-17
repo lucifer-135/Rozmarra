@@ -14,7 +14,6 @@ This data card describes the data that Rozmarra uses, how the team processes it,
 |---|---|---|---|
 | ShanghaiT2DM (Zhao and colleagues, Scientific Data, 2023) | Figshare article 21600933, version 5, file `diabetes_datasets.zip` (3.6 MB, MD5 `4bfb61cfa506b48155fd9e841ee48e21`) | The 109 recording periods in the `Shanghai_T2DM` folder and the file `Shanghai_T2DM_Summary.xlsx`. Rozmarra does not use the Type 1 Diabetes files. | The article uses CC BY 4.0. The data files do not state a separate licence. |
 | CGMacros (PhysioNet) | Version 1.0.0, file `CGMacros_dateshifted365.zip` (626.7 MB) | The minute-level file of each of the 45 participants and the file `bio.csv`. | CC BY-NC-SA 4.0 |
-| BIG IDEAs Lab Glycemic Variability and Wearable Device Data (PhysioNet) | Version 1.1.3. Rozmarra downloads 65 of the 130 files (396.6 MB): the Dexcom, heart rate, inter-beat interval and food log files of the 16 participants, and `Demographics.csv`. | The team planned to use the inter-beat intervals to calculate heart rate variability (a Should item). This version of Rozmarra does not use the dataset. The heart rate variability in the synthetic data comes from the signal model in Section 7. | Open Data Commons Attribution License v1.0 |
 | Synthetic health records | Created by the Rozmarra generator | The static data stream for all synthetic and virtual patients | Apache License 2.0, released with the code |
 
 The repository does not contain any raw dataset. The command `rozmarra data download` fetches each file from its original source.
@@ -22,8 +21,6 @@ The repository does not contain any raw dataset. The command `rozmarra data down
 ### 1.1 How the download works
 
 PhysioNet sent data at only about 15 KB per second during the team's first attempt on 12 October 2026. PhysioNet also publishes its open datasets in an official public mirror on Amazon S3 (`physionet-open`), so the download script tries the mirror first. The script checks every file against the SHA-256 checksum that PhysioNet publishes for the cited version. If a mirrored file does not match, the script fetches it from PhysioNet instead.
-
-The mirror holds version 1.1.2 of BIG IDEAs Lab, not version 1.1.3. On 12 October 2026, 62 of the 66 selected files were identical in both versions. The 4 food logs that version 1.1.3 corrected (participants 007, 013, 015 and 016) failed the checksum check and came from PhysioNet. Every downloaded file therefore matches version 1.1.3.
 
 ## 2. The standard format
 
@@ -243,7 +240,6 @@ The fasting templates in `backend/src/rozmarra/fasting/templates.py` are startin
 
 1. Zhao Q, et al. Chinese diabetes datasets for data-driven machine learning (ShanghaiT1DM and ShanghaiT2DM). Scientific Data, 2023;10:35.
 2. CGMacros: a scientific dataset for personalized nutrition and diet monitoring. PhysioNet, version 1.0.0, 2025.
-3. BIG IDEAs Lab Glycemic Variability and Wearable Device Data. PhysioNet, version 1.1.3.
-4. Goldberger A, et al. PhysioBank, PhysioToolkit, and PhysioNet: components of a new research resource for complex physiologic signals. Circulation, 2000.
-5. Sistonen J, et al. Pharmacogenetic variation at CYP2C9, CYP2C19, and CYP2D6 at global and microgeographic scales. Pharmacogenetics and Genomics, 2009. The team took the Gujarati frequencies from a study of a diabetic cohort in Gujarat that cites this work (Indian Journal of Pharmaceutical Sciences): https://www.ijpsonline.com/articles/investigating-the-role-of-plasma-glucose-concentration-as-a-phenotypic-marker-for-cyp2c9-genetic-variants-in-the-diabeti.pdf
-6. CYP2C9 variations and their pharmacogenetic implications among diverse South Asian populations. Pharmacogenomics and Personalized Medicine, 2021, volume 14. https://www.dovepress.com/cyp2c9-variations-and-their-pharmacogenetic-implications-among-diverse-peer-reviewed-fulltext-article-PGPM
+3. Goldberger A, et al. PhysioBank, PhysioToolkit, and PhysioNet: components of a new research resource for complex physiologic signals. Circulation, 2000.
+4. Sistonen J, et al. Pharmacogenetic variation at CYP2C9, CYP2C19, and CYP2D6 at global and microgeographic scales. Pharmacogenetics and Genomics, 2009. The team took the Gujarati frequencies from a study of a diabetic cohort in Gujarat that cites this work (Indian Journal of Pharmaceutical Sciences): https://www.ijpsonline.com/articles/investigating-the-role-of-plasma-glucose-concentration-as-a-phenotypic-marker-for-cyp2c9-genetic-variants-in-the-diabeti.pdf
+5. CYP2C9 variations and their pharmacogenetic implications among diverse South Asian populations. Pharmacogenomics and Personalized Medicine, 2021, volume 14. https://www.dovepress.com/cyp2c9-variations-and-their-pharmacogenetic-implications-among-diverse-peer-reviewed-fulltext-article-PGPM

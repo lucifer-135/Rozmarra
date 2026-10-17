@@ -56,7 +56,6 @@ flowchart LR
   subgraph Sources["Data sources"]
     S1["ShanghaiT2DM<br/>(real, open)"]
     S2["CGMacros<br/>(real, open)"]
-    S3["BIG IDEAs Lab<br/>(real, open)"]
     S4["Synthetic health records<br/>(FHIR R4)"]
     S5["Fasting templates<br/>(Navratri, Karva Chauth,<br/>Ekadashi, Ramadan, Jain)"]
   end
@@ -77,7 +76,6 @@ flowchart LR
   end
   S1 --> A
   S2 --> A
-  S3 --> A
   S4 --> A
   A --> B
   B --> C
@@ -121,8 +119,8 @@ All glucose and wearable data is stored in one long table in Parquet format.
 | `value` | number | The reading. |
 | `unit` | text | The unit, for example mg/dL, beats per minute, ms, steps, MET or °C. |
 | `source` | text | Either `real_open` or `synthetic`. |
-| `dataset` | text | The dataset name, for example "ShanghaiT2DM", "CGMacros", "BIG IDEAs" or "Rozmarra synthetic". |
-| `device` | text | The device, for example "FreeStyle Libre H", "Dexcom G6", "Fitbit Sense", "Empatica E4" or "simulated". |
+| `dataset` | text | The dataset name, for example "ShanghaiT2DM", "CGMacros" or "Rozmarra synthetic". |
+| `device` | text | The device, for example "FreeStyle Libre H", "Dexcom G6", "Fitbit Sense" or "simulated". |
 
 A second table stores events: meals, medicines, insulin doses, activities and fasting windows. Its columns are `patient_id`, `start`, `end`, `event_type` and `details`. The `details` column holds JSON, for example the carbohydrates in grams, the food category, the medicine name and the dose.
 
@@ -608,7 +606,7 @@ Rozmarra/                          GitHub repository (the local folder name can 
 │   ├── src/rozmarra/
 │   │   ├── cli.py                 Typer commands
 │   │   ├── config.py
-│   │   ├── data/                  download.py, shanghai.py, cgmacros.py, bigideas.py, harmonise.py
+│   │   ├── data/                  download.py, shanghai.py, cgmacros.py, harmonise.py
 │   │   ├── ehr/                   generator.py, fhir.py, synthea_import.py
 │   │   ├── fasting/               templates.py, calendar.py, meals.py
 │   │   ├── twin/                  model.py, medicines.py, solver.py, fit.py, kalman.py, simulate.py, virtual_patients.py
@@ -685,7 +683,6 @@ The script `scripts/run_demo.ps1` (or `scripts/run_demo.sh`) starts the API and 
 
 - **ShanghaiT2DM.** The data is in the Figshare collection 6310860. The Figshare API lists the files at `https://api.figshare.com/v2/collections/6310860/articles`. The Excel files have the columns "Date", "CGM", "CBG", "Blood ketone", "Dietary intake", "Insulin dose-s.c.", "Insulin dose-i.v.", "Non-insulin hypoglycemic agents", "CSII-bolus insulin" and "CSII-basal insulin". Some cells may contain Chinese text. A small translation table will map the medicine names, for example 二甲双胍 = metformin, 格列美脲 = glimepiride, 格列齐特 = gliclazide, 格列本脲 = glibenclamide, 阿卡波糖 = acarbose, 西格列汀 = sitagliptin, 达格列净 = dapagliflozin, 甘精胰岛素 = insulin glargine and 门冬胰岛素 = insulin aspart. If the meal text is hard to read, the team will use the meal times with a default meal size, and the twin will fit a personal meal-size factor.
 - **CGMacros.** The team will use the download link or the `wget` command on the PhysioNet page. The minute-level files have the columns "Timestamp", "Libre GL", "Dexcom GL", "HR", "Calories (Activity)", "Mets", "Meal Type", "Calories", "Carbs", "Protein", "Fat", "Fiber", "Amount Consumed" and "Image Path". The "Mets" value is multiplied by 10. The dataset does not appear to include medicine records, and the team will check this in the files.
-- **BIG IDEAs Lab.** The full dataset is 4.7 GB as a ZIP file. The team will download only the Dexcom, HR, IBI and food log files and `Demographics.csv`.
 - **Synthea (Should).** The team will build Synthea in a folder without spaces, for example `C:\tools\synthea`. It needs Java 17 or 25. The command `run_synthea -s 2026 -p 1000 --exporter.fhir.export=true` creates FHIR R4 records. The team will then keep only adults with Type 2 Diabetes (SNOMED CT 44054006) and add the India-specific fields.
 
 ## 14. Quality checks
@@ -717,7 +714,6 @@ The team will also use these tools:
 | Rozmarra code | Apache License 2.0 | The team adds a LICENSE file and a licence section to the README. |
 | ShanghaiT2DM | The article uses CC BY 4.0. The data files do not state a separate licence. | The team cites the dataset, does not redistribute it, and downloads it with a script. |
 | CGMacros | CC BY-NC-SA 4.0 | The team cites the dataset and does not redistribute the raw files. Files derived from it, including trained models, are for non-commercial research use and follow the share-alike terms. |
-| BIG IDEAs Lab | Open Data Commons Attribution License v1.0 | The team cites the dataset. |
 | Synthea | Apache License 2.0 | The team cites the tool. |
 | T2DSim AI (ideas only) | A research licence from Oregon Health & Science University (OHSU). It does not allow anyone to redistribute the code. | The team uses ideas only and writes its own code. The team does not copy any code or trained twins, does not install the `t2dsim-ai` package, and cites the project. |
 | Stanford hypoglycemia forecasting (ideas only) | GNU General Public License v3.0 (GPL-3.0) | The team uses ideas only and writes its own code. Copying the code would force the whole project to use GPL-3.0. The team cites the project. |
