@@ -160,7 +160,6 @@ Rozmarra uses only open anonymised data and synthetic data. The repository does 
 |---|---|---|
 | ShanghaiT2DM (Scientific Data, 2023) | Fitting the twin's responses to meals and medicines, and testing predictions on real patients | The article uses CC BY 4.0. |
 | CGMacros, version 1.0.0 (PhysioNet, 2025) | Fitting responses to meals and activity, and testing the fusion of CGM and smartwatch data | CC BY-NC-SA 4.0 |
-| BIG IDEAs Lab Glycemic Variability and Wearable Device Data, version 1.1.3 (PhysioNet) | The team downloaded this dataset to calculate heart rate variability from inter-beat intervals. This version of Rozmarra does not use it yet. | Open Data Commons Attribution License v1.0 |
 | Synthetic health records and synthetic fasting days | The static data stream and the fasting days for all virtual patients | Apache License 2.0, released with the code |
 
 Every synthetic record, chart and table in Rozmarra is labelled as synthetic.
@@ -275,13 +274,12 @@ The presentation covers the problem, the solution, the architecture, the results
 4. Hassanein M, et al. Diabetes and Ramadan: Practical Guidelines 2021. International Diabetes Federation and DAR International Alliance.
 5. Zhao Q, et al. Chinese diabetes datasets for data-driven machine learning (ShanghaiT1DM and ShanghaiT2DM). Scientific Data, 2023;10:35. https://doi.org/10.6084/m9.figshare.c.6310860
 6. CGMacros: a scientific dataset for personalized nutrition and diet monitoring. PhysioNet, version 1.0.0, 2025. https://physionet.org/content/cgmacros/
-7. BIG IDEAs Lab Glycemic Variability and Wearable Device Data. PhysioNet, version 1.1.3. https://physionet.org/content/big-ideas-glycemic-wearable/
-8. Goldberger A, et al. PhysioBank, PhysioToolkit, and PhysioNet: components of a new research resource for complex physiologic signals. Circulation, 2000.
-9. Bergman RN, et al. Quantitative estimation of insulin sensitivity. American Journal of Physiology, 1979.
-10. Dalla Man C, Rizza RA, Cobelli C. Meal simulation model of the glucose-insulin system. IEEE Transactions on Biomedical Engineering, 2007.
-11. Roquemen-Echeverri V, Mosquera-Lopez C. T2DSim AI: Hybrid Neural Digital-Twin Framework for Type 2 Diabetes. https://github.com/mosqueralopez/T2DSim_AI
-12. Giammarino F, et al. A machine learning model for week-ahead hypoglycemia prediction from continuous glucose monitoring data. Journal of Diabetes Science and Technology, 2024. https://github.com/flaviagiammarino/stanford-hypoglycemia-forecasting
-13. Ainsworth BE, et al. 2011 Compendium of Physical Activities: a second update of codes and MET values. Medicine & Science in Sports & Exercise, 2011;43(8):1575–1581.
+7. Goldberger A, et al. PhysioBank, PhysioToolkit, and PhysioNet: components of a new research resource for complex physiologic signals. Circulation, 2000.
+8. Bergman RN, et al. Quantitative estimation of insulin sensitivity. American Journal of Physiology, 1979.
+9. Dalla Man C, Rizza RA, Cobelli C. Meal simulation model of the glucose-insulin system. IEEE Transactions on Biomedical Engineering, 2007.
+10. Roquemen-Echeverri V, Mosquera-Lopez C. T2DSim AI: Hybrid Neural Digital-Twin Framework for Type 2 Diabetes. https://github.com/mosqueralopez/T2DSim_AI
+11. Giammarino F, et al. A machine learning model for week-ahead hypoglycemia prediction from continuous glucose monitoring data. Journal of Diabetes Science and Technology, 2024. https://github.com/flaviagiammarino/stanford-hypoglycemia-forecasting
+12. Ainsworth BE, et al. 2011 Compendium of Physical Activities: a second update of codes and MET values. Medicine & Science in Sports & Exercise, 2011;43(8):1575–1581.
 
 Rozmarra uses several simple ideas from the T2DSim AI project and the Stanford hypoglycemia forecasting project, which [`docs/techstack.md`](docs/techstack.md) describes. The team wrote its own code for every idea, and this repository contains no code or trained models from either project. The team thanks the authors of these projects and the creators of the open datasets.
 
