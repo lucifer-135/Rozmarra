@@ -6,17 +6,14 @@ Rozmarra is a digital twin that helps doctors keep people with Type 2 Diabetes s
 
 Rozmarra (रोज़मर्रा) is a Hindi and Urdu word that means "everyday". The name reflects the aim of the project: safe fasting should be a normal, everyday part of diabetes care for people of every faith.
 
-> **Safety notice.** Rozmarra is a research prototype for the Digital Twin Challenge 2026. It is not a certified medical device, and it must not be used to make decisions about real patients. Rozmarra supports clinical decisions. It does not replace the judgement of a doctor.
-
-> **Project status.** The team built Rozmarra between 12 and 18 October 2026. The models, the API, the six dashboard screens and the printable patient plan work. The team will add the demonstration video, the presentation and the architecture diagram on 19 October 2026.
+> **Safety notice.** Rozmarra is a research prototype. It is not a certified medical device, and it must not be used to make decisions about real patients. Rozmarra supports clinical decisions. It does not replace the judgement of a doctor.
 
 ## 1. Team
 
 | Item | Details |
 |---|---|
 | Team name | NOT_SOMEONE_IMPORTANT |
-| College | Indian Institute of Technology (Indian School of Mines) Dhanbad, also known as IIT (ISM) Dhanbad |
-| Challenge | Digital Twin Challenge 2026 by Happiest Health, part of the Reimagining and Reforming Healthcare in India Summit 2026 |
+| College | Indian Institute of Technology (Indian School of Mines) Dhanbad |
 
 | Member | Role | Main responsibilities |
 |---|---|---|
