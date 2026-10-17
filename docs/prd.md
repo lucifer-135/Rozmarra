@@ -279,7 +279,7 @@ The priorities have the following meanings:
 |---|---|---|
 | FR-F1 | The README contains every item that the challenge requires (see Section 19). | Must |
 | FR-F2 | The repository includes an architecture diagram in PDF format and a presentation in PDF or PPT format. | Must |
-| FR-F3 | The team records a demonstration video that lasts at least 20 minutes. The team uploads it to YouTube as an unlisted video. | Must |
+| FR-F3 | The team records a demonstration video that lasts between 15 and 20 minutes. The team uploads it to YouTube as an unlisted video. | Must |
 | FR-F4 | The repository includes a model card and a data card. | Must |
 | FR-F5 | The repository includes an open-source licence file (Apache License 2.0). | Must |
 | FR-F6 | A judge can run the demo with documented commands on Windows, macOS or Linux. | Must |
@@ -534,7 +534,7 @@ The challenge requires the README to include the following items:
 - the project title;
 - the problem statement and the healthcare use case;
 - the technical stack and the AI/ML model or framework details;
-- a video of at least 20 minutes that explains and demonstrates the prototype (an unlisted YouTube video or a recorded PowerPoint presentation);
+- a video of 15 to 20 minutes that explains and demonstrates the prototype (an unlisted YouTube video or a recorded PowerPoint presentation);
 - the open-source licence details;
 - an architecture diagram in PDF or PPT format; and
 - a presentation in PDF or PPT format with the project details and outcome.
