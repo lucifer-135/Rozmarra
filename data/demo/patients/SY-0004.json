@@ -38,6 +38,18 @@
             "given": [
               "Kamla"
             ]
+          },
+          {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/language",
+                "valueCode": "hi"
+              }
+            ],
+            "family": "देवी",
+            "given": [
+              "कमला"
+            ]
           }
         ],
         "gender": "female",

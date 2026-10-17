@@ -110,3 +110,10 @@ def test_fasting_patterns_follow_the_generator_rules():
             assert record.sex == "female"
         if "ramadan" in record.fasts_kept:
             assert record.fast_word == "रोज़ा"
+
+
+def test_a_record_without_a_hindi_name_falls_back_to_the_latin_name():
+    record = SUNITA.model_copy(update={"given_name_hi": None, "family_name_hi": None})
+    assert record.full_name_hi == "Sunita Sharma"
+    assert len(to_bundle(record)["entry"][0]["resource"]["name"]) == 1
+    assert from_bundle(to_bundle(record)).full_name_hi == "Sunita Sharma"

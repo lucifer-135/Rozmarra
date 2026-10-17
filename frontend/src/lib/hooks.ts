@@ -23,6 +23,12 @@ export function useFastName(): (templateId: string, fallback?: string) => string
   }
 }
 
+/** The patient's name in the language of the dashboard. */
+export function usePatientName(): (patient: { name: string; name_hi: string }) => string {
+  const { i18n } = useTranslation()
+  return (patient) => (i18n.language === 'hi' ? patient.name_hi : patient.name)
+}
+
 /** The name of a medicine in the language of the dashboard. */
 export function useMedicineName(): (name: string) => string {
   const { i18n } = useTranslation()

@@ -21,12 +21,13 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { formatDate } from '@/lib/format'
-import { useFastName } from '@/lib/hooks'
+import { useFastName, usePatientName } from '@/lib/hooks'
 
 /** Screen 1: the patients who plan to fast, sorted by the predicted chance of low blood sugar. */
 export function PatientsPage() {
   const { t, i18n } = useTranslation()
   const fastName = useFastName()
+  const patientName = usePatientName()
   const patients = useQuery({ queryKey: ['patients'], queryFn: fetchPatients })
 
   return (
@@ -64,7 +65,7 @@ export function PatientsPage() {
                           to={`/patients/${row.patient_id}`}
                           className="font-medium text-primary underline-offset-4 hover:underline"
                         >
-                          {t('patient.nameAndAge', { name: row.name, age: row.age })}
+                          {t('patient.nameAndAge', { name: patientName(row), age: row.age })}
                         </Link>
                       </TableCell>
                       <TableCell>
@@ -100,7 +101,7 @@ export function PatientsPage() {
                         >
                           {t('patients.testPlan')}
                           <span className="sr-only">
-                            {t('patients.forPatient', { name: row.name })}
+                            {t('patients.forPatient', { name: patientName(row) })}
                           </span>
                           <ChevronRight aria-hidden className="size-4" />
                         </Link>

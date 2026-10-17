@@ -20,7 +20,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { formatDate, formatNumber, formatTime } from '@/lib/format'
-import { useFastName, useMedicineName } from '@/lib/hooks'
+import { useFastName, usePatientName, useMedicineName } from '@/lib/hooks'
 
 function useDose() {
   const { t, i18n } = useTranslation()
@@ -385,6 +385,7 @@ export function VirtualPatientPage() {
   const { id = '' } = useParams()
   const { t, i18n } = useTranslation()
   const fastName = useFastName()
+  const patientName = usePatientName()
   const patient = useQuery({ queryKey: ['patient', id], queryFn: () => fetchPatient(id) })
   const score = useQuery({ queryKey: ['idf-dar', id], queryFn: () => fetchIdfDar(id) })
   const twin = useQuery({ queryKey: ['twin', id], queryFn: () => fetchTwin(id) })
@@ -398,7 +399,7 @@ export function VirtualPatientPage() {
           <>
             <p className="max-w-4xl text-base">
               {t('virtual.intro', {
-                name: p.name,
+                name: patientName(p),
                 fast: fastName(p.planned_fast.template_id),
                 date: formatDate(p.planned_fast.date, i18n.language),
               })}

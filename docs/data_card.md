@@ -126,7 +126,7 @@ Every value in this table is a starting value and a modelling assumption. The te
 | CYP2C9 genotype | Allele frequencies of 85% for \*1, 5% for \*2 and 10% for \*3 (see Section 6.2) |
 | Fasting habits | Hindu patients: Navratri 50%, Karva Chauth 60% of women, Ekadashi 30% and Chhath Puja 5%. Muslim patients: Ramadan 85%. Jain patients: a Jain upvas or ekasana. Other patients: a custom fast 30%. |
 | Word for the fast | Hindu patients: व्रत 70% and उपवास 30%. Muslim patients: रोज़ा. Jain and other patients: उपवास. |
-| Names and cities | Chosen from fixed lists of Indian names and 16 Indian cities |
+| Names and cities | Chosen from fixed lists of Indian names and 16 Indian cities. The four demo patients also have their names in Devanagari, which the Hindi screens and the Hindi plan show. The FHIR record stores this second name with the standard language extension. |
 
 The generator links fasting patterns to communities with simple probabilities. Real practice varies widely between families and regions, and the doctor can change every plan.
 

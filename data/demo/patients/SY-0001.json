@@ -38,6 +38,18 @@
             "given": [
               "Sunita"
             ]
+          },
+          {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/language",
+                "valueCode": "hi"
+              }
+            ],
+            "family": "शर्मा",
+            "given": [
+              "सुनीता"
+            ]
           }
         ],
         "gender": "female",

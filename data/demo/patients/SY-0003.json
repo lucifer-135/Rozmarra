@@ -38,6 +38,18 @@
             "given": [
               "Abdul"
             ]
+          },
+          {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/language",
+                "valueCode": "hi"
+              }
+            ],
+            "family": "रहमान",
+            "given": [
+              "अब्दुल"
+            ]
           }
         ],
         "gender": "male",

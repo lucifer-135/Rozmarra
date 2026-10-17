@@ -14,6 +14,7 @@ export interface PatientRow {
   patient_id: string
   label: string
   name: string
+  name_hi: string
   age: number
   source: string
   fast: string
@@ -45,6 +46,7 @@ export interface PatientDetail {
   source: string
   label: string
   name: string
+  name_hi: string
   age: number
   sex: 'female' | 'male'
   city: string

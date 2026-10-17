@@ -760,7 +760,7 @@
   {
    "patient_id": "SY-0002",
    "label": "Ramesh Patel, Age 62",
-   "name": "Ramesh Patel",
+   "name": "Ramesh Patel", "name_hi": "रमेश पटेल",
    "age": 62,
    "source": "synthetic",
    "fast": "Navratri",
@@ -780,7 +780,7 @@
   {
    "patient_id": "SY-0001",
    "label": "Sunita Sharma, Age 54",
-   "name": "Sunita Sharma",
+   "name": "Sunita Sharma", "name_hi": "सुनीता शर्मा",
    "age": 54,
    "source": "synthetic",
    "fast": "Karva Chauth",
@@ -800,7 +800,7 @@
   {
    "patient_id": "SY-0004",
    "label": "Kamla Devi, Age 71",
-   "name": "Kamla Devi",
+   "name": "Kamla Devi", "name_hi": "कमला देवी",
    "age": 71,
    "source": "synthetic",
    "fast": "Ekadashi",
@@ -820,7 +820,7 @@
   {
    "patient_id": "SY-0003",
    "label": "Abdul Rahman, Age 58",
-   "name": "Abdul Rahman",
+   "name": "Abdul Rahman", "name_hi": "अब्दुल रहमान",
    "age": 58,
    "source": "synthetic",
    "fast": "Ramadan",

@@ -38,6 +38,18 @@
             "given": [
               "Ramesh"
             ]
+          },
+          {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/language",
+                "valueCode": "hi"
+              }
+            ],
+            "family": "पटेल",
+            "given": [
+              "रमेश"
+            ]
           }
         ],
         "gender": "male",

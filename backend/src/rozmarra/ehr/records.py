@@ -68,6 +68,9 @@ class PatientRecord(BaseModel):
     record_date: date = date(2026, 10, 1)
     given_name: str
     family_name: str
+    # The name in Devanagari for Hindi screens and plans. Records without it show the Latin name.
+    given_name_hi: str | None = None
+    family_name_hi: str | None = None
     sex: str  # "female" or "male"
     birth_date: date
     city: str
@@ -103,6 +106,12 @@ class PatientRecord(BaseModel):
     @property
     def full_name(self) -> str:
         return f"{self.given_name} {self.family_name}"
+
+    @property
+    def full_name_hi(self) -> str:
+        if self.given_name_hi and self.family_name_hi:
+            return f"{self.given_name_hi} {self.family_name_hi}"
+        return self.full_name
 
     def age_on(self, day: date) -> int:
         before_birthday = (day.month, day.day) < (self.birth_date.month, self.birth_date.day)

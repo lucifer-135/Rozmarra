@@ -91,3 +91,10 @@ def test_an_unapproved_plan_cannot_be_printed():
         plan_context(RECORDS["SY-0001"], plan, "en")
     with pytest.raises(ValueError, match="language"):
         plan_context(RECORDS["SY-0001"], _plan("SY-0001"), "fr")
+
+
+def test_the_hindi_plan_shows_the_name_in_devanagari():
+    record = RECORDS["SY-0001"]
+    plan = _plan("SY-0001")
+    assert "सुनीता शर्मा, उम्र" in render_plan(record, plan, "hi")
+    assert "Sunita Sharma, Age" in render_plan(record, plan, "en")

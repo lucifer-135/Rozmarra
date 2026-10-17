@@ -155,7 +155,7 @@ def plan_context(
     checks = [words.when(moment) for moment in check_times(plan, lowest_time)]
     return {
         "lang": language,
-        "patient_name": record.full_name,
+        "patient_name": record.full_name_hi if language == "hi" else record.full_name,
         "age": record.age_on(plan.date),
         "fast_name": fast_name,
         "word": word,

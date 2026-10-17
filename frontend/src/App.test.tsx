@@ -90,7 +90,7 @@ test('the doctor can switch the dashboard to Hindi', async () => {
   await screen.findByText('Ramesh Patel, Age 62')
   await userEvent.click(screen.getByRole('button', { name: 'हिन्दी' }))
   expect(screen.getByRole('heading', { level: 1, name: 'उपवास रखने वाले मरीज़' })).toBeInTheDocument()
-  expect(screen.getByText('Ramesh Patel, उम्र 62')).toBeInTheDocument()
+  expect(screen.getByText('रमेश पटेल, उम्र 62')).toBeInTheDocument()
   expect(document.documentElement.lang).toBe('hi')
 })
 

@@ -6,7 +6,7 @@ import { fetchPatients } from '@/api/client'
 import { DehydrationBadge, IdfDarBadge, PlanStatusBadge, SyntheticBadge } from '@/components/badges'
 import { QueryState } from '@/components/QueryState'
 import { formatDate } from '@/lib/format'
-import { useFastName } from '@/lib/hooks'
+import { useFastName, usePatientName } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
 
 const TABS = [
@@ -29,6 +29,7 @@ export function PatientLayout() {
   const { id = '' } = useParams()
   const { t, i18n } = useTranslation()
   const fastName = useFastName()
+  const patientName = usePatientName()
   const patients = useQuery({ queryKey: ['patients'], queryFn: fetchPatients })
 
   return (
@@ -58,7 +59,7 @@ export function PatientLayout() {
               </Link>
               <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                 <h1 className="text-2xl font-semibold">
-                  {t('patient.nameAndAge', { name: row.name, age: row.age })}
+                  {t('patient.nameAndAge', { name: patientName(row), age: row.age })}
                 </h1>
                 <p className="text-lg text-muted-foreground">
                   {t('patient.fastOn', {

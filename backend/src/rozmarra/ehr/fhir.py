@@ -33,6 +33,8 @@ LOINC = "http://loinc.org"
 UCUM = "http://unitsofmeasure.org"
 ATC = "http://www.whocc.no/atc"
 HGNC = "http://www.genenames.org/geneId"
+# The standard FHIR extension that states the language of one element, such as a name.
+EXT_LANGUAGE = "http://hl7.org/fhir/StructureDefinition/language"
 BCP47 = "urn:ietf:bcp:47"
 OBSERVATION_CATEGORY = "http://terminology.hl7.org/CodeSystem/observation-category"
 CONDITION_CLINICAL = "http://terminology.hl7.org/CodeSystem/condition-clinical"
@@ -152,7 +154,7 @@ def to_bundle(record: PatientRecord) -> dict[str, Any]:
                 "resourceType": "Patient",
                 "meta": _meta(),
                 "identifier": [{"system": PATIENT_ID_SYSTEM, "value": pid}],
-                "name": [{"family": record.family_name, "given": [record.given_name]}],
+                "name": _names(record),
                 "gender": record.sex,
                 "birthDate": record.birth_date.isoformat(),
                 "address": [{"city": record.city, "country": "IN"}],
@@ -360,6 +362,28 @@ def _code_of(concept: dict[str, Any], system: str) -> str | None:
     return next((c["code"] for c in concept.get("coding", []) if c.get("system") == system), None)
 
 
+def _names(record: PatientRecord) -> list[dict[str, Any]]:
+    """The Latin name first, and the Devanagari name, when the record has one, tagged as Hindi."""
+    names: list[dict[str, Any]] = [{"family": record.family_name, "given": [record.given_name]}]
+    if record.given_name_hi and record.family_name_hi:
+        names.append(
+            {
+                "extension": [{"url": EXT_LANGUAGE, "valueCode": "hi"}],
+                "family": record.family_name_hi,
+                "given": [record.given_name_hi],
+            }
+        )
+    return names
+
+
+def _hindi_name(names: list[dict[str, Any]]) -> dict[str, str]:
+    for name in names:
+        tags = name.get("extension", [])
+        if any(e["url"] == EXT_LANGUAGE and e["valueCode"] == "hi" for e in tags):
+            return {"given_name_hi": name["given"][0], "family_name_hi": name["family"]}
+    return {}
+
+
 def from_bundle(bundle: dict[str, Any]) -> PatientRecord:
     """Read a health record back from a FHIR R4 Bundle that to_bundle created."""
     resources = [entry["resource"] for entry in bundle["entry"]]
@@ -370,6 +394,7 @@ def from_bundle(bundle: dict[str, Any]) -> PatientRecord:
         ),
         "given_name": patient["name"][0]["given"][0],
         "family_name": patient["name"][0]["family"],
+        **_hindi_name(patient["name"]),
         "sex": patient["gender"],
         "birth_date": date.fromisoformat(patient["birthDate"]),
         "city": patient["address"][0]["city"],
