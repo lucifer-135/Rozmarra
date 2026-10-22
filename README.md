@@ -21,9 +21,11 @@ Rozmarra (रोज़मर्रा) is a Hindi and Urdu word that means "ever
 | Aman Soni | Lead for the data and the application | Aman builds the data loaders for the open datasets, the synthetic health records and fasting days, the API and the doctor dashboard. |
 | Divy Sharma | Lead for documentation, testing and the presentation | Divy prepares the fasting templates, the architecture diagram, the presentation, the model card and the data card. Divy also tests the demo on a fresh copy of the repository. |
 
-## 2. Demonstration video
+## 2. Demonstration Video
 
-The team will add the link to the demonstration video here. The video will last between 15 and 20 minutes and will be published on YouTube as an unlisted video.
+[Watch the Demonstration Video](https://youtu.be/Al53Bok-EOY)
+
+*For the best viewing experience, please watch in 1080p (Full HD).*
 
 ## 3. Problem statement and healthcare use case
 
