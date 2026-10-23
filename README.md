@@ -8,6 +8,25 @@ Rozmarra (रोज़मर्रा) is a Hindi and Urdu word that means "ever
 
 > **Safety notice.** Rozmarra is a research prototype. It is not a certified medical device, and it must not be used to make decisions about real patients. Rozmarra supports clinical decisions. It does not replace the judgement of a doctor.
 
+## Contents
+
+- [1. Team](#1-team)
+- [2. Demonstration Video](#2-demonstration-video)
+- [3. Problem statement and healthcare use case](#3-problem-statement-and-healthcare-use-case)
+- [4. What Rozmarra does](#4-what-rozmarra-does)
+- [5. Architecture](#5-architecture)
+- [6. Technical stack and AI/ML model](#6-technical-stack-and-aiml-model)
+- [7. Data sources and licences](#7-data-sources-and-licences)
+- [8. How to run Rozmarra](#8-how-to-run-rozmarra)
+   - [8.1 Requirements](#81-requirements)
+   - [8.2 Setup and demo](#82-setup-and-demo)
+   - [8.3 Command-line tool](#83-command-line-tool)
+- [9. Results](#9-results)
+- [10. Safety, ethics and limitations](#10-safety-ethics-and-limitations)
+- [11. Licence](#11-licence)
+- [12. Presentation](#12-presentation)
+- [13. References and acknowledgements](#13-references-and-acknowledgements)
+
 ## 1. Team
 
 | Item | Details |
