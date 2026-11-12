@@ -83,9 +83,13 @@ The dashboard can switch between English and Hindi.
 
 The screenshots show the synthetic demo patients. They do not represent real people.
 
+**Home page.** The home page explains what Rozmarra does, shows the order in which a doctor uses the screens and lists the fasts that Rozmarra knows.
+
+![The home page shows the title "Test a fasting plan on a virtual patient before the fast begins", an illustration of one fasting day with the fasting window in indigo, the five steps of the doctor's work, the list of fasts and what Rozmarra does not do.](docs/images/screen0_home.png)
+
 **Screen 1. Patients who plan to fast.** The list sorts the four demo patients by the predicted chance of low blood sugar during the fast.
 
-![Screen 1 shows the list of the four synthetic patients with their fast, IDF-DAR risk, predicted chance of low blood sugar, plan status and cautions.](docs/images/screen1_patients.png)
+![Screen 1 shows the list of the four synthetic patients, sorted by the chance of low blood sugar shown next to each name, with their fast, IDF-DAR risk, plan status and cautions.](docs/images/screen1_patients.png)
 
 **Screen 2. Virtual patient.** The screen shows what the twin knows about Sunita Sharma, Age 54, before Karva Chauth.
 
@@ -93,7 +97,7 @@ The screenshots show the synthetic demo patients. They do not represent real peo
 
 **Screen 3. Test a fasting plan.** The doctor compares Plan A, Sunita's usual medicines, with Plan B, which has a lower glimepiride dose with sargi and dapagliflozin after the fast.
 
-![Screen 3 shows the plan form, the comparison table of Plan A and Plan B, the dehydration caution and the glucose curves of both plans with their uncertainty bands.](docs/images/screen3_simulator.png)
+![Screen 3 shows the plan form, the summary and comparison table of Plan A and Plan B, the dehydration caution, one chart with the glucose curves of both plans and their uncertainty bands, and the meals and medicines of each plan.](docs/images/screen3_simulator.png)
 
 **Screen 4. Live fasting monitor.** The replay of Ramesh Patel's Navratri fast shows the alert at 10:50 am, with the forecast for the next 2 hours and the three main reasons.
 
