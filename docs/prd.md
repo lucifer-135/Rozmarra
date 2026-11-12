@@ -326,13 +326,13 @@ This screen lets the doctor test and compare two plans before the fast. The left
 
 A grey dotted line shows the curve for an average patient with the same plan, so the doctor can see how this patient differs. The screen also shows the dehydration caution when it applies, and an "Approve this plan" button.
 
-Example text: "With Plan A, the predicted lowest glucose is 61 mg/dL at about 4:30 pm. With Plan B, the predicted lowest glucose is 84 mg/dL at about 5:00 pm."
+Example text: "With Plan A, the predicted lowest glucose is 61 mg/dL at about 4:30 pm. With Plan B, the predicted lowest glucose is 84 mg/dL at about 5:00 pm. With Plan A, the chance of high blood sugar after the fast is broken is 62% (High). With Plan B, the chance of high blood sugar after the fast is broken is 71% (High). Plan B has a lower chance of low blood sugar during the fast, but a higher chance of high blood sugar after the fast is broken."
 
 ### Screen 4: Live fasting monitor (replay)
 
 This screen shows how Rozmarra would warn the doctor during a fast. A time slider moves through a recorded fasting day. The screen shows the glucose readings so far, the forecast, an alert timeline, and panels for heart rate, heart rate variability and steps.
 
-Example alert: "Low glucose is likely within the next 60 minutes. Estimated chance: 74% (High). Predicted lowest value: 63 mg/dL at about 4:40 pm. Main reasons: glimepiride was taken at 8:00 am, no food has been eaten for 11 hours, and the heart rate has risen by 12 beats per minute without extra activity."
+Example alert: "Rozmarra raised an alert. The chance of low glucose within the next 60 minutes has passed the alert level of 8.9%. Estimated chance: 74% (High). Predicted lowest value: 63 mg/dL at about 4:40 pm. Main reasons: glimepiride was taken at 8:00 am, no food has been eaten for 11 hours, and the heart rate has risen by 12 beats per minute without extra activity."
 
 ### Screen 5: Patient fasting plan
 

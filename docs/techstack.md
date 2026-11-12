@@ -546,6 +546,7 @@ During development, the API allows requests from the dashboard at `http://localh
 
 | Route | Screen in `prd.md`, Section 12 |
 |---|---|
+| `/` | Home page: what Rozmarra does and the order of the screens |
 | `/patients` | Screen 1: Patients who plan to fast |
 | `/patients/:id` | Screen 2: Virtual patient |
 | `/patients/:id/simulator` | Screen 3: Test a fasting plan |
@@ -557,10 +558,12 @@ During development, the API allows requests from the dashboard at `http://localh
 
 - The horizontal axis shows the time on the 12-hour clock.
 - A shaded band shows the target range from 70 to 180 mg/dL, with the label "Target range".
-- Labelled lines mark 70 mg/dL and 54 mg/dL.
+- Labelled lines mark 70 mg/dL and 54 mg/dL. Their labels ("Low" and "Very low") sit in the right margin, outside the plot.
+- The vertical axis labels the limits of the ambulatory glucose profile: 54, 70, 180 and 250 mg/dL. On a short chart, the label 54 is left out so that it does not touch the label 70.
 - A solid line shows the measured CGM values. A dashed line shows the forecast, with a shaded band from the 10th to the 90th percentile.
 - In the fasting plan simulator, a grey dotted line shows the average-patient curve, with the label "Average patient with the same plan". This line shows how the patient's own twin differs from an average patient.
-- A light background shows the fasting window, with a label such as "Fast without food or water".
+- A light indigo background shows the fasting window, with a label such as "Fast without food or water". The same indigo marks the fast on the home page and in the printed plan.
+- Red is kept for alerts and for glucose below 54 mg/dL. The line at 70 mg/dL and a high chance are amber.
 - Markers show meals with their carbohydrates, medicines with their doses, and alerts.
 - Panels below the chart show heart rate, heart rate variability and steps on the same time axis.
 - Low glucose is shown with a colour, an icon and the word "Low", so that the chart does not rely on colour alone. The colours are colour-blind-safe.
