@@ -38,6 +38,17 @@
   .approval { margin-top: 22px; padding: 10px 14px; border: 1px solid #0b6b3a; border-radius: 8px; font-weight: 600; }
   .note { color: #52514e; font-size: 16px; margin-top: 18px; }
   .time { font-weight: 600; white-space: nowrap; }
+  /* The fasting window has the same indigo as the dashboard charts (--fast in index.css). */
+  .fast {
+    border-left: 6px solid #3730a3;
+    background: #eeedfb;
+    border-radius: 0 8px 8px 0;
+    padding: 2px 16px 8px;
+    margin: 22px 0 6px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .fast h2 { margin-top: 8px; border-bottom-color: #c7c4ef; color: #3730a3; }
   @media print {
     body { padding: 0; font-size: 14pt; }
     h1 { font-size: 20pt; }

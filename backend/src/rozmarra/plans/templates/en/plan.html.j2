@@ -11,6 +11,7 @@
   Please break your fast immediately if your blood sugar is below 70 mg/dL or above 300 mg/dL, or if you feel unwell.
 </div>
 
+<section class="fast">
 <h2>Your fast</h2>
 <p>Your fast (<span lang="hi">{{ word }}</span>) will start at <span class="time">{{ fast_start }}</span> and will end at <span class="time">{{ fast_end }}</span>.</p>
 {% if water_allowed %}
@@ -18,6 +19,7 @@
 {% else %}
 <p>This fast does not allow water. Please drink enough water before the fast starts and after it ends.</p>
 {% endif %}
+</section>
 
 <h2>When to check your blood sugar</h2>
 <p>Please check your blood sugar at {{ checks }}.</p>
