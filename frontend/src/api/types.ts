@@ -364,6 +364,9 @@ export interface ReplayMoment {
 export interface Metric {
   auroc?: number
   auprc?: number
+  // The number of tested moments and how many of them came before low blood sugar.
+  time_points?: number
+  positive_time_points?: number
   confidence_intervals_95?: { auroc?: [number, number]; auprc?: [number, number] }
 }
 

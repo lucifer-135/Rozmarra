@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { CircleCheck, ExternalLink, MessageSquareText, Printer } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { documentUrl, fetchPatient, fetchPlanMessage, fetchSavedPlans } from '@/api/client'
+import { documentUrl, fetchPlanMessage, fetchSavedPlans } from '@/api/client'
 import { LoadError, Loading } from '@/components/QueryState'
 import { Section } from '@/components/Section'
 import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/format'
+import { cn } from '@/lib/utils'
 
 type DocumentLanguage = 'en' | 'hi'
 
@@ -16,8 +17,10 @@ export function PlanPage() {
   const { id = '' } = useParams()
   const { t, i18n } = useTranslation()
   const frame = useRef<HTMLIFrameElement>(null)
+  const languageLabelId = useId()
   const [height, setHeight] = useState(1100)
-  const patient = useQuery({ queryKey: ['patient', id], queryFn: () => fetchPatient(id) })
+  // The plan fades in after it loads, so that switching its language shows no white flash.
+  const [loadedSrc, setLoadedSrc] = useState<string | null>(null)
   const saved = useQuery({ queryKey: ['saved-plans', id], queryFn: () => fetchSavedPlans(id) })
   const [searchParams] = useSearchParams()
   // A link such as "?lang=hi" opens the plan in that language.
@@ -28,8 +31,9 @@ export function PlanPage() {
   const approved = saved.data
     ? Object.entries(saved.data.plans).find(([, plan]) => plan.status === 'approved')
     : undefined
-  // The plan opens in the patient's own language, and the doctor can switch it.
-  const language: DocumentLanguage = chosen ?? (patient.data?.language === 'hi' ? 'hi' : 'en')
+  // The plan opens in English, the language of the doctor's review, whatever the language of
+  // the dashboard or of the patient. The doctor can switch it to Hindi before printing.
+  const language: DocumentLanguage = chosen ?? 'en'
   const message = useQuery({
     queryKey: ['plan-message', id, approved?.[0], language],
     queryFn: () => fetchPlanMessage(id, approved![0], language),
@@ -37,12 +41,12 @@ export function PlanPage() {
   })
 
   if (saved.isError) return <LoadError error={saved.error} onRetry={() => void saved.refetch()} />
-  if (saved.isPending || patient.isPending) return <Loading />
+  if (saved.isPending) return <Loading />
 
   if (!approved) {
     return (
       <div className="grid max-w-3xl gap-3 rounded-xl border bg-card p-6">
-        <h2 className="text-xl font-semibold">{t('planScreen.notApprovedTitle')}</h2>
+        <h2 className="text-lg font-semibold">{t('planScreen.notApprovedTitle')}</h2>
         <p className="text-base">{t('planScreen.notApproved')}</p>
         <Link
           to={`/patients/${id}/simulator`}
@@ -64,7 +68,7 @@ export function PlanPage() {
   return (
     <div className="grid gap-5">
       <div className="grid gap-2">
-        <h2 className="text-xl font-semibold">{t('planScreen.title')}</h2>
+        <h2 className="text-lg font-semibold">{t('planScreen.title')}</h2>
         <p className="max-w-4xl text-base">{t('planScreen.intro')}</p>
         <p className="inline-flex items-center gap-2 text-base font-medium text-emerald-800">
           <CircleCheck aria-hidden className="size-5" />
@@ -77,7 +81,10 @@ export function PlanPage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <div role="group" aria-label={t('planScreen.language')} className="flex gap-2">
+        <span id={languageLabelId} className="text-base font-medium">
+          {t('planScreen.language')}
+        </span>
+        <div role="group" aria-labelledby={languageLabelId} className="flex gap-2">
           {(['en', 'hi'] as const).map((lang) => (
             <Button
               key={lang}
@@ -112,11 +119,15 @@ export function PlanPage() {
           key={src}
           src={src}
           title={t('planScreen.frameTitle', { language: labels[language] })}
-          className="block w-full"
+          className={cn(
+            'block w-full transition-opacity duration-150 ease-out-strong',
+            loadedSrc !== src && 'opacity-0',
+          )}
           style={{ height }}
           onLoad={() => {
             const body = frame.current?.contentDocument?.body
             if (body) setHeight(body.scrollHeight + 32)
+            setLoadedSrc(src)
           }}
         />
       </div>

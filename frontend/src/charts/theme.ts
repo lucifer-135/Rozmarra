@@ -37,10 +37,14 @@ export const COLOURS = {
   meal: '#1baf7a',
   medicine: '#4a3aa7',
   activity: '#c98500',
-  low: '#d03b3b',
-  veryLow: '#8f1d1d',
+  // Red is kept for alerts and for glucose below 54 mg/dL. The line at 70 mg/dL is amber.
+  low: '#a14a00',
+  veryLow: '#b42318',
+  alert: '#b42318',
   targetRange: 'rgba(12, 163, 12, 0.07)',
-  fastWindow: 'rgba(137, 135, 129, 0.12)',
+  // The fasting window: the same indigo as --fast in index.css.
+  fastWindow: 'rgba(55, 48, 163, 0.09)',
+  fastWindowText: '#3730a3',
   ink: '#0b0b0b',
   inkSecondary: '#52514e',
   muted: '#6b6a65',

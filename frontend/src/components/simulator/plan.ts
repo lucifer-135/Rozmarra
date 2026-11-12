@@ -1,4 +1,4 @@
-import type { Comparison, FastingPlan, PlanOptions, Simulation } from '@/api/types'
+import type { Chance, Comparison, FastingPlan, PlanOptions, Simulation } from '@/api/types'
 import { glucoseAxisTop } from '@/charts/scale'
 import { COLOURS } from '@/charts/theme'
 import { formatNumber, formatTime, toDate } from '@/lib/format'
@@ -26,22 +26,46 @@ export function planProblems(plan: FastingPlan, options: PlanOptions | undefined
   return problems
 }
 
-/** The sentence that compares the lowest predicted glucose of the two plans. */
+/**
+ * The sentences that sum up the comparison: the lowest predicted glucose of each plan, the
+ * chance of high blood sugar after the fast is broken, and a trade-off when one plan lowers the
+ * chance of low blood sugar but raises the chance of high blood sugar.
+ */
 export function comparisonSentence(
   comparison: Comparison,
   t: (key: string, options?: Record<string, unknown>) => string,
   language: string,
+  chanceText: (chance: Chance) => string,
 ): string {
-  const one = (s: Simulation, key: string) =>
+  const lowest = (s: Simulation, key: string) =>
     s.summary.lowest_glucose_time
       ? t(key, {
           value: formatNumber(s.summary.lowest_glucose_mg_dl, language),
           time: formatTime(s.summary.lowest_glucose_time, language),
         })
       : ''
+  const high = (s: Simulation, key: string) =>
+    s.summary.chance_of_high_after_fast
+      ? t(key, { chance: chanceText(s.summary.chance_of_high_after_fast) })
+      : ''
+  const a = comparison.plan_a.summary
+  const b = comparison.plan_b.summary
+  let tradeOff = ''
+  if (a.chance_of_high_after_fast && b.chance_of_high_after_fast) {
+    const lowA = a.chance_of_low_during_fast.value
+    const lowB = b.chance_of_low_during_fast.value
+    const highA = a.chance_of_high_after_fast.value
+    const highB = b.chance_of_high_after_fast.value
+    const plan: PlanKey | null =
+      lowB < lowA && highB > highA ? 'plan_b' : lowA < lowB && highA > highB ? 'plan_a' : null
+    if (plan) tradeOff = t('results.tradeOff', { plan: t(`simulator.tab.${plan}`) })
+  }
   return [
-    one(comparison.plan_a, 'results.sentenceA'),
-    one(comparison.plan_b, 'results.sentenceB'),
+    lowest(comparison.plan_a, 'results.sentenceA'),
+    lowest(comparison.plan_b, 'results.sentenceB'),
+    high(comparison.plan_a, 'results.highA'),
+    high(comparison.plan_b, 'results.highB'),
+    tradeOff,
   ]
     .filter(Boolean)
     .join(' ')

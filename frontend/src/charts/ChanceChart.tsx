@@ -6,7 +6,7 @@ import { AXIS_TEXT, COLOURS, echarts, FONT } from './theme'
 
 // The alert timeline of the live fasting monitor: the estimated chance of low glucose within
 // the next 60 minutes, the alert level and the alerts so far. A single series needs no
-// legend, because the heading says what the chart shows.
+// legend, because the heading says what the chart shows. Red marks only the alerts.
 
 interface Props {
   times: string[]
@@ -86,10 +86,10 @@ export function ChanceChart({
             data: [
               {
                 yAxis: Math.round(threshold * 1000) / 10,
-                lineStyle: { color: COLOURS.low, type: 'dashed', width: 1.5 },
+                lineStyle: { color: COLOURS.inkSecondary, type: 'dashed', width: 1.5 },
                 label: {
                   ...AXIS_TEXT,
-                  color: COLOURS.low,
+                  color: COLOURS.inkSecondary,
                   position: 'insideEndTop',
                   formatter: t('monitor.alertLevel', {
                     value: formatNumber(threshold * 100, language, 1),
@@ -106,7 +106,7 @@ export function ChanceChart({
           markPoint: {
             symbol: 'triangle',
             symbolSize: 14,
-            itemStyle: { color: COLOURS.low, borderColor: COLOURS.surface, borderWidth: 2 },
+            itemStyle: { color: COLOURS.alert, borderColor: COLOURS.surface, borderWidth: 2 },
             label: { show: false },
             data: times
               .map((time, i) => ({ time, value: percent(chances[i]) }))

@@ -1,8 +1,13 @@
 import { Droplets } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { type ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Comparison, Simulation } from '@/api/types'
-import { type ChartEvent, GlucoseChart } from '@/charts/GlucoseChart'
+import {
+  type ChartEvent,
+  type ChartWindow,
+  GlucoseChart,
+  type GlucoseLine,
+} from '@/charts/GlucoseChart'
 import { COLOURS } from '@/charts/theme'
 import { ChanceBadge } from '@/components/badges'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -191,7 +196,107 @@ function EventList({ events }: { events: ChartEvent[] }) {
   )
 }
 
-/** The chart of one plan: the twin's curve with its band and the average-patient curve. */
+function fastWindow(
+  simulation: Simulation,
+  t: (k: string, o?: Record<string, unknown>) => string,
+): ChartWindow {
+  const fast = simulation.markers.fast
+  return {
+    start: fast.start,
+    end: fast.end,
+    label: fast.water_allowed ? t('chart.fastWithWater') : t('chart.fastWithoutWater'),
+  }
+}
+
+/**
+ * Both plans on one chart, so that the doctor compares them without scrolling. Events that the
+ * two plans share appear once in the strip. An event that only one plan has names that plan.
+ */
+export function BothPlansChart({
+  comparison,
+  yMax,
+  start,
+  end,
+}: {
+  comparison: Comparison
+  yMax: number
+  start: string
+  end: string
+}) {
+  const { t, i18n } = useTranslation()
+  const language = i18n.language
+  const plans: PlanKey[] = ['plan_a', 'plan_b']
+  const planLabel = (key: PlanKey) => t(`simulator.tab.${key}`)
+
+  const lines: GlucoseLine[] = plans.map((key) => {
+    const simulation = comparison[key]
+    const summary = simulation.summary
+    return {
+      id: `${key}-both`,
+      name: t('chart.planMedian', { plan: planLabel(key) }),
+      times: simulation.curve.times,
+      values: simulation.curve.p50,
+      colour: PLAN_COLOURS[key],
+      style: 'solid',
+      labelLowest: true,
+      lowest: summary.lowest_glucose_time
+        ? { value: summary.lowest_glucose_mg_dl, time: summary.lowest_glucose_time }
+        : undefined,
+      band: {
+        name: t('chart.planBand', { plan: planLabel(key) }),
+        lower: simulation.curve.p10,
+        upper: simulation.curve.p90,
+      },
+    }
+  })
+
+  const eventKey = (e: ChartEvent) => `${e.kind}|${e.start}|${e.end ?? ''}|${e.label}`
+  const [eventsA, eventsB] = plans.map((key) => chartEvents(comparison[key], language, t))
+  const keysA = new Set(eventsA.map(eventKey))
+  const keysB = new Set(eventsB.map(eventKey))
+  const onlyIn = (e: ChartEvent, key: PlanKey): ChartEvent => ({
+    ...e,
+    label: t('results.onlyIn', { plan: planLabel(key), label: e.label }),
+  })
+  const events = [
+    ...eventsA.map((e) => (keysB.has(eventKey(e)) ? e : onlyIn(e, 'plan_a'))),
+    ...eventsB.filter((e) => !keysA.has(eventKey(e))).map((e) => onlyIn(e, 'plan_b')),
+  ]
+
+  const windowA = fastWindow(comparison.plan_a, t)
+  const windowB = fastWindow(comparison.plan_b, t)
+  const sameWindow = windowA.start === windowB.start && windowA.end === windowB.end
+  const lowestText = (key: PlanKey) =>
+    formatNumber(comparison[key].summary.lowest_glucose_mg_dl, language)
+
+  return (
+    <section className="grid gap-2 rounded-xl border bg-card p-4">
+      <h3 className="text-lg font-semibold">{t('results.combinedTitle')}</h3>
+      <p className="text-base text-muted-foreground">{t('results.combinedDescription')}</p>
+      <GlucoseChart
+        height={380}
+        yMax={yMax}
+        start={start}
+        end={end}
+        lines={lines}
+        windows={sameWindow ? [windowA] : [windowA, windowB]}
+        events={events}
+        summary={t('results.combinedSummary', {
+          planA: comparison.plan_a.plan.plan_name,
+          planB: comparison.plan_b.plan.plan_name,
+          lowestA: lowestText('plan_a'),
+          lowestB: lowestText('plan_b'),
+        })}
+      />
+    </section>
+  )
+}
+
+/**
+ * One plan: its name, the approval, and its meals, medicines and activities as text. Its own
+ * chart, with the average patient, opens on request, because the combined chart above already
+ * compares the two plans.
+ */
 export function PlanChart({
   planKey,
   simulation,
@@ -208,11 +313,9 @@ export function PlanChart({
   action?: ReactNode
 }) {
   const { t, i18n } = useTranslation()
-  const language = i18n.language
-  const curve = simulation.curve
-  const s = simulation.summary
   const plan = simulation.plan
-  const events = chartEvents(simulation, language, t)
+  const events = chartEvents(simulation, i18n.language, t)
+  const [showChart, setShowChart] = useState(false)
   return (
     <section className="grid gap-2 rounded-xl border bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -222,57 +325,94 @@ export function PlanChart({
         </h3>
         {action}
       </div>
-      <GlucoseChart
-        height={360}
-        yMax={yMax}
-        start={start}
-        end={end}
-        lines={[
-          {
-            id: `${planKey}-twin`,
-            name: t('chart.twinCurve'),
-            times: curve.times,
-            values: curve.p50,
-            colour: PLAN_COLOURS[planKey],
-            style: 'solid',
-            labelLowest: true,
-            lowest: s.lowest_glucose_time
-              ? { value: s.lowest_glucose_mg_dl, time: s.lowest_glucose_time }
-              : undefined,
-            band: { name: t('chart.band'), lower: curve.p10, upper: curve.p90 },
-          },
-          ...(curve.average_patient
-            ? [
-                {
-                  id: `${planKey}-average`,
-                  name: t('chart.averagePatient'),
-                  times: curve.times,
-                  values: curve.average_patient,
-                  colour: COLOURS.average,
-                  style: 'dotted' as const,
-                },
-              ]
-            : []),
-        ]}
-        windows={[
-          {
-            start: simulation.markers.fast.start,
-            end: simulation.markers.fast.end,
-            label: simulation.markers.fast.water_allowed
-              ? t('chart.fastWithWater')
-              : t('chart.fastWithoutWater'),
-          },
-        ]}
-        events={events}
-        summary={t('results.chartSummary', {
-          plan: plan.plan_name,
-          value: formatNumber(s.lowest_glucose_mg_dl, language),
-          time: s.lowest_glucose_time ? formatTime(s.lowest_glucose_time, language) : '-',
-          percent: s.chance_of_low_during_fast.percent,
-        })}
-      />
       <EventList events={events} />
+      <details
+        className="rounded-lg border bg-background"
+        onToggle={(e) => setShowChart(e.currentTarget.open)}
+      >
+        <summary className="cursor-pointer px-3 py-2 text-base font-medium text-primary outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
+          {t('results.showDetail')}
+        </summary>
+        {/* The chart is drawn only when it is open, so that it measures its real width. */}
+        {showChart && (
+          <div className="motion-enter-fade px-2 pb-2">
+            <PlanDetailChart
+              planKey={planKey}
+              simulation={simulation}
+              yMax={yMax}
+              start={start}
+              end={end}
+              events={events}
+            />
+          </div>
+        )}
+      </details>
     </section>
+  )
+}
+
+function PlanDetailChart({
+  planKey,
+  simulation,
+  yMax,
+  start,
+  end,
+  events,
+}: {
+  planKey: PlanKey
+  simulation: Simulation
+  yMax: number
+  start: string
+  end: string
+  events: ChartEvent[]
+}) {
+  const { t, i18n } = useTranslation()
+  const language = i18n.language
+  const curve = simulation.curve
+  const s = simulation.summary
+  const plan = simulation.plan
+  return (
+    <GlucoseChart
+      height={360}
+      yMax={yMax}
+      start={start}
+      end={end}
+      lines={[
+        {
+          id: `${planKey}-twin`,
+          name: t('chart.twinCurve'),
+          times: curve.times,
+          values: curve.p50,
+          colour: PLAN_COLOURS[planKey],
+          style: 'solid',
+          labelLowest: true,
+          lowest: s.lowest_glucose_time
+            ? { value: s.lowest_glucose_mg_dl, time: s.lowest_glucose_time }
+            : undefined,
+          band: { name: t('chart.band'), lower: curve.p10, upper: curve.p90 },
+        },
+        ...(curve.average_patient
+          ? [
+              {
+                id: `${planKey}-average`,
+                name: t('chart.averagePatient'),
+                times: curve.times,
+                values: curve.average_patient,
+                colour: COLOURS.average,
+                style: 'dotted' as const,
+              },
+            ]
+          : []),
+      ]}
+      windows={[fastWindow(simulation, t)]}
+      events={events}
+      summary={t('results.chartSummary', {
+        plan: plan.plan_name,
+        value: formatNumber(s.lowest_glucose_mg_dl, language),
+        time: s.lowest_glucose_time ? formatTime(s.lowest_glucose_time, language) : '-',
+        percent: s.chance_of_low_during_fast.percent,
+      })}
+    />
   )
 }
 

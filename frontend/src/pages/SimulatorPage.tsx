@@ -18,6 +18,7 @@ import { planProblems } from '@/components/simulator/plan'
 import { PlanForm } from '@/components/simulator/PlanForm'
 import { comparisonSentence, type PlanKey, sharedScale } from '@/components/simulator/plan'
 import {
+  BothPlansChart,
   ComparisonTable,
   DehydrationCaution,
   PlanChart,
@@ -27,7 +28,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { formatDate } from '@/lib/format'
-import { usePlanOptions, useTemplates } from '@/lib/hooks'
+import { useChanceText, usePlanOptions, useTemplates } from '@/lib/hooks'
+import { cn } from '@/lib/utils'
 
 type Plans = Record<PlanKey, FastingPlan>
 
@@ -66,10 +68,14 @@ function Workspace({
   const { t, i18n } = useTranslation()
   const language = i18n.language
   const queryClient = useQueryClient()
+  const chanceText = useChanceText()
   const [plans, setPlans] = useState<Plans>(initial)
   const [active, setActive] = useState<PlanKey>('plan_a')
   const [tested, setTested] = useState<Plans | null>(null)
   const [approving, setApproving] = useState<PlanKey | null>(null)
+  // Only the plan that the doctor has just approved plays the approval animation, not a plan
+  // that was approved before the screen opened.
+  const [justApproved, setJustApproved] = useState<PlanKey | null>(null)
 
   const compare = useMutation({
     mutationFn: (snapshot: Plans) => comparePlans(patientId, snapshot.plan_a, snapshot.plan_b),
@@ -149,6 +155,7 @@ function Workspace({
         const other: PlanKey = key === 'plan_a' ? 'plan_b' : 'plan_a'
         return { ...current, [key]: answer.plan, [other]: asDraft(current[other]) }
       })
+      setJustApproved(key)
       refreshLists()
     } finally {
       setApproving(null)
@@ -159,8 +166,16 @@ function Workspace({
     const plan = plans[key]
     if (plan.status === 'approved' && plan.approved_by) {
       return (
-        <p className="inline-flex items-center gap-1.5 text-base font-medium text-emerald-800">
-          <CircleCheck aria-hidden className="size-4" />
+        <p
+          className={cn(
+            'inline-flex items-center gap-1.5 text-base font-medium text-emerald-800',
+            justApproved === key && 'motion-sharpen-slow',
+          )}
+        >
+          <CircleCheck
+            aria-hidden
+            className={cn('size-4', justApproved === key && 'motion-draw-icon')}
+          />
           {t('approve.approvedText', {
             name: plan.approved_by,
             date: plan.approved_on ? formatDate(plan.approved_on, language) : '',
@@ -183,7 +198,7 @@ function Workspace({
     <div className="grid items-start gap-6 xl:grid-cols-[minmax(24rem,30rem)_1fr]">
       <Card className="gap-4 py-4 xl:sticky xl:top-4 xl:max-h-[calc(100vh-2rem)] xl:overflow-y-auto">
         <CardContent className="grid gap-4 px-4">
-          <h2 className="text-xl font-semibold">{t('simulator.formTitle')}</h2>
+          <h2 className="text-lg font-semibold">{t('simulator.formTitle')}</h2>
           <p className="text-base text-muted-foreground">{t('simulator.formIntro')}</p>
           <Button
             className="h-11 text-base"
@@ -201,6 +216,10 @@ function Workspace({
             <p role="alert" className="text-base text-destructive">
               {t('simulator.fixProblems')}
             </p>
+          )}
+          {/* The button is disabled while the test runs, so the reason is stated beside it. */}
+          {compare.isPending && (
+            <p className="text-base text-muted-foreground">{t('simulator.running')}</p>
           )}
           <Tabs value={active} onValueChange={(v) => setActive(v as PlanKey)}>
             <TabsList className="h-11 w-full">
@@ -260,27 +279,41 @@ function Workspace({
       </Card>
 
       <div className="grid min-w-0 gap-5" aria-live="polite" aria-busy={compare.isPending}>
-        <h2 className="text-xl font-semibold">{t('simulator.resultsTitle')}</h2>
+        <h2 className="text-lg font-semibold">{t('simulator.resultsTitle')}</h2>
         {compare.isPending && <Loading text={t('simulator.running')} />}
         {compare.isError && <LoadError error={compare.error} onRetry={() => run(false)} />}
         {stale && !compare.isPending && (
           <p
             role="status"
-            className="flex items-start gap-2 rounded-lg border border-amber-400 bg-amber-50 p-3 text-base text-amber-950"
+            className="motion-enter-drop flex items-start gap-2 rounded-lg border border-amber-400 bg-amber-50 p-3 text-base text-amber-950"
           >
             <TriangleAlert aria-hidden className="mt-0.5 size-5 shrink-0" />
             {t('simulator.stale')}
           </p>
         )}
         {result && scale && (
-          <div className={compare.isPending ? 'grid gap-5 opacity-50' : 'grid gap-5'}>
-            <Card className="gap-3 py-4">
+          <div
+            className={cn(
+              'grid gap-5 transition-opacity duration-150',
+              compare.isPending && 'opacity-50 delay-200',
+            )}
+          >
+            {/* A new key after each test replays the short focus animation on the new values. */}
+            <Card key={compare.submittedAt} className="motion-sharpen gap-3 py-4">
               <CardContent className="grid gap-3 px-4">
-                <p className="text-lg font-medium">{comparisonSentence(result, t, language)}</p>
+                <p className="text-lg font-medium">
+                  {comparisonSentence(result, t, language, chanceText)}
+                </p>
                 <ComparisonTable comparison={result} />
               </CardContent>
             </Card>
             <DehydrationCaution comparison={result} />
+            <BothPlansChart
+              comparison={result}
+              yMax={scale.yMax}
+              start={scale.start}
+              end={scale.end}
+            />
             {KEYS.map((key) => (
               <PlanChart
                 key={key}

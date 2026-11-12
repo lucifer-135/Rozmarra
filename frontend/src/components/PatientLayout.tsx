@@ -39,7 +39,7 @@ export function PatientLayout() {
         if (!row) {
           return (
             <div className="grid gap-4">
-              <h1 className="text-2xl font-semibold">{t('patient.notFoundTitle')}</h1>
+              <h1 className="text-[1.75rem] leading-tight font-semibold">{t('patient.notFoundTitle')}</h1>
               <p className="text-base">{t('patient.notFound')}</p>
               <Link to="/patients" className="text-base text-primary underline">
                 {t('patient.backToList')}
@@ -58,7 +58,7 @@ export function PatientLayout() {
                 {t('patient.backToList')}
               </Link>
               <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                <h1 className="text-2xl font-semibold">
+                <h1 className="text-[1.75rem] leading-tight font-semibold">
                   {t('patient.nameAndAge', { name: patientName(row), age: row.age })}
                 </h1>
                 <p className="text-lg text-muted-foreground">

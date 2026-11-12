@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router'
 import { Layout } from '@/components/Layout'
 import { PatientLayout } from '@/components/PatientLayout'
 import { AboutPage } from '@/pages/AboutPage'
+import { HomePage } from '@/pages/HomePage'
 import { MonitorPage } from '@/pages/MonitorPage'
 import { PatientsPage } from '@/pages/PatientsPage'
 import { PlanPage } from '@/pages/PlanPage'
@@ -13,7 +14,7 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route index element={<Navigate to="/patients" replace />} />
+        <Route index element={<HomePage />} />
         <Route path="patients" element={<PatientsPage />} />
         <Route path="patients/:id" element={<PatientLayout />}>
           <Route index element={<VirtualPatientPage />} />
@@ -22,7 +23,7 @@ export default function App() {
           <Route path="plan" element={<PlanPage />} />
         </Route>
         <Route path="about" element={<AboutPage />} />
-        <Route path="*" element={<Navigate to="/patients" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
   )

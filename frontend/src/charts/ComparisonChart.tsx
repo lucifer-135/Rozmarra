@@ -6,7 +6,8 @@ import { AXIS_TEXT, COLOURS, echarts, FONT } from './theme'
 
 // A horizontal bar chart that compares the full model with simpler methods on one measure.
 // The full model is blue and the other methods are grey, so the eye goes to the full model.
-// The value sits at the end of each bar.
+// The value sits at the end of each bar. A dashed line can mark the score of a random guess,
+// which is the floor that every method should beat.
 
 export interface ComparisonRow {
   label: string
@@ -17,17 +18,26 @@ export interface ComparisonRow {
 interface Props {
   rows: ComparisonRow[]
   max?: number
+  baseline?: { value: number; label: string }
   summary: string
 }
 
-export function ComparisonChart({ rows, max, summary }: Props) {
+const BASELINE_SPACE = 32
+
+export function ComparisonChart({ rows, max, baseline, summary }: Props) {
   const { i18n } = useTranslation()
   const language = i18n.language
   const option = useMemo(
     () => ({
       animation: false,
       textStyle: { fontFamily: FONT },
-      grid: { left: 8, right: 56, top: 8, bottom: 8, containLabel: true },
+      grid: {
+        left: 8,
+        right: 56,
+        top: baseline ? BASELINE_SPACE : 8,
+        bottom: 8,
+        containLabel: true,
+      },
       xAxis: { type: 'value', min: 0, max: max ?? Math.max(...rows.map((r) => r.value)) * 1.15, show: false },
       yAxis: {
         type: 'category',
@@ -55,10 +65,29 @@ export function ComparisonChart({ rows, max, summary }: Props) {
             color: COLOURS.ink,
             formatter: (p: { value: number }) => formatFixed(p.value, language, 3),
           },
+          markLine: baseline
+            ? {
+                silent: true,
+                symbol: 'none',
+                data: [
+                  {
+                    xAxis: baseline.value,
+                    lineStyle: { color: COLOURS.inkSecondary, type: 'dashed', width: 1.5 },
+                    // The category axis runs from top to bottom, so the start of the line is
+                    // at the top, in the space kept free above the bars.
+                    label: {
+                      ...AXIS_TEXT,
+                      position: 'start',
+                      formatter: baseline.label,
+                    },
+                  },
+                ],
+              }
+            : undefined,
         },
       ],
     }),
-    [rows, max, language],
+    [rows, max, baseline, language],
   )
   return (
     <figure className="m-0">
@@ -68,7 +97,10 @@ export function ComparisonChart({ rows, max, summary }: Props) {
           echarts={echarts}
           option={option}
           notMerge
-          style={{ height: rows.length * 40 + 24, width: '100%' }}
+          style={{
+            height: rows.length * 40 + 24 + (baseline ? BASELINE_SPACE : 0),
+            width: '100%',
+          }}
         />
       </div>
     </figure>

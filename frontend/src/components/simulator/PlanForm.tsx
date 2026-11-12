@@ -14,10 +14,12 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { WrappingSelect } from '@/components/ui/select'
 import {
   addDays,
   addMinutes,
   daysBetween,
+  formatDate,
   formatNumber,
   formatTime,
   joinDateTime,
@@ -51,9 +53,10 @@ function DateTimeField({
   onChange: (value: string) => void
   invalid?: boolean
 }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const id = useId()
   const { date, time } = splitDateTime(value)
+  const twelveHour = formatTime(value, i18n.language)
   const offset = daysBetween(planDate, date)
   const name = context ? `${context}, ${label}` : label
   const offsets: number[] = DAY_OFFSETS.includes(offset as (typeof DAY_OFFSETS)[number])
@@ -92,6 +95,12 @@ function DateTimeField({
             aria-invalid={invalid || undefined}
             onChange={(e) => e.target.value && onChange(joinDateTime(date, e.target.value))}
           />
+          {/* The browser may show the time input in the 24-hour clock, so the dashboard
+              repeats the time in the 12-hour clock that the rest of Rozmarra uses. */}
+          <p className="mt-1 text-base text-muted-foreground">
+            <span className="sr-only">{t('form.timeEcho', { time: twelveHour })}</span>
+            <span aria-hidden>{twelveHour}</span>
+          </p>
         </div>
       </div>
     </fieldset>
@@ -232,24 +241,21 @@ export function PlanForm({ plan, onChange, options, templates, onTemplate, templ
         />
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-[1fr_11rem]">
+      <div className="grid gap-3">
         <div className="grid gap-1">
           <Label htmlFor={`${id}-template`} className="text-base">
             {t('form.template')}
           </Label>
-          <select
+          <WrappingSelect
             id={`${id}-template`}
-            className={SELECT}
             value={plan.template_id}
             disabled={templateBusy}
-            onChange={(e) => onTemplate(e.target.value, plan.date)}
-          >
-            {templates.map((template) => (
-              <option key={template.id} value={template.id}>
-                {templateName(template)}
-              </option>
-            ))}
-          </select>
+            onValueChange={(templateId) => onTemplate(templateId, plan.date)}
+            options={templates.map((template) => ({
+              value: template.id,
+              label: templateName(template),
+            }))}
+          />
         </div>
         <div className="grid gap-1">
           <Label htmlFor={`${id}-date`} className="text-base">
@@ -263,6 +269,9 @@ export function PlanForm({ plan, onChange, options, templates, onTemplate, templ
             disabled={templateBusy}
             onChange={(e) => e.target.value && onTemplate(plan.template_id, e.target.value)}
           />
+          <p className="text-base text-muted-foreground">
+            {t('form.dateEcho', { date: formatDate(plan.date, language) })}
+          </p>
         </div>
       </div>
       <p className="text-muted-foreground">{t('form.templateNote')}</p>
@@ -371,18 +380,15 @@ export function PlanForm({ plan, onChange, options, templates, onTemplate, templ
               <Label htmlFor={`${id}-meal-${i}-food`} className="text-base">
                 {t('form.foodType')}
               </Label>
-              <select
+              <WrappingSelect
                 id={`${id}-meal-${i}-food`}
-                className={SELECT}
                 value={meal.food_category}
-                onChange={(e) => setMeal(i, { food_category: e.target.value as FoodCategory })}
-              >
-                {options.food_categories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {t(`form.food.${c.id}`, { defaultValue: c.label })}
-                  </option>
-                ))}
-              </select>
+                onValueChange={(food) => setMeal(i, { food_category: food as FoodCategory })}
+                options={options.food_categories.map((c) => ({
+                  value: c.id,
+                  label: t(`form.food.${c.id}`, { defaultValue: c.label }),
+                }))}
+              />
             </div>
             <div className="flex items-center gap-2">
               <Checkbox

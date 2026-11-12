@@ -2,12 +2,14 @@ import ReactEChartsCore from 'echarts-for-react/esm/core'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatAxisTime, formatShortDate, formatTime, toDate } from '@/lib/format'
-import { glucoseAxisTop, Y_MIN, Y_STEP } from './scale'
+import { glucoseAxisTop, glucoseTicks, Y_MIN } from './scale'
 import { AXIS_TEXT, COLOURS, echarts, FONT } from './theme'
 
 // The main glucose chart (docs/techstack.md, Section 11.2): the target range from 70 to
 // 180 mg/dL, labelled lines at 70 and 54 mg/dL, the glucose lines with an optional band,
 // the fasting window, and a strip below the chart with the meals, medicines and activities.
+// The labels of the lines at 70 and 54 mg/dL sit in the right margin, outside the plot, so
+// that they never cover a glucose line or an axis label.
 
 export interface GlucoseLine {
   id: string
@@ -56,6 +58,8 @@ interface Props {
 }
 
 const STRIP_ROW = 30
+// The right margin holds the labels of the lines at 70 and 54 mg/dL.
+const RIGHT_MARGIN = 96
 
 function escapeHtml(text: string): string {
   return text.replace(
@@ -92,9 +96,6 @@ export function GlucoseChart({
   summary,
 }: Props) {
   const { t, i18n } = useTranslation()
-  // With a "Now" line, the forecast fills the right side, so the limit labels move to the left.
-  const lowPosition = moments.length ? 'insideStartTop' : 'insideEndTop'
-  const veryLowPosition = moments.length ? 'insideStartBottom' : 'insideEndBottom'
   const language = i18n.language
 
   const option = useMemo(() => {
@@ -114,6 +115,15 @@ export function GlucoseChart({
     const stripHeight = stripRows.length * STRIP_ROW
     const hasStrip = stripRows.length > 0
     const mainBottom = hasStrip ? stripHeight + 72 : 40
+    // A long legend wraps onto a second line, so the plot starts lower. The legend has one entry
+    // for each line, one for each band and one for the target range.
+    const legendEntries = lines.length + lines.filter((l) => l.band).length + 1
+    const mainTop = legendEntries > 3 ? 76 : 48
+    // The axis labels 54 and 70 mg/dL only when they are far enough apart not to touch. On a
+    // short chart, the line at 54 mg/dL keeps its "Very low" label in the right margin.
+    const plotHeight = height + (hasStrip ? stripHeight + 40 : 0) - mainTop - mainBottom
+    const gapAt54 = (plotHeight * (70 - 54)) / (top - Y_MIN)
+    const ticks = glucoseTicks(top).filter((value) => value !== 54 || gapAt54 >= 18)
 
     const xAxisBase = {
       type: 'time' as const,
@@ -247,7 +257,13 @@ export function GlucoseChart({
             {
               xAxis: ms(w.start),
               itemStyle: { color: COLOURS.fastWindow },
-              label: { ...AXIS_TEXT, position: 'insideTop', formatter: w.label },
+              label: {
+                ...AXIS_TEXT,
+                color: COLOURS.fastWindowText,
+                fontWeight: 500,
+                position: 'insideTop',
+                formatter: w.label,
+              },
             },
             { xAxis: ms(w.end) },
           ]),
@@ -257,13 +273,24 @@ export function GlucoseChart({
         silent: true,
         symbol: 'none',
         data: [
+          // Thin grid lines at the upper labels of the axis.
+          ...ticks
+            .filter((value) => value > 70)
+            .map((value) => ({
+              yAxis: value,
+              lineStyle: { color: COLOURS.grid, type: 'solid', width: 1 },
+              label: { show: false },
+            })),
+          // The two labels move apart, one above its line and one below, because the lines
+          // are only 16 mg/dL apart.
           {
             yAxis: 70,
             lineStyle: { color: COLOURS.low, type: 'dashed', width: 1.5 },
             label: {
               ...AXIS_TEXT,
               color: COLOURS.low,
-              position: lowPosition,
+              position: 'end',
+              offset: [0, -7],
               formatter: t('chart.lowLine'),
             },
           },
@@ -273,7 +300,8 @@ export function GlucoseChart({
             label: {
               ...AXIS_TEXT,
               color: COLOURS.veryLow,
-              position: veryLowPosition,
+              position: 'end',
+              offset: [0, 7],
               formatter: t('chart.veryLowLine'),
             },
           },
@@ -376,14 +404,12 @@ export function GlucoseChart({
       return rows.join('<br/>')
     }
 
-    // A long legend wraps onto a second line, so the plot starts lower.
-    const mainTop = legend.length > 3 ? 76 : 48
     return {
       animation: false,
       textStyle: { fontFamily: FONT },
       grid: [
-        { left: 64, right: 24, top: mainTop, bottom: mainBottom },
-        ...(hasStrip ? [{ left: 64, right: 24, height: stripHeight, bottom: 36 }] : []),
+        { left: 64, right: RIGHT_MARGIN, top: mainTop, bottom: mainBottom },
+        ...(hasStrip ? [{ left: 64, right: RIGHT_MARGIN, height: stripHeight, bottom: 36 }] : []),
       ],
       legend: {
         data: legend,
@@ -410,12 +436,12 @@ export function GlucoseChart({
           type: 'value',
           min: Y_MIN,
           max: top,
-          interval: Y_STEP * Math.max(1, Math.round(top / 300)),
           name: 'mg/dL',
           nameGap: 14,
           nameTextStyle: { ...AXIS_TEXT, align: 'right', padding: [0, 6, 0, 0] },
-          axisLabel: AXIS_TEXT,
-          splitLine: { lineStyle: { color: COLOURS.grid, width: 1 } },
+          axisLabel: { ...AXIS_TEXT, customValues: ticks },
+          axisTick: { show: true, customValues: ticks },
+          splitLine: { show: false },
         },
         ...(hasStrip
           ? [
@@ -434,7 +460,7 @@ export function GlucoseChart({
       ],
       series,
     }
-  }, [lines, events, windows, moments, start, end, yMax, multiDay, language, t])
+  }, [lines, events, windows, moments, start, end, yMax, height, multiDay, language, t])
 
   const stripRows = new Set(events.map((e) => e.kind)).size
   const totalHeight = height + (stripRows ? stripRows * STRIP_ROW + 40 : 0)

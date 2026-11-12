@@ -26,6 +26,24 @@ function Card({ card }: { card: ModelCard }) {
   const realMeals = card.metrics.real.e2
 
   const methodName = (name: string) => t(`about.methods.${name}`, { defaultValue: name })
+  const methodInSentence = (name: string) =>
+    t(`about.methodsInSentence.${name}`, { defaultValue: name })
+  // The methods that scored a higher AUPRC than the full model, named in a sentence.
+  const beatenBy = (full: Metric, baselines: Record<string, Metric>) => {
+    const names = Object.entries(baselines)
+      .filter(([, m]) => (m.auprc ?? 0) > (full.auprc ?? 0))
+      .map(([name]) => methodInSentence(name))
+    return names.length
+      ? new Intl.ListFormat(language === 'hi' ? 'hi-IN' : 'en-IN', { type: 'conjunction' }).format(
+          names,
+        )
+      : null
+  }
+  // A random guess reaches an AUPRC equal to the share of moments before low blood sugar.
+  const randomGuess = (full: Metric) =>
+    full.time_points && full.positive_time_points != null
+      ? full.positive_time_points / full.time_points
+      : null
   const comparison = (full: Metric, baselines: Record<string, Metric>): ComparisonRow[] => [
     { label: t('about.methods.full model'), value: full.auprc ?? 0, highlight: true },
     ...Object.entries(baselines)
@@ -35,8 +53,27 @@ function Card({ card }: { card: ModelCard }) {
   ]
   const syntheticRows = comparison(synthetic.e1, synthetic.e1.baselines)
   const realRows = comparison(real.all, real.baselines)
-  const comparisonSummary = (rows: ComparisonRow[]) =>
-    rows.map((r) => `${r.label}: ${n(r.value)}`).join('. ')
+  const comparisonSummary = (rows: ComparisonRow[], guess: number | null) =>
+    [
+      rows.map((r) => `${r.label}: ${n(r.value)}.`).join(' '),
+      guess == null ? '' : t('about.compare.randomSummary', { value: n(guess) }),
+    ]
+      .filter(Boolean)
+      .join(' ')
+  const panels = [
+    {
+      key: 'synthetic',
+      rows: syntheticRows,
+      guess: randomGuess(synthetic.e1),
+      beaten: beatenBy(synthetic.e1, synthetic.e1.baselines),
+    },
+    {
+      key: 'real',
+      rows: realRows,
+      guess: randomGuess(real.all),
+      beaten: beatenBy(real.all, real.baselines),
+    },
+  ] as const
 
   return (
     <div className="grid gap-6">
@@ -105,17 +142,28 @@ function Card({ card }: { card: ModelCard }) {
 
       <Section title={t('about.compare.title')} description={t('about.compare.description')}>
         <div className="grid gap-6 lg:grid-cols-2">
-          <div>
-            <h3 className="mb-2 text-lg font-semibold">{t('about.compare.synthetic')}</h3>
-            <ComparisonChart
-              rows={syntheticRows}
-              summary={comparisonSummary(syntheticRows)}
-            />
-          </div>
-          <div>
-            <h3 className="mb-2 text-lg font-semibold">{t('about.compare.real')}</h3>
-            <ComparisonChart rows={realRows} summary={comparisonSummary(realRows)} />
-          </div>
+          {panels.map((panel) => (
+            <div key={panel.key} className="grid content-start gap-2">
+              <h3 className="text-lg font-semibold">{t(`about.compare.${panel.key}`)}</h3>
+              <ComparisonChart
+                rows={panel.rows}
+                baseline={
+                  panel.guess == null
+                    ? undefined
+                    : {
+                        value: panel.guess,
+                        label: t('about.compare.randomGuess', { value: n(panel.guess) }),
+                      }
+                }
+                summary={comparisonSummary(panel.rows, panel.guess)}
+              />
+              {panel.beaten && (
+                <p className="text-base">
+                  {t(`about.compare.${panel.key}Note`, { methods: panel.beaten })}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
       </Section>
 
@@ -141,7 +189,7 @@ export function AboutPage() {
   return (
     <div className="grid gap-5">
       <div className="grid gap-2">
-        <h1 className="text-2xl font-semibold">{t('screens.about')}</h1>
+        <h1 className="text-[1.75rem] leading-tight font-semibold">{t('screens.about')}</h1>
         <p className="max-w-4xl text-base text-muted-foreground">{t('about.intro')}</p>
       </div>
       <QueryState query={card}>{(data) => <Card card={data} />}</QueryState>

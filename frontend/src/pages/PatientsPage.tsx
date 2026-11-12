@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { ChevronRight } from 'lucide-react'
+import { ArrowDown, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { fetchPatients } from '@/api/client'
 import {
-  ChanceBadge,
+  ChanceText,
   DehydrationBadge,
-  IdfDarBadge,
+  IdfDarText,
   PlanStatusBadge,
 } from '@/components/badges'
 import { QueryState } from '@/components/QueryState'
@@ -23,7 +23,11 @@ import {
 import { formatDate } from '@/lib/format'
 import { useFastName, usePatientName } from '@/lib/hooks'
 
-/** Screen 1: the patients who plan to fast, sorted by the predicted chance of low blood sugar. */
+/**
+ * Screen 1: the patients who plan to fast, sorted by the predicted chance of low blood sugar.
+ * The sorted column sits next to the name and is the strongest text in each row, so that the
+ * eye follows the order of the list.
+ */
 export function PatientsPage() {
   const { t, i18n } = useTranslation()
   const fastName = useFastName()
@@ -33,7 +37,7 @@ export function PatientsPage() {
   return (
     <div className="grid gap-5">
       <div className="grid gap-2">
-        <h1 className="text-2xl font-semibold">{t('patients.title')}</h1>
+        <h1 className="text-[1.75rem] leading-tight font-semibold">{t('patients.title')}</h1>
         <p className="max-w-4xl text-base text-muted-foreground">{t('patients.intro')}</p>
       </div>
       <QueryState query={patients} loadingText={t('patients.loading')}>
@@ -45,11 +49,14 @@ export function PatientsPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-base">{t('patients.columns.patient')}</TableHead>
+                    <TableHead className="text-base whitespace-normal" aria-sort="descending">
+                      <span className="inline-flex max-w-[11rem] items-end gap-1">
+                        {t('patients.columns.chance')}
+                        <ArrowDown aria-hidden className="mb-1 size-4 shrink-0" />
+                      </span>
+                    </TableHead>
                     <TableHead className="text-base">{t('patients.columns.fast')}</TableHead>
                     <TableHead className="text-base">{t('patients.columns.idfDar')}</TableHead>
-                    <TableHead className="text-base whitespace-normal">
-                      {t('patients.columns.chance')}
-                    </TableHead>
                     <TableHead className="text-base">{t('patients.columns.status')}</TableHead>
                     <TableHead className="text-base">{t('patients.columns.notes')}</TableHead>
                     <TableHead className="text-base">
@@ -69,20 +76,16 @@ export function PatientsPage() {
                         </Link>
                       </TableCell>
                       <TableCell>
+                        <ChanceText chance={row.chance_of_low_during_fast} />
+                      </TableCell>
+                      <TableCell>
                         <div>{fastName(row.template_id, row.fast)}</div>
                         <div className="text-muted-foreground">
                           {formatDate(row.fast_date, i18n.language)}
                         </div>
                       </TableCell>
                       <TableCell>
-                        <IdfDarBadge
-                          category={row.idf_dar_category}
-                          total={row.idf_dar_total}
-                          named={false}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <ChanceBadge chance={row.chance_of_low_during_fast} />
+                        <IdfDarText category={row.idf_dar_category} total={row.idf_dar_total} />
                       </TableCell>
                       <TableCell>
                         <PlanStatusBadge status={row.plan_status} />

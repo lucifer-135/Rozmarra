@@ -21,7 +21,7 @@ import { ChanceChart } from '@/charts/ChanceChart'
 import { type GlucoseLine, GlucoseChart } from '@/charts/GlucoseChart'
 import { SignalChart } from '@/charts/SignalChart'
 import { COLOURS } from '@/charts/theme'
-import { ChanceBadge } from '@/components/badges'
+import { ChanceText } from '@/components/badges'
 import { LoadError, Loading, QueryState } from '@/components/QueryState'
 import { Section } from '@/components/Section'
 import { Button } from '@/components/ui/button'
@@ -44,8 +44,20 @@ function useMomentText() {
     })
 }
 
-/** The alert panel: what the doctor would see at this moment of the fast. */
-function AlertPanel({ moment, firstAlert }: { moment: ReplayMoment; firstAlert?: string }) {
+/**
+ * The alert panel: what the doctor would see at this moment of the fast. The title states that
+ * the chance passed the alert level, and not that low glucose is likely, because the alert level
+ * is a small chance chosen to detect most events early.
+ */
+function AlertPanel({
+  moment,
+  firstAlert,
+  threshold,
+}: {
+  moment: ReplayMoment
+  firstAlert?: string
+  threshold: number
+}) {
   const { t, i18n } = useTranslation()
   const language = i18n.language
   if (!moment.enough_data) {
@@ -71,13 +83,20 @@ function AlertPanel({ moment, firstAlert }: { moment: ReplayMoment; firstAlert?:
       ? 'border-amber-400 bg-amber-50 text-amber-950'
       : 'border-slate-300 bg-white'
   const title = moment.alert
-    ? t('monitor.alertTitle')
+    ? t('monitor.alertTitle', { level: formatNumber(threshold * 100, language, 1) })
     : moment.above_alert_threshold
       ? t('monitor.stillAboveTitle')
       : t('monitor.noAlertTitle')
   const Icon = moment.alert ? OctagonAlert : moment.above_alert_threshold ? TriangleAlert : CircleDot
   return (
-    <div className={cn('flex items-start gap-3 rounded-xl border-2 p-4', style)}>
+    // The colours change smoothly between the three states, without any movement, because the
+    // state can change at every step of the slider.
+    <div
+      className={cn(
+        'flex items-start gap-3 rounded-xl border-2 p-4 transition-[background-color,border-color,color] duration-200',
+        style,
+      )}
+    >
       <Icon aria-hidden className="mt-0.5 size-6 shrink-0" />
       <div className="grid gap-2 text-base">
         <p className="text-lg font-semibold">{title}</p>
@@ -85,7 +104,7 @@ function AlertPanel({ moment, firstAlert }: { moment: ReplayMoment; firstAlert?:
           <p>{t('monitor.stillAboveDetail', { time: formatTime(firstAlert, language) })}</p>
         )}
         <p className="flex flex-wrap items-center gap-2">
-          {t('monitor.estimatedChance')} <ChanceBadge chance={chance} />
+          {t('monitor.estimatedChance')} <ChanceText chance={chance} />
         </p>
         <p>{lowest}</p>
         {reasons.length > 0 && (
@@ -175,7 +194,8 @@ function Monitor({ patientId, overview }: { patientId: string; overview: ReplayO
         name: t('monitor.forecast'),
         times: data.forecast.times,
         values: data.forecast.p50,
-        colour: COLOURS.planB,
+        // The forecast continues the readings, so it keeps their colour and differs by its dashes.
+        colour: COLOURS.measured,
         style: 'dashed',
         band: { name: t('monitor.forecastBand'), lower: data.forecast.p10, upper: data.forecast.p90 },
       })
@@ -262,9 +282,18 @@ function Monitor({ patientId, overview }: { patientId: string; overview: ReplayO
       {moment.isError && <LoadError error={moment.error} onRetry={() => void moment.refetch()} />}
       {!data && moment.isPending && <Loading text={t('monitor.loading')} />}
       {data && (
-        <div className={cn('grid gap-5', moment.isFetching && !playing && 'opacity-70')}>
+        <div
+          className={cn(
+            'grid gap-5 transition-opacity duration-150',
+            moment.isFetching && !playing && 'opacity-70 delay-200',
+          )}
+        >
           <div aria-live="polite">
-            <AlertPanel moment={data} firstAlert={alertsSoFar.at(-1)?.time} />
+            <AlertPanel
+              moment={data}
+              firstAlert={alertsSoFar.at(-1)?.time}
+              threshold={overview.alert_threshold}
+            />
           </div>
 
           <Section
@@ -328,7 +357,7 @@ function Monitor({ patientId, overview }: { patientId: string; overview: ReplayO
               ) : (
                 <ul className="mt-1 flex flex-wrap gap-2">
                   {alertsSoFar.map((a) => (
-                    <li key={a.time}>
+                    <li key={a.time} className="motion-enter-pop">
                       <Button variant="outline" className="text-base" onClick={() => goTo(a.time)}>
                         <OctagonAlert aria-hidden className="text-red-700" />
                         {t('monitor.alertAt', {

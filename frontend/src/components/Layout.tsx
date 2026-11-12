@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Activity, CircleAlert, CircleCheck, LoaderCircle, ShieldAlert } from 'lucide-react'
-import { NavLink, Outlet } from 'react-router'
+import { Link, NavLink, Outlet } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { fetchHealth } from '@/api/client'
 import { SyntheticBadge } from '@/components/badges'
@@ -71,16 +71,22 @@ export function Layout() {
       </a>
       <header className="border-b bg-background">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4">
-          <div className="flex items-start gap-3">
+          <Link
+            to="/"
+            className="flex items-start gap-3 rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
             <Activity aria-hidden className="mt-1 size-8 text-primary" />
             <div>
               <p className="text-2xl font-semibold">{t('app.name')}</p>
               <p className="text-base text-muted-foreground">{t('app.subtitle')}</p>
             </div>
-          </div>
+          </Link>
           <LanguageSwitch />
         </div>
-        <nav aria-label={t('nav.main')} className="mx-auto flex max-w-7xl gap-2 px-4 pb-3">
+        <nav aria-label={t('nav.main')} className="mx-auto flex max-w-7xl flex-wrap gap-2 px-4 pb-3">
+          <NavLink to="/" end className={navLinkClass}>
+            {t('nav.home')}
+          </NavLink>
           <NavLink to="/patients" className={navLinkClass}>
             {t('nav.patients')}
           </NavLink>

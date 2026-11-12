@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { fetchPlanOptions, fetchTemplates } from '@/api/client'
-import type { FastTemplate, MedicineOption } from '@/api/types'
+import type { Chance, FastTemplate, MedicineOption } from '@/api/types'
 
 export function useTemplates() {
   return useQuery({ queryKey: ['templates'], queryFn: fetchTemplates, staleTime: Infinity })
@@ -37,6 +37,20 @@ export function useMedicineName(): (name: string) => string {
     const medicine = options.data?.medicines.find((m: MedicineOption) => m.name === name)
     if (!medicine) return name
     return i18n.language === 'hi' ? medicine.display_name_hi : medicine.display_name
+  }
+}
+
+/**
+ * The text of a chance, for example "7% (Low)". A chance that rounds to 0% reads "Below 1%",
+ * because an estimate from a model is never certain.
+ */
+export function useChanceText(): (chance: Chance) => string {
+  const { t } = useTranslation()
+  return (chance) => {
+    const word = t(`risk.${chance.word.toLowerCase()}`)
+    return chance.percent < 1
+      ? t('risk.chanceBelowOne', { word })
+      : t('risk.chance', { percent: chance.percent, word })
   }
 }
 

@@ -67,6 +67,12 @@ test('the patient list is sorted by risk and shows the notices on the screen', a
   expect(within(rows[1]).getByText('Ramesh Patel, Age 62')).toBeInTheDocument()
   expect(within(rows[2]).getByText('Sunita Sharma, Age 54')).toBeInTheDocument()
   expect(within(rows[1]).getByText('7% (Low)')).toBeInTheDocument()
+  // A chance that rounds to 0% is shown as below 1%, so that it does not claim certainty.
+  expect(within(rows[4]).getByText('Below 1% (Low)')).toBeInTheDocument()
+  expect(screen.getByRole('columnheader', { name: /Chance of low blood sugar/ })).toHaveAttribute(
+    'aria-sort',
+    'descending',
+  )
   expect(within(rows[2]).getByText('Dehydration caution')).toBeInTheDocument()
   expect(within(rows[2]).getByText('Not started')).toBeInTheDocument()
   expect(
@@ -76,6 +82,23 @@ test('the patient list is sorted by risk and shows the notices on the screen', a
   ).toBeInTheDocument()
   expect(screen.getAllByText('Synthetic data').length).toBeGreaterThan(0)
   expect(await screen.findByText(/The service version is 0\.1\.0\./)).toBeInTheDocument()
+})
+
+test('the home page introduces Rozmarra and leads to the patient list', async () => {
+  mockApi()
+  renderAt('/')
+  expect(
+    await screen.findByRole('heading', {
+      level: 1,
+      name: 'Test a fasting plan on a virtual patient before the fast begins.',
+    }),
+  ).toBeInTheDocument()
+  expect(screen.getByRole('link', { name: 'Open the list of patients' })).toHaveAttribute(
+    'href',
+    '/patients',
+  )
+  expect(screen.getByRole('heading', { name: 'How a doctor uses Rozmarra' })).toBeInTheDocument()
+  expect(await screen.findByText('Karva Chauth')).toBeInTheDocument()
 })
 
 test('the dashboard reports when the service is not running', async () => {
@@ -101,6 +124,11 @@ test('the simulator compares two plans and saves them when the doctor tests them
   })
   renderAt('/patients/SY-0001/simulator')
   expect(await screen.findByText(/With Plan A, the predicted lowest glucose is/)).toBeInTheDocument()
+  // The summary also states the chance of high blood sugar after the fast, not only the lowest value.
+  expect(
+    screen.getByText(/With Plan A, the chance of high blood sugar after the fast is broken is 80% \(High\)\./),
+  ).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: 'Plan A and Plan B on one chart' })).toBeInTheDocument()
   expect(screen.getByRole('table', { name: /compares the two plans/ })).toBeInTheDocument()
   expect(screen.getAllByText('Dehydration caution').length).toBeGreaterThan(0)
   // The first comparison runs when the screen opens and does not save anything.

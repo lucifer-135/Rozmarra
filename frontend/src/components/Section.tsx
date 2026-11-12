@@ -20,7 +20,7 @@ export function Section({
       <CardHeader className="flex flex-wrap items-start justify-between gap-3">
         <div className="grid gap-1">
           <CardTitle>
-            <h2 className="text-xl font-semibold">{title}</h2>
+            <h2 className="text-lg font-semibold">{title}</h2>
           </CardTitle>
           {description && (
             <CardDescription className="text-base">{description}</CardDescription>

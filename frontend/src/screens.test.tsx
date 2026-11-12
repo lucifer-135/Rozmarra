@@ -66,7 +66,9 @@ test('the live fasting monitor jumps to the next alert and shows the reasons', a
 
   await userEvent.click(screen.getByRole('button', { name: 'Go to the next alert' }))
   expect(
-    await screen.findByText('Low glucose is likely within the next 60 minutes.'),
+    await screen.findByText(
+      'Rozmarra raised an alert. The chance of low glucose within the next 60 minutes has passed the alert level of 3.5%.',
+    ),
   ).toBeInTheDocument()
   expect(screen.getByText('9% (Moderate)')).toBeInTheDocument()
   expect(screen.getByText(sunday.moment.reasons[0].en)).toBeInTheDocument()
@@ -88,36 +90,51 @@ test('the patient plan screen asks for an approval first', async () => {
   )
 })
 
-test('an approved plan opens in the patient language with the short message', async () => {
-  const approved = {
-    ...fixtures.plan,
-    plan_name: 'Plan B: lower glimepiride with sargi',
-    status: 'approved',
-    approved_by: 'Meera Iyer',
-    approved_on: '2026-10-13',
-  }
+const APPROVED_PLAN = {
+  ...fixtures.plan,
+  plan_name: 'Plan B: lower glimepiride with sargi',
+  status: 'approved',
+  approved_by: 'Meera Iyer',
+  approved_on: '2026-10-13',
+}
+
+function mockApprovedPlan() {
   mockApi({
     '/api/patients/SY-0001': () => json({ language: 'hi' }),
-    '/api/patients/SY-0001/plans': () => json({ status: 'approved', plans: { 'plan-b': approved } }),
+    '/api/patients/SY-0001/plans': () =>
+      json({ status: 'approved', plans: { 'plan-b': APPROVED_PLAN } }),
     '/api/patients/SY-0001/plans/plan-b/document': (url) =>
       new Response(url.searchParams.get('lang') === 'hi' ? 'हिन्दी संदेश' : 'English message'),
   })
+}
+
+test('an approved plan opens in English, even for a patient who reads Hindi', async () => {
+  mockApprovedPlan()
   renderAt('/patients/SY-0001/plan')
   expect(
     await screen.findByText(/Approved by Dr Meera Iyer on 13 October 2026/),
   ).toBeInTheDocument()
-  const frame = screen.getByTitle('Patient fasting plan in हिन्दी')
-  expect(frame).toHaveAttribute('src', '/api/patients/SY-0001/plans/plan-b/document?lang=hi')
-  expect(await screen.findByText('हिन्दी संदेश')).toBeInTheDocument()
+  const frame = screen.getByTitle('Patient fasting plan in English')
+  expect(frame).toHaveAttribute('src', '/api/patients/SY-0001/plans/plan-b/document?lang=en')
+  expect(await screen.findByText('English message')).toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'Print or save as PDF' })).toBeInTheDocument()
 
   const group = screen.getByRole('group', { name: 'Language of the patient plan' })
-  await userEvent.click(within(group).getByRole('button', { name: 'English' }))
-  expect(screen.getByTitle('Patient fasting plan in English')).toHaveAttribute(
+  await userEvent.click(within(group).getByRole('button', { name: 'हिन्दी' }))
+  expect(screen.getByTitle('Patient fasting plan in हिन्दी')).toHaveAttribute(
     'src',
-    '/api/patients/SY-0001/plans/plan-b/document?lang=en',
+    '/api/patients/SY-0001/plans/plan-b/document?lang=hi',
   )
-  expect(await screen.findByText('English message')).toBeInTheDocument()
+  expect(await screen.findByText('हिन्दी संदेश')).toBeInTheDocument()
+})
+
+test('a link with "?lang=hi" opens the approved plan in Hindi', async () => {
+  mockApprovedPlan()
+  renderAt('/patients/SY-0001/plan?lang=hi')
+  expect(await screen.findByTitle('Patient fasting plan in हिन्दी')).toHaveAttribute(
+    'src',
+    '/api/patients/SY-0001/plans/plan-b/document?lang=hi',
+  )
 })
 
 test('the model card screen explains the data and tests without a results table', async () => {
@@ -127,4 +144,15 @@ test('the model card screen explains the data and tests without a results table'
   expect(screen.getByRole('heading', { name: 'Comparison with simpler methods' })).toBeInTheDocument()
   expect(screen.queryByRole('heading', { name: 'Results and targets' })).not.toBeInTheDocument()
   expect(screen.queryByRole('heading', { name: 'What the results mean' })).not.toBeInTheDocument()
+  // When a simpler method scores higher than the full model, the screen says so in words.
+  expect(
+    screen.getByText(/On simulated fasting days, the twin alone scored higher than the full model\./),
+  ).toBeInTheDocument()
+  expect(
+    screen.getByText(
+      /On real normal days, the model with CGM data only scored higher than the full model\./,
+    ),
+  ).toBeInTheDocument()
+  expect(screen.getAllByText(/A random guess scores 0\.010\./).length).toBe(1)
+  expect(screen.getAllByText(/A random guess scores 0\.011\./).length).toBe(1)
 })

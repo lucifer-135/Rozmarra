@@ -10,7 +10,8 @@
   "nav": {
     "main": "Main navigation",
     "patients": "Patients who plan to fast",
-    "about": "How Rozmarra makes predictions"
+    "about": "How Rozmarra makes predictions",
+    "home": "Home"
   },
   "screens": {
     "virtualPatient": "Virtual patient",
@@ -49,7 +50,8 @@
     "low": "Low",
     "moderate": "Moderate",
     "high": "High",
-    "chance": "{{percent}}% ({{word}})"
+    "chance": "{{percent}}% ({{word}})",
+    "chanceBelowOne": "Below 1% ({{word}})"
   },
   "planStatus": {
     "not_started": "Not started",
@@ -97,12 +99,12 @@
     "title": "Patients who plan to fast",
     "intro": "This list helps you see which patients need attention first. The patients are sorted by the predicted chance of low blood sugar during the fast, from the highest chance to the lowest.",
     "loading": "The dashboard is loading the list of patients.",
-    "caption": "All patients in this list are synthetic.",
+    "caption": "All patients in this list are synthetic. The chance of low blood sugar is for the whole fast.",
     "columns": {
       "patient": "Patient",
       "fast": "Fast and date",
       "idfDar": "IDF-DAR risk",
-      "chance": "Predicted chance of low blood sugar during the fast",
+      "chance": "Chance of low blood sugar",
       "status": "Plan status",
       "notes": "Cautions",
       "open": "Actions"
@@ -303,7 +305,9 @@
       "dose": "This dose is above the largest single dose that Rozmarra accepts ({{max}} {{unit}}).",
       "fastEnd": "The end of the fast must be later than the start of the fast.",
       "activityEnd": "The activity must end after it starts."
-    }
+    },
+    "timeEcho": "In the 12-hour clock, this is {{time}}.",
+    "dateEcho": "The date is {{date}}."
   },
   "results": {
     "tableCaption": "The table compares the two plans. The values come from simulations on the virtual patient.",
@@ -325,7 +329,15 @@
     "medicineChanged": "{{name}} {{dose}} (changed from the usual plan)",
     "activityEvent": "{{label}} ({{mets}} METs)",
     "chartSummary": "The chart shows the simulated glucose for {{plan}}. The predicted lowest glucose is {{value}} mg/dL at about {{time}}. The chance of low blood sugar during the fast is {{percent}}%.",
-    "fromTo": "{{from}} to {{to}}"
+    "fromTo": "{{from}} to {{to}}",
+    "highA": "With Plan A, the chance of high blood sugar after the fast is broken is {{chance}}.",
+    "highB": "With Plan B, the chance of high blood sugar after the fast is broken is {{chance}}.",
+    "tradeOff": "{{plan}} has a lower chance of low blood sugar during the fast, but a higher chance of high blood sugar after the fast is broken.",
+    "combinedTitle": "Plan A and Plan B on one chart",
+    "combinedDescription": "The lines show the median of this patient's twin under each plan. The shaded bands show the likely range, from the 10th to the 90th percentile.",
+    "combinedSummary": "The chart compares the simulated glucose of the two plans. With {{planA}}, the predicted lowest glucose is {{lowestA}} mg/dL. With {{planB}}, it is {{lowestB}} mg/dL.",
+    "onlyIn": "{{plan}} only: {{label}}",
+    "showDetail": "Show the chart of this plan with the average patient"
   },
   "approve": {
     "button": "Approve this plan",
@@ -343,8 +355,8 @@
   },
   "chart": {
     "targetRangeLegend": "Target range, 70 to 180 mg/dL",
-    "lowLine": "70 mg/dL: low",
-    "veryLowLine": "54 mg/dL: very low",
+    "lowLine": "Low",
+    "veryLowLine": "Very low",
     "lowestLabel": "Lowest: {{value}} mg/dL at {{time}}",
     "measuredGlucose": "Measured glucose",
     "twinCurve": "This patient's twin (median)",
@@ -357,7 +369,9 @@
       "meal": "Meals",
       "medicine": "Medicines",
       "activity": "Activity"
-    }
+    },
+    "planMedian": "{{plan}} (median)",
+    "planBand": "{{plan}}: likely range"
   },
   "monitor": {
     "intro": "This screen replays a recorded fasting day of the virtual patient. Move the time slider to see the forecasts and alerts as Rozmarra would have shown them at each moment. Rozmarra uses only the data recorded up to that moment.",
@@ -377,7 +391,7 @@
     "loading": "Rozmarra is preparing the forecast for this moment.",
     "noPredictionTitle": "Rozmarra cannot make a prediction at this moment.",
     "notEnoughData": "There is not enough recent CGM data to make a prediction. Please check that the sensor is working.",
-    "alertTitle": "Low glucose is likely within the next 60 minutes.",
+    "alertTitle": "Rozmarra raised an alert. The chance of low glucose within the next 60 minutes has passed the alert level of {{level}}%.",
     "stillAboveTitle": "The chance of low glucose within the next 60 minutes is still above the alert level.",
     "stillAboveDetail": "Rozmarra raised the last alert at {{time}}. A new alert follows after 30 minutes, or earlier if the chance rises by 10 percentage points.",
     "noAlertTitle": "No alert at this moment.",
@@ -461,9 +475,13 @@
     },
     "compare": {
       "title": "Comparison with simpler methods",
-      "description": "The charts compare the area under the precision-recall curve (AUPRC) for low blood sugar within 60 minutes. AUPRC shows how well a method finds the rare moments before low blood sugar. A higher value is better.",
+      "description": "The charts compare the area under the precision-recall curve (AUPRC) for low blood sugar within 60 minutes. AUPRC shows how well a method finds the rare moments before low blood sugar. A higher value is better. The dashed line shows the score of a random guess, which equals the share of moments that come before low blood sugar.",
       "synthetic": "Simulated fasting days",
-      "real": "Real normal days"
+      "real": "Real normal days",
+      "randomGuess": "Random guess: {{value}}",
+      "randomSummary": "A random guess scores {{value}}.",
+      "syntheticNote": "On simulated fasting days, {{methods}} scored higher than the full model. The twin also created the simulated days, so methods that use the twin have an advantage on these days.",
+      "realNote": "On real normal days, {{methods}} scored higher than the full model. The real data therefore does not show that combining the data streams adds value."
     },
     "methods": {
       "full model": "Full model",
@@ -482,6 +500,65 @@
         "clinical_review": "No doctor or pharmacist has reviewed the clinical content of this prototype.",
         "sulfonylurea": "The twin's sulfonylurea effect is modest, and the real data identifies it poorly."
       }
+    },
+    "methodsInSentence": {
+      "full model": "the full model",
+      "last glucose value": "the last glucose value",
+      "straight-line trend": "the straight-line trend",
+      "twin alone": "the twin alone",
+      "IDF-DAR score alone": "the IDF-DAR score alone",
+      "model with CGM data only": "the model with CGM data only"
+    }
+  },
+  "home": {
+    "title": "Test a fasting plan on a virtual patient before the fast begins.",
+    "lead": "Rozmarra is a digital twin for doctors in India. It estimates the chance of low and high blood sugar during Navratri, Karva Chauth, Ekadashi, Ramadan and other religious fasts, for adults with Type 2 Diabetes.",
+    "openPatients": "Open the list of patients",
+    "readAbout": "Read how Rozmarra makes predictions",
+    "figure": {
+      "caption": "An illustration of one fasting day, not patient data. The indigo band marks the fasting window. The dashed line is a forecast, and the triangle marks an alert before the glucose falls below 70 mg/dL.",
+      "start": "The fast begins",
+      "end": "The fast ends",
+      "alert": "Alert",
+      "forecast": "Forecast"
+    },
+    "steps": {
+      "title": "How a doctor uses Rozmarra",
+      "description": "The five screens follow the order of the work, from the first look at a patient to the printed plan.",
+      "open": "Open the screen for {{name}}",
+      "items": {
+        "patients": {
+          "title": "See who needs attention first.",
+          "body": "The list of patients sorts everyone who plans to fast by the estimated chance of low blood sugar during the fast."
+        },
+        "virtual": {
+          "title": "Review the virtual patient.",
+          "body": "The twin brings together the health record, the usual medicines, the CYP2C9 genotype and the last 14 days of glucose and smartwatch data."
+        },
+        "simulator": {
+          "title": "Test a fasting plan.",
+          "body": "The doctor changes meal times, doses and activities, and compares two plans on the virtual patient before the fast."
+        },
+        "monitor": {
+          "title": "Follow the fast.",
+          "body": "The live fasting monitor estimates the chance of low glucose within the next 60 minutes and explains each alert. In this prototype, it replays a recorded synthetic fasting day."
+        },
+        "plan": {
+          "title": "Give the patient a plan.",
+          "body": "After the doctor approves a plan, Rozmarra prints it for the patient and family in English or Hindi."
+        }
+      }
+    },
+    "fasts": {
+      "title": "Fasts that Rozmarra knows",
+      "description": "Each fast has a template with its usual times, its meals and its rules about water. The doctor can also set a custom fast."
+    },
+    "safety": {
+      "title": "What Rozmarra does not do",
+      "medicines": "Rozmarra never changes a medicine by itself. The doctor decides every change.",
+      "judge": "Rozmarra never judges the decision to fast.",
+      "ai": "Rozmarra does not use AI to write medical advice. Every sentence in the patient plan comes from fixed templates.",
+      "prototype": "Rozmarra is a research prototype. All patients in it are synthetic, and no doctor or pharmacist has reviewed its clinical content."
     }
   }
 }
