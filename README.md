@@ -83,9 +83,9 @@ The dashboard can switch between English and Hindi.
 
 The screenshots show the synthetic demo patients. They do not represent real people.
 
-**Home page.** The home page explains what Rozmarra does, shows the order in which a doctor uses the screens and lists the fasts that Rozmarra knows.
+**Home page.** The home page states what Rozmarra does in one sentence and shows an illustration of one fasting day. Further down, it shows the order in which a doctor uses the screens and lists the fasts that Rozmarra knows. Longer explanations on every screen stay folded under "Learn more".
 
-![The home page shows the title "Test a fasting plan on a virtual patient before the fast begins", an illustration of one fasting day with the fasting window in indigo, the five steps of the doctor's work, the list of fasts and what Rozmarra does not do.](docs/images/screen0_home.png)
+![The home page shows the title "Test a fasting plan on a virtual patient before the fast begins", one sentence about Rozmarra, two buttons and an illustration of one fasting day with the fasting window in indigo and an alert before the low range.](docs/images/screen0_home.png)
 
 **Screen 1. Patients who plan to fast.** The list sorts the four demo patients by the predicted chance of low blood sugar during the fast.
 
@@ -93,23 +93,23 @@ The screenshots show the synthetic demo patients. They do not represent real peo
 
 **Screen 2. Virtual patient.** The screen shows what the twin knows about Sunita Sharma, Age 54, before Karva Chauth.
 
-![Screen 2 shows the health record summary, usual medicines, CYP2C9 marker and the last 14 days of glucose, heart rate, steps and sleep for Sunita Sharma.](docs/images/screen2_virtual_patient.png)
+![Screen 2 shows the health record summary, the usual medicines and the CYP2C9 marker for Sunita Sharma. The last 14 days of glucose, heart rate, steps and sleep follow below.](docs/images/screen2_virtual_patient.png)
 
 **Screen 3. Test a fasting plan.** The doctor compares Plan A, Sunita's usual medicines, with Plan B, which has a lower glimepiride dose with sargi and dapagliflozin after the fast.
 
-![Screen 3 shows the plan form, the summary and comparison table of Plan A and Plan B, the dehydration caution, one chart with the glucose curves of both plans and their uncertainty bands, and the meals and medicines of each plan.](docs/images/screen3_simulator.png)
+![Screen 3 shows the plan form and the results of the simulation: a summary in words and a table that compares Plan A and Plan B, with the chance of low blood sugar falling from 4% to 1% and the chance of high blood sugar after the fast rising from 80% to 86%. The chart of both plans and the dehydration caution follow below.](docs/images/screen3_simulator.png)
 
 **Screen 4. Live fasting monitor.** The replay of Ramesh Patel's Navratri fast shows the alert at 10:50 am, with the forecast for the next 2 hours and the three main reasons.
 
-![Screen 4 shows the time slider at 10:50 am, the alert with an estimated chance of 9% (Moderate), the glucose readings with the forecast, and the alert timeline.](docs/images/screen4_monitor.png)
+![Screen 4 shows the time slider at 10:50 am and the alert with an estimated chance of 9% (Moderate) and its three reasons. The glucose readings with the forecast and the alert timeline follow below.](docs/images/screen4_monitor.png)
 
 **Screen 5. Patient fasting plan.** The approved Plan B for Sunita is shown in Hindi, with her own word for the fast, व्रत.
 
-![Screen 5 shows the printable patient fasting plan in Hindi, with the rule for breaking the fast, the times to check blood sugar and the medicine changes.](docs/images/screen5_patient_plan_hindi.png)
+![Screen 5 shows the approval by Dr Ananya Rao and the printable patient fasting plan in Hindi, which starts with the rule for breaking the fast and the times of the fast.](docs/images/screen5_patient_plan_hindi.png)
 
 **Screen 6. How Rozmarra makes predictions.** The screen explains the three layers, the data sources, how the team tested Rozmarra, a comparison with simpler methods and the limits.
 
-![Screen 6 shows the three layers, the data sources, the tests, the comparison charts with simpler methods and the limits of Rozmarra.](docs/images/screen6_model_card.png)
+![Screen 6 shows how Rozmarra makes its estimates in three layers and the table of data sources. The tests, the comparison with simpler methods and the limits follow below.](docs/images/screen6_model_card.png)
 
 ## 5. Architecture
 
@@ -298,7 +298,10 @@ The open datasets keep their own licences. CGMacros uses the CC BY-NC-SA 4.0 lic
 
 ## 12. Presentation
 
-The presentation covers the problem, the solution, the architecture, the results and the limits in 19 slides: [`docs/presentation/presentation.pdf`](docs/presentation/presentation.pdf).
+The presentation for the grand finale at the Reimagining and Reforming Healthcare in India Summit 2026 tells the story of one fasting day in 11 slides. It covers the problem, a 1-minute 42-second introduction video, the results, how Rozmarra fits care in India, the expected impact, the limits and what the team needs next. The live demonstration of the dashboard follows slide 6.
+
+- PowerPoint, with the introduction video on slide 5: [`docs/presentation/presentation.pptx`](docs/presentation/presentation.pptx)
+- PDF, with a still frame instead of the video: [`docs/presentation/presentation.pdf`](docs/presentation/presentation.pdf)
 
 ## 13. References and acknowledgements
 
