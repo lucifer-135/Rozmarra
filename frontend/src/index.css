@@ -24,6 +24,10 @@
     --text-xs--line-height: 1.5;
     --text-sm: 1rem;
     --text-sm--line-height: 1.5;
+    /* Body text is 17 pixels with generous leading, which gives the calm reading pace of a
+       product page. */
+    --text-base: 1.0625rem;
+    --text-base--line-height: 1.47;
 }
 
 @theme inline {
@@ -62,6 +66,10 @@
     --color-foreground: var(--foreground);
     --color-background: var(--background);
     --color-fast: var(--fast);
+    --color-parchment: var(--parchment);
+    --color-tile: var(--tile);
+    --color-on-tile-muted: var(--on-tile-muted);
+    --color-primary-on-tile: var(--primary-on-tile);
     --color-fast-soft: var(--fast-soft);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
@@ -73,10 +81,18 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
+    /* A product-page palette: white and an off-white parchment for light surfaces, one
+       near-black ink for all text, and a near-black tile for the dark bands. Teal is the only
+       accent, and it marks every action. */
+    --background: #ffffff;
+    --parchment: #f5f5f7;
+    --foreground: #1d1d1f;
+    --card: #ffffff;
+    --card-foreground: #1d1d1f;
+    --tile: #1d1d1f;
+    --on-tile-muted: #a1a1a6;
+    /* A lighter teal for links and actions on the dark tiles, where the main teal is too dark. */
+    --primary-on-tile: #7fd1d6;
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
     /* A calm teal for the main actions. White text on it has a contrast ratio above 4.5 to 1. */
@@ -85,12 +101,14 @@
     --secondary: oklch(0.97 0 0);
     --secondary-foreground: oklch(0.205 0 0);
     --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
+    /* Secondary text in grey #6e6e73 keeps a contrast ratio above 4.5 to 1 on white and on
+       parchment. */
+    --muted-foreground: #6e6e73;
     --accent: oklch(0.97 0 0);
     --accent-foreground: oklch(0.205 0 0);
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
+    --border: #e0e0e2;
+    --input: #d2d2d7;
     --ring: oklch(0.708 0 0);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
@@ -167,6 +185,8 @@
      single word. */
   h1, h2, h3 {
     text-wrap: balance;
+    /* Headlines are set slightly tight, like display type. */
+    letter-spacing: -0.015em;
     }
   p, li {
     text-wrap: pretty;

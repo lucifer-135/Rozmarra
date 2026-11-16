@@ -9,6 +9,7 @@ import {
   IdfDarText,
   PlanStatusBadge,
 } from '@/components/badges'
+import { Lede, PageHeader } from '@/components/LearnMore'
 import { QueryState } from '@/components/QueryState'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -35,31 +36,28 @@ export function PatientsPage() {
   const patients = useQuery({ queryKey: ['patients'], queryFn: fetchPatients })
 
   return (
-    <div className="grid gap-5">
-      <div className="grid gap-2">
-        <h1 className="text-[1.75rem] leading-tight font-semibold">{t('patients.title')}</h1>
-        <p className="max-w-4xl text-base text-muted-foreground">{t('patients.intro')}</p>
-      </div>
+    <div className="grid gap-8">
+      <PageHeader title={t('patients.title')} lede={t('patients.intro')} />
       <QueryState query={patients} loadingText={t('patients.loading')}>
         {(rows) => (
           <Card className="py-2">
             <CardContent className="px-2">
-              <Table className="text-base">
+              <Table className="text-[1rem]">
                 <TableCaption className="text-base">{t('patients.caption')}</TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-base">{t('patients.columns.patient')}</TableHead>
-                    <TableHead className="text-base whitespace-normal" aria-sort="descending">
+                    <TableHead className="text-[1rem]">{t('patients.columns.patient')}</TableHead>
+                    <TableHead className="text-[1rem] whitespace-normal" aria-sort="descending">
                       <span className="inline-flex max-w-[11rem] items-end gap-1">
                         {t('patients.columns.chance')}
                         <ArrowDown aria-hidden className="mb-1 size-4 shrink-0" />
                       </span>
                     </TableHead>
-                    <TableHead className="text-base">{t('patients.columns.fast')}</TableHead>
-                    <TableHead className="text-base">{t('patients.columns.idfDar')}</TableHead>
-                    <TableHead className="text-base">{t('patients.columns.status')}</TableHead>
-                    <TableHead className="text-base">{t('patients.columns.notes')}</TableHead>
-                    <TableHead className="text-base">
+                    <TableHead className="text-[1rem]">{t('patients.columns.fast')}</TableHead>
+                    <TableHead className="text-[1rem]">{t('patients.columns.idfDar')}</TableHead>
+                    <TableHead className="text-[1rem]">{t('patients.columns.status')}</TableHead>
+                    <TableHead className="text-[1rem]">{t('patients.columns.notes')}</TableHead>
+                    <TableHead className="text-[1rem]">
                       <span className="sr-only">{t('patients.columns.open')}</span>
                     </TableHead>
                   </TableRow>
@@ -67,7 +65,7 @@ export function PatientsPage() {
                 <TableBody>
                   {rows.map((row) => (
                     <TableRow key={row.patient_id}>
-                      <TableCell className="py-3">
+                      <TableCell className="py-3 whitespace-normal">
                         <Link
                           to={`/patients/${row.patient_id}`}
                           className="font-medium text-primary underline-offset-4 hover:underline"
@@ -117,7 +115,7 @@ export function PatientsPage() {
           </Card>
         )}
       </QueryState>
-      <p className="max-w-4xl text-base text-muted-foreground">{t('patients.chanceNote')}</p>
+      <Lede text={t('patients.chanceNote')} className="max-w-[70ch] [&_p:first-child]:text-base" />
     </div>
   )
 }

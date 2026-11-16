@@ -5,6 +5,7 @@ import { fetchModelCard } from '@/api/client'
 import type { Metric, ModelCard } from '@/api/types'
 import { ComparisonChart, type ComparisonRow } from '@/charts/ComparisonChart'
 import { QueryState } from '@/components/QueryState'
+import { LearnMore, PageHeader } from '@/components/LearnMore'
 import { Section } from '@/components/Section'
 import {
   Table,
@@ -114,30 +115,28 @@ function Card({ card }: { card: ModelCard }) {
       </Section>
 
       <Section title={t('about.testing.title')}>
-        <ul className="grid list-disc gap-2 pl-6">
-          <li>
-            {t('about.testing.real', {
-              patients: real.all.patients,
-            })}
-          </li>
-          {realMeals && (
+        <p>{t('about.testing.real', { patients: real.all.patients })}</p>
+        <LearnMore>
+          <ul className="grid list-disc gap-2 pl-6">
+            {realMeals && (
+              <li>
+                {t('about.testing.realMeals', {
+                  meals: realMeals.meals,
+                  patients: realMeals.patients,
+                })}
+              </li>
+            )}
             <li>
-              {t('about.testing.realMeals', {
-                meals: realMeals.meals,
-                patients: realMeals.patients,
+              {t('about.testing.synthetic', {
+                patients: card.synthetic_cohort?.virtual_patients ?? 0,
+                episodes: formatNumber(card.synthetic_cohort?.fasting_episodes ?? 0, language),
+                test: synthetic.e1.patients,
               })}
             </li>
-          )}
-          <li>
-            {t('about.testing.synthetic', {
-              patients: card.synthetic_cohort?.virtual_patients ?? 0,
-              episodes: formatNumber(card.synthetic_cohort?.fasting_episodes ?? 0, language),
-              test: synthetic.e1.patients,
-            })}
-          </li>
-          <li>{t('about.testing.baselines')}</li>
-          <li>{t('about.testing.intervals')}</li>
-        </ul>
+            <li>{t('about.testing.baselines')}</li>
+            <li>{t('about.testing.intervals')}</li>
+          </ul>
+        </LearnMore>
       </Section>
 
       <Section title={t('about.compare.title')} description={t('about.compare.description')}>
@@ -187,11 +186,8 @@ export function AboutPage() {
   const { t } = useTranslation()
   const card = useQuery({ queryKey: ['model-card'], queryFn: fetchModelCard, staleTime: Infinity })
   return (
-    <div className="grid gap-5">
-      <div className="grid gap-2">
-        <h1 className="text-[1.75rem] leading-tight font-semibold">{t('screens.about')}</h1>
-        <p className="max-w-4xl text-base text-muted-foreground">{t('about.intro')}</p>
-      </div>
+    <div className="grid gap-8">
+      <PageHeader title={t('screens.about')} lede={t('about.intro')} />
       <QueryState query={card}>{(data) => <Card card={data} />}</QueryState>
     </div>
   )

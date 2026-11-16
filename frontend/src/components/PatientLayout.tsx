@@ -16,12 +16,11 @@ const TABS = [
   { path: 'plan', key: 'plan' },
 ] as const
 
+// The screens of a patient sit in one row of pills, like a segmented control.
 const tabClass = ({ isActive }: { isActive: boolean }) =>
   cn(
-    '-mb-px border-b-2 px-3 py-2 text-base font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
-    isActive
-      ? 'border-primary text-foreground'
-      : 'border-transparent text-muted-foreground hover:text-foreground',
+    'rounded-full px-4 py-2 text-base font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50',
+    isActive ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground',
   )
 
 /** The heading of every patient screen, with the tabs that lead to the other screens. */
@@ -48,7 +47,7 @@ export function PatientLayout() {
           )
         }
         return (
-          <div className="grid gap-6">
+          <div className="grid gap-8">
             <div className="grid gap-3">
               <Link
                 to="/patients"
@@ -58,7 +57,7 @@ export function PatientLayout() {
                 {t('patient.backToList')}
               </Link>
               <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                <h1 className="text-[1.75rem] leading-tight font-semibold">
+                <h1 className="text-4xl leading-[1.08] font-semibold tracking-[-0.022em] md:text-5xl">
                   {t('patient.nameAndAge', { name: patientName(row), age: row.age })}
                 </h1>
                 <p className="text-lg text-muted-foreground">
@@ -75,7 +74,7 @@ export function PatientLayout() {
                 {row.dehydration_caution && <DehydrationBadge />}
               </div>
             </div>
-            <nav aria-label={t('patient.screens')} className="flex flex-wrap gap-1 border-b">
+            <nav aria-label={t('patient.screens')} className="flex w-fit flex-wrap gap-1 rounded-full bg-black/[0.04] p-1">
               {TABS.map((tab) => (
                 <NavLink
                   key={tab.key}

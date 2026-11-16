@@ -80,7 +80,7 @@ test('the patient list is sorted by risk and shows the notices on the screen', a
       'Rozmarra supports clinical decisions. It does not replace the judgement of a doctor.',
     ),
   ).toBeInTheDocument()
-  expect(screen.getAllByText('Synthetic data').length).toBeGreaterThan(0)
+  expect(screen.getByText(/All patients in this list are synthetic\./)).toBeInTheDocument()
   expect(await screen.findByText(/The service version is 0\.1\.0\./)).toBeInTheDocument()
 })
 

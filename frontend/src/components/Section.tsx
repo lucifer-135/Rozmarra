@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Lede } from '@/components/LearnMore'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
@@ -20,10 +21,13 @@ export function Section({
       <CardHeader className="flex flex-wrap items-start justify-between gap-3">
         <div className="grid gap-1">
           <CardTitle>
-            <h2 className="text-lg font-semibold">{title}</h2>
+            <h2 className="text-2xl leading-tight font-semibold">{title}</h2>
           </CardTitle>
-          {description && (
-            <CardDescription className="text-base">{description}</CardDescription>
+          {/* A text description shows its first sentence; the rest folds into "Learn more". */}
+          {typeof description === 'string' ? (
+            <Lede text={description} className="[&_p:first-child]:text-base" />
+          ) : (
+            description && <CardDescription className="text-base">{description}</CardDescription>
           )}
         </div>
         {action}
@@ -50,9 +54,9 @@ export function Facts({ items }: { items: [string, ReactNode][] }) {
 /** A single number with its label, for example the average glucose over 14 days. */
 export function StatTile({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
-    <div className="rounded-lg border bg-background p-4">
+    <div className="rounded-[14px] bg-parchment p-4">
       <p className="text-base text-muted-foreground">{label}</p>
-      <p className="mt-1 text-2xl font-semibold">{value}</p>
+      <p className="mt-1 text-[1.75rem] leading-tight font-semibold tracking-[-0.015em]">{value}</p>
       {note && <p className="mt-1 text-base text-muted-foreground">{note}</p>}
     </div>
   )

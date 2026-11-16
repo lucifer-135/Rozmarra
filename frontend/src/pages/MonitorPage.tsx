@@ -23,6 +23,7 @@ import { SignalChart } from '@/charts/SignalChart'
 import { COLOURS } from '@/charts/theme'
 import { ChanceText } from '@/components/badges'
 import { LoadError, Loading, QueryState } from '@/components/QueryState'
+import { Lede } from '@/components/LearnMore'
 import { Section } from '@/components/Section'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -217,7 +218,7 @@ function Monitor({ patientId, overview }: { patientId: string; overview: ReplayO
 
   return (
     <div className="grid gap-5">
-      <p className="max-w-4xl text-base">{t('monitor.intro')}</p>
+      <Lede text={t('monitor.intro')} className="max-w-[70ch]" />
 
       <section className="grid gap-3 rounded-xl border bg-card p-4" aria-label={t('monitor.controls')}>
         <div className="flex flex-wrap items-baseline justify-between gap-2">

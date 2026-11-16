@@ -9,6 +9,7 @@ import { GlucoseChart } from '@/charts/GlucoseChart'
 import { SignalChart } from '@/charts/SignalChart'
 import { COLOURS } from '@/charts/theme'
 import { IdfDarBadge } from '@/components/badges'
+import { LearnMore } from '@/components/LearnMore'
 import { QueryState } from '@/components/QueryState'
 import { Facts, Section, StatTile } from '@/components/Section'
 import {
@@ -171,15 +172,17 @@ function IdfDarSection({ score }: { score: IdfDar }) {
           </TableRow>
         </TableBody>
       </Table>
-      <p className="text-muted-foreground">{t('idfDar.bands')}</p>
+      <LearnMore>
+        <p>{t('idfDar.bands')}</p>
+        {score.note && (
+          <p className="flex items-start gap-2">
+            <Info aria-hidden className="mt-0.5 size-4 shrink-0" />
+            {t('idfDar.otherFasts')}
+          </p>
+        )}
+      </LearnMore>
       {score.missing.length > 0 && (
         <p>{t('idfDar.missing', { range: `${n(score.range[0])} to ${n(score.range[1])}` })}</p>
-      )}
-      {score.note && (
-        <p className="flex items-start gap-2 text-muted-foreground">
-          <Info aria-hidden className="mt-0.5 size-4 shrink-0" />
-          {t('idfDar.otherFasts')}
-        </p>
       )}
     </Section>
   )
@@ -334,8 +337,10 @@ function TwinSection({ twin }: { twin: Twin }) {
         <StatTile label={t('virtual.twin.heldOutError')} value={`${n(q.held_out_rmse_mg_dl)} mg/dL`} />
         <StatTile label={t('virtual.twin.heldOutMard')} value={`${n(q.held_out_mard_percent)}%`} />
       </div>
-      <p className="text-muted-foreground">{t('virtual.twin.reference')}</p>
-      <details className="rounded-lg border bg-background p-4">
+      <LearnMore>
+        <p>{t('virtual.twin.reference')}</p>
+      </LearnMore>
+      <details className="rounded-[14px] bg-parchment p-4">
         <summary className="cursor-pointer font-medium">{t('virtual.twin.parameters')}</summary>
         <Table className="mt-3 text-base">
           <TableHeader>
@@ -371,11 +376,13 @@ function SourcesSection({ donor }: { donor: string }) {
   const { t } = useTranslation()
   return (
     <Section title={t('virtual.sources.title')}>
-      <ul className="list-disc space-y-1 pl-6">
-        <li>{t('virtual.sources.record')}</li>
-        <li>{t('virtual.sources.twin', { donor })}</li>
-        <li>{t('virtual.sources.history')}</li>
-      </ul>
+      <p>{t('virtual.sources.record')}</p>
+      <LearnMore>
+        <ul className="list-disc space-y-1 pl-6">
+          <li>{t('virtual.sources.twin', { donor })}</li>
+          <li>{t('virtual.sources.history')}</li>
+        </ul>
+      </LearnMore>
     </Section>
   )
 }
@@ -397,7 +404,7 @@ export function VirtualPatientPage() {
       <QueryState query={patient}>
         {(p) => (
           <>
-            <p className="max-w-4xl text-base">
+            <p className="max-w-[70ch] text-lg text-muted-foreground">
               {t('virtual.intro', {
                 name: patientName(p),
                 fast: fastName(p.planned_fast.template_id),

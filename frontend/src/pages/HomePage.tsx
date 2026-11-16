@@ -5,8 +5,10 @@ import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { fetchPatients } from '@/api/client'
 import { COLOURS } from '@/charts/theme'
+import { LearnMore, Lede } from '@/components/LearnMore'
 import { buttonVariants } from '@/components/ui/button'
 import { formatAxisTime } from '@/lib/format'
+import { splitFirstSentence } from '@/lib/text'
 import { usePatientName, useTemplates } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
 
@@ -49,7 +51,7 @@ function FastingDayFigure() {
   const nowGlucose = MEASURED[MEASURED.length - 1][1]
   return (
     <figure className="m-0 grid gap-3">
-      <div aria-hidden="true" className="rounded-xl border bg-card p-4 pb-3 shadow-xs">
+      <div aria-hidden="true" className="rounded-[28px] bg-parchment p-5 pb-4 md:p-8 md:pb-6">
         <div className="relative h-8 text-base font-medium text-fast">
           <span className="absolute bottom-1 whitespace-nowrap" style={{ left: `${x(FAST_START)}%` }}>
             {t('home.figure.start')}
@@ -143,7 +145,12 @@ function FastingDayFigure() {
           ))}
         </div>
       </div>
-      <figcaption className="text-base text-muted-foreground">{t('home.figure.caption')}</figcaption>
+      <figcaption className="text-center text-base text-muted-foreground">
+        {splitFirstSentence(t('home.figure.caption'))[0]}
+        <LearnMore className="mt-1 text-center [&>div]:text-center">
+          <p>{splitFirstSentence(t('home.figure.caption'))[1]}</p>
+        </LearnMore>
+      </figcaption>
     </figure>
   )
 }
@@ -165,9 +172,9 @@ function Steps() {
   // printed plan needs an approved plan, so its link prefers a patient whose plan is approved.
   const first = patients.data?.[0]
   const withPlan = patients.data?.find((row) => row.plan_status === 'approved') ?? first
-  const linkClass = 'w-fit font-medium text-primary underline-offset-4 hover:underline'
+  const linkClass = 'w-fit font-medium text-primary-on-tile underline-offset-4 hover:underline'
   return (
-    <ol role="list" className="grid gap-8 xl:grid-cols-5 xl:gap-6">
+    <ol role="list" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
       {STEPS.map((step, index) => {
         // The first step needs no link of its own: the main button above opens the list.
         let link: ReactNode = null
@@ -182,22 +189,19 @@ function Steps() {
             </Link>
           )
         }
+        const [summary, more] = splitFirstSentence(t(`home.steps.items.${step.key}.body`))
         return (
-          <li key={step.key} className="relative grid content-start gap-2 pl-14 xl:pt-14 xl:pl-0">
-            <span
-              aria-hidden
-              className="absolute top-0 left-0 z-10 flex size-10 items-center justify-center rounded-full border-2 border-primary bg-background text-lg font-semibold text-primary"
-            >
+          <li key={step.key} className="grid content-start gap-3 rounded-[18px] bg-white/[0.06] p-6">
+            <span aria-hidden className="text-[2.5rem] leading-none font-semibold tracking-[-0.02em] text-primary-on-tile">
               {index + 1}
             </span>
-            {index < STEPS.length - 1 && (
-              <span
-                aria-hidden
-                className="absolute top-10 -bottom-8 left-5 w-0.5 bg-border xl:top-5 xl:right-[-1.5rem] xl:bottom-auto xl:left-10 xl:h-0.5 xl:w-auto"
-              />
+            <h3 className="text-xl leading-snug font-semibold">{t(`home.steps.items.${step.key}.title`)}</h3>
+            <p className="text-base text-on-tile-muted">{summary}</p>
+            {more && (
+              <LearnMore className="[&>summary]:text-primary-on-tile [&>div]:text-on-tile-muted">
+                <p>{more}</p>
+              </LearnMore>
             )}
-            <h3 className="text-lg font-semibold">{t(`home.steps.items.${step.key}.title`)}</h3>
-            <p className="text-base">{t(`home.steps.items.${step.key}.body`)}</p>
             {link}
           </li>
         )
@@ -217,14 +221,14 @@ function Fasts() {
     ),
   ]
   return (
-    <section aria-labelledby="home-fasts" className="grid content-start gap-3">
-      <h2 id="home-fasts" className="text-lg font-semibold">
+    <section aria-labelledby="home-fasts" className="grid content-start gap-4">
+      <h2 id="home-fasts" className="text-3xl font-semibold">
         {t('home.fasts.title')}
       </h2>
-      <p className="text-base text-muted-foreground">{t('home.fasts.description')}</p>
+      <Lede text={t('home.fasts.description')} />
       <ul role="list" className="flex flex-wrap gap-2">
         {names.map((name) => (
-          <li key={name} className="rounded-full bg-fast-soft px-3 py-1 text-base font-medium text-fast">
+          <li key={name} className="rounded-full bg-white px-4 py-2 text-base font-medium text-fast ring-1 ring-black/[0.06]">
             {name}
           </li>
         ))}
@@ -242,8 +246,8 @@ function Safety() {
     { key: 'prototype', icon: FlaskConical },
   ] as const
   return (
-    <section aria-labelledby="home-safety" className="grid content-start gap-3">
-      <h2 id="home-safety" className="text-lg font-semibold">
+    <section aria-labelledby="home-safety" className="grid content-start gap-4">
+      <h2 id="home-safety" className="text-3xl font-semibold">
         {t('home.safety.title')}
       </h2>
       <ul role="list" className="grid gap-3">
@@ -258,47 +262,49 @@ function Safety() {
   )
 }
 
-/** The home page of the dashboard. */
+/** The home page of the dashboard: full-width bands that alternate light and dark. */
 export function HomePage() {
   const { t } = useTranslation()
+  const pill = 'h-11 px-6 text-base'
   return (
-    <div className="grid gap-14 py-4">
-      <section className="grid items-center gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,6fr)]">
-        <div className="grid content-start gap-5">
-          <h1 className="max-w-[22ch] text-4xl leading-[1.15] font-semibold tracking-tight md:text-[2.75rem]">
+    <div>
+      <section className="bg-background px-4 pt-16 pb-14 md:pt-24">
+        <div className="mx-auto grid max-w-5xl justify-items-center gap-6 text-center">
+          <h1 className="max-w-[22ch] text-4xl leading-[1.05] font-semibold tracking-[-0.025em] sm:text-5xl md:text-[4rem]">
             {t('home.title')}
           </h1>
-          <p className="max-w-[60ch] text-lg text-muted-foreground">{t('home.lead')}</p>
-          <div className="flex flex-wrap gap-3">
-            <Link to="/patients" className={cn(buttonVariants(), 'h-11 px-5 text-base')}>
+          <Lede text={t('home.lead')} className="max-w-[60ch] justify-items-center [&_p:first-child]:text-xl md:[&_p:first-child]:text-2xl" />
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link to="/patients" className={cn(buttonVariants(), pill)}>
               {t('home.openPatients')}
             </Link>
-            <Link
-              to="/about"
-              className={cn(buttonVariants({ variant: 'outline' }), 'h-11 px-5 text-base')}
-            >
+            <Link to="/about" className={cn(buttonVariants({ variant: 'outline' }), pill)}>
               {t('home.readAbout')}
             </Link>
           </div>
+          <div className="mt-8 w-full max-w-4xl text-left">
+            <FastingDayFigure />
+          </div>
         </div>
-        <FastingDayFigure />
       </section>
 
-      <section aria-labelledby="home-steps" className="grid gap-6">
-        <div className="grid gap-1">
-          <h2 id="home-steps" className="text-2xl font-semibold">
-            {t('home.steps.title')}
-          </h2>
-          <p className="max-w-[70ch] text-base text-muted-foreground">
-            {t('home.steps.description')}
-          </p>
+      <section aria-labelledby="home-steps" className="bg-tile px-4 py-16 text-white md:py-24">
+        <div className="mx-auto grid max-w-7xl gap-10">
+          <div className="grid justify-items-center gap-3 text-center">
+            <h2 id="home-steps" className="text-4xl font-semibold md:text-5xl">
+              {t('home.steps.title')}
+            </h2>
+            <p className="max-w-[52ch] text-xl text-on-tile-muted">{t('home.steps.description')}</p>
+          </div>
+          <Steps />
         </div>
-        <Steps />
       </section>
 
-      <div className="grid gap-10 border-t pt-10 lg:grid-cols-2">
-        <Fasts />
-        <Safety />
+      <div className="px-4 py-16 md:py-24">
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2">
+          <Fasts />
+          <Safety />
+        </div>
       </div>
     </div>
   )

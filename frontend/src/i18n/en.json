@@ -23,8 +23,7 @@
   "notice": {
     "clinical": "Rozmarra supports clinical decisions. It does not replace the judgement of a doctor.",
     "prototype": "Rozmarra is a research prototype. It is not a certified medical device.",
-    "synthetic": "Synthetic data",
-    "syntheticDetail": "All patients in this prototype are synthetic. They do not represent real people."
+    "synthetic": "Synthetic data"
   },
   "service": {
     "checking": "The dashboard is checking the connection to the Rozmarra service.",
@@ -39,7 +38,9 @@
     "yes": "Yes",
     "no": "No",
     "cancel": "Cancel",
-    "listSeparator": ", "
+    "listSeparator": ", ",
+    "learnMore": "Learn more",
+    "showLess": "Show less"
   },
   "units": {
     "mg": "mg",

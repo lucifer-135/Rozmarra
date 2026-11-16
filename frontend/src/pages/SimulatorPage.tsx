@@ -12,6 +12,7 @@ import {
   savePlan,
 } from '@/api/client'
 import type { FastTemplate, FastingPlan, PlanOptions } from '@/api/types'
+import { LearnMore, Lede } from '@/components/LearnMore'
 import { LoadError, Loading } from '@/components/QueryState'
 import { ApproveDialog } from '@/components/simulator/ApproveDialog'
 import { planProblems } from '@/components/simulator/plan'
@@ -199,7 +200,7 @@ function Workspace({
       <Card className="gap-4 py-4 xl:sticky xl:top-4 xl:max-h-[calc(100vh-2rem)] xl:overflow-y-auto">
         <CardContent className="grid gap-4 px-4">
           <h2 className="text-lg font-semibold">{t('simulator.formTitle')}</h2>
-          <p className="text-base text-muted-foreground">{t('simulator.formIntro')}</p>
+          <Lede text={t('simulator.formIntro')} className="[&_p:first-child]:text-base" />
           <Button
             className="h-11 text-base"
             disabled={compare.isPending || problems.length > 0}
@@ -327,9 +328,11 @@ function Workspace({
             ))}
             <div className="grid gap-2 text-base text-muted-foreground">
               <p>{t('simulator.explainBand')}</p>
-              <p>{t('simulator.explainAverage')}</p>
-              <p>{t('simulator.explainChance')}</p>
-              {result.plan_a.plan.fast_type !== 'ramadan' && <p>{t('idfDar.otherFasts')}</p>}
+              <LearnMore>
+                <p>{t('simulator.explainAverage')}</p>
+                <p>{t('simulator.explainChance')}</p>
+                {result.plan_a.plan.fast_type !== 'ramadan' && <p>{t('idfDar.otherFasts')}</p>}
+              </LearnMore>
             </div>
           </div>
         )}

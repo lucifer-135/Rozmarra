@@ -5,6 +5,7 @@ import { Link, useParams, useSearchParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { documentUrl, fetchPlanMessage, fetchSavedPlans } from '@/api/client'
 import { LoadError, Loading } from '@/components/QueryState'
+import { Lede } from '@/components/LearnMore'
 import { Section } from '@/components/Section'
 import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/format'
@@ -45,8 +46,8 @@ export function PlanPage() {
 
   if (!approved) {
     return (
-      <div className="grid max-w-3xl gap-3 rounded-xl border bg-card p-6">
-        <h2 className="text-lg font-semibold">{t('planScreen.notApprovedTitle')}</h2>
+      <div className="grid max-w-3xl gap-3 rounded-[18px] bg-card p-8 ring-1 ring-black/[0.06]">
+        <h2 className="text-2xl font-semibold">{t('planScreen.notApprovedTitle')}</h2>
         <p className="text-base">{t('planScreen.notApproved')}</p>
         <Link
           to={`/patients/${id}/simulator`}
@@ -68,8 +69,8 @@ export function PlanPage() {
   return (
     <div className="grid gap-5">
       <div className="grid gap-2">
-        <h2 className="text-lg font-semibold">{t('planScreen.title')}</h2>
-        <p className="max-w-4xl text-base">{t('planScreen.intro')}</p>
+        <h2 className="text-3xl font-semibold">{t('planScreen.title')}</h2>
+        <Lede text={t('planScreen.intro')} className="max-w-[70ch]" />
         <p className="inline-flex items-center gap-2 text-base font-medium text-emerald-800">
           <CircleCheck aria-hidden className="size-5" />
           {t('planScreen.approvedPlan', {
@@ -136,7 +137,7 @@ export function PlanPage() {
         title={t('planScreen.messageTitle')}
         description={t('planScreen.messageDescription')}
       >
-        <div className="flex items-start gap-3 rounded-lg border bg-muted/50 p-4">
+        <div className="flex items-start gap-3 rounded-[14px] bg-parchment p-5">
           <MessageSquareText aria-hidden className="mt-1 size-5 shrink-0 text-muted-foreground" />
           {message.isPending ? (
             <Loading />
