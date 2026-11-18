@@ -2,6 +2,11 @@
 # Please run scripts\setup.ps1 once before you run this script:
 #   powershell -ExecutionPolicy Bypass -File scripts\run_demo.ps1
 # The dashboard then opens at http://localhost:5173. Press Ctrl+C to stop both.
+# For a presentation, add -Production. The script then builds the dashboard once and serves the
+# built files, which load faster and do not compile anything while the audience watches:
+#   powershell -ExecutionPolicy Bypass -File scripts\run_demo.ps1 -Production
+
+param([switch]$Production)
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
@@ -29,9 +34,19 @@ try {
     if (-not $ready) { throw 'The Rozmarra API did not start within 90 seconds.' }
     Write-Host 'The Rozmarra API is running.'
 
-    Write-Host 'Starting the dashboard at http://localhost:5173 ...'
     Push-Location (Join-Path $root 'frontend')
-    npm run dev -- --open
+    if ($Production) {
+        Write-Host 'Building the dashboard ...'
+        npm run build
+        if ($LASTEXITCODE -ne 0) { throw 'The dashboard build failed. Please read the messages above.' }
+        # The preview server passes /api to the Rozmarra API in the same way as the dev server.
+        Write-Host 'Serving the built dashboard at http://localhost:5173 ...'
+        npm run preview -- --port 5173 --strictPort --open
+    }
+    else {
+        Write-Host 'Starting the dashboard at http://localhost:5173 ...'
+        npm run dev -- --open
+    }
 }
 finally {
     Pop-Location -ErrorAction SilentlyContinue
