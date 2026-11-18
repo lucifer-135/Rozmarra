@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatAxisTime, formatShortDate, formatTime, toDate } from '@/lib/format'
 import { glucoseAxisTop, glucoseTicks, Y_MIN } from './scale'
+import { countLegendRows, measureText, useElementWidth } from './legend'
 import { AXIS_TEXT, COLOURS, echarts, FONT } from './theme'
 
 // The main glucose chart (docs/techstack.md, Section 11.2): the target range from 70 to
@@ -60,6 +61,13 @@ interface Props {
 const STRIP_ROW = 30
 // The right margin holds the labels of the lines at 70 and 54 mg/dL.
 const RIGHT_MARGIN = 96
+// The legend sits above the plot, between these margins, and each extra row adds LEGEND_ROW.
+const LEGEND_LEFT = 96
+const LEGEND_RIGHT = 16
+const LEGEND_ICON = 28
+const LEGEND_ICON_GAP = 5
+const LEGEND_GAP = 20
+const LEGEND_ROW = 28
 
 function escapeHtml(text: string): string {
   return text.replace(
@@ -97,6 +105,7 @@ export function GlucoseChart({
 }: Props) {
   const { t, i18n } = useTranslation()
   const language = i18n.language
+  const [frame, width] = useElementWidth<HTMLDivElement>()
 
   const option = useMemo(() => {
     const allTimes = lines.flatMap((l) => l.times.map(ms))
@@ -115,10 +124,25 @@ export function GlucoseChart({
     const stripHeight = stripRows.length * STRIP_ROW
     const hasStrip = stripRows.length > 0
     const mainBottom = hasStrip ? stripHeight + 72 : 40
-    // A long legend wraps onto a second line, so the plot starts lower. The legend has one entry
-    // for each line, one for each band and one for the target range.
-    const legendEntries = lines.length + lines.filter((l) => l.band).length + 1
-    const mainTop = legendEntries > 3 ? 76 : 48
+    // A long legend wraps onto more rows, so the plot starts lower. Before the chart knows its
+    // width, or where text cannot be measured, a legend of more than three entries gets two rows.
+    const legendFont = `${AXIS_TEXT.fontSize}px ${FONT}`
+    // The legend has one entry for each band, one for each line and one for the target range.
+    const legendNames = [
+      ...lines.flatMap((l) => (l.band ? [l.band.name, l.name] : [l.name])),
+      t('chart.targetRangeLegend'),
+    ]
+    const entryWidths = legendNames.map((name) => {
+      const text = measureText(name, legendFont)
+      return text == null ? null : LEGEND_ICON + LEGEND_ICON_GAP + text
+    })
+    const measured = width > 0 && entryWidths.every((w) => w != null)
+    const legendRows = measured
+      ? countLegendRows(entryWidths as number[], width - LEGEND_LEFT - LEGEND_RIGHT, LEGEND_GAP)
+      : legendNames.length > 3
+        ? 2
+        : 1
+    const mainTop = 48 + LEGEND_ROW * Math.max(0, legendRows - 1)
     // The axis labels 54 and 70 mg/dL only when they are far enough apart not to touch. On a
     // short chart, the line at 54 mg/dL keeps its "Very low" label in the right margin.
     const plotHeight = height + (hasStrip ? stripHeight + 40 : 0) - mainTop - mainBottom
@@ -404,6 +428,7 @@ export function GlucoseChart({
       return rows.join('<br/>')
     }
 
+
     return {
       animation: false,
       textStyle: { fontFamily: FONT },
@@ -414,10 +439,10 @@ export function GlucoseChart({
       legend: {
         data: legend,
         top: 0,
-        left: 96,
-        right: 16,
-        itemWidth: 28,
-        itemGap: 20,
+        left: LEGEND_LEFT,
+        right: LEGEND_RIGHT,
+        itemWidth: LEGEND_ICON,
+        itemGap: LEGEND_GAP,
         textStyle: { ...AXIS_TEXT, color: COLOURS.ink },
       },
       tooltip: {
@@ -460,7 +485,7 @@ export function GlucoseChart({
       ],
       series,
     }
-  }, [lines, events, windows, moments, start, end, yMax, height, multiDay, language, t])
+  }, [lines, events, windows, moments, start, end, yMax, height, multiDay, language, t, width])
 
   const stripRows = new Set(events.map((e) => e.kind)).size
   const totalHeight = height + (stripRows ? stripRows * STRIP_ROW + 40 : 0)
@@ -468,7 +493,7 @@ export function GlucoseChart({
   return (
     <figure className="m-0">
       <figcaption className="sr-only">{summary}</figcaption>
-      <div aria-hidden="true">
+      <div aria-hidden="true" ref={frame}>
         <ReactEChartsCore
           echarts={echarts}
           option={option}

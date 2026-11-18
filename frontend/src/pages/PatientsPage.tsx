@@ -57,7 +57,10 @@ export function PatientsPage() {
                     <TableHead className="text-[1rem]">{t('patients.columns.idfDar')}</TableHead>
                     <TableHead className="text-[1rem]">{t('patients.columns.status')}</TableHead>
                     <TableHead className="text-[1rem]">{t('patients.columns.notes')}</TableHead>
-                    <TableHead className="text-[1rem]">
+                    {/* The shortcut column shows only on wide screens. On a narrower screen, such as a
+                        projector, the table would cut it off, and the patient's name still opens
+                        the patient. */}
+                    <TableHead className="hidden text-[1rem] xl:table-cell">
                       <span className="sr-only">{t('patients.columns.open')}</span>
                     </TableHead>
                   </TableRow>
@@ -95,7 +98,7 @@ export function PatientsPage() {
                           <span className="text-muted-foreground">{t('patients.noNotes')}</span>
                         )}
                       </TableCell>
-                      <TableCell className="whitespace-nowrap">
+                      <TableCell className="hidden whitespace-nowrap xl:table-cell">
                         <Link
                           to={`/patients/${row.patient_id}/simulator`}
                           className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-primary underline-offset-4 hover:underline"

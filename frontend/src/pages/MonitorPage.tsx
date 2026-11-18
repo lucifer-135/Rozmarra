@@ -216,9 +216,29 @@ function Monitor({ patientId, overview }: { patientId: string; overview: ReplayO
     })
   }
 
+  const refreshing = cn(
+    'transition-opacity duration-150',
+    moment.isFetching && !playing && 'opacity-70 delay-200',
+  )
+
   return (
     <div className="grid gap-5">
       <Lede text={t('monitor.intro')} className="max-w-[70ch]" />
+
+
+      {moment.isError && <LoadError error={moment.error} onRetry={() => void moment.refetch()} />}
+      {!data && moment.isPending && <Loading text={t('monitor.loading')} />}
+      {/* The alert comes before the time controls, so that on a short screen, such as a
+          projector, the doctor sees the alert and its reasons without scrolling. */}
+      {data && (
+        <div aria-live="polite" className={refreshing}>
+          <AlertPanel
+            moment={data}
+            firstAlert={alertsSoFar.at(-1)?.time}
+            threshold={overview.alert_threshold}
+          />
+        </div>
+      )}
 
       <section className="grid gap-3 rounded-xl border bg-card p-4" aria-label={t('monitor.controls')}>
         <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -280,23 +300,8 @@ function Monitor({ patientId, overview }: { patientId: string; overview: ReplayO
         </div>
       </section>
 
-      {moment.isError && <LoadError error={moment.error} onRetry={() => void moment.refetch()} />}
-      {!data && moment.isPending && <Loading text={t('monitor.loading')} />}
       {data && (
-        <div
-          className={cn(
-            'grid gap-5 transition-opacity duration-150',
-            moment.isFetching && !playing && 'opacity-70 delay-200',
-          )}
-        >
-          <div aria-live="polite">
-            <AlertPanel
-              moment={data}
-              firstAlert={alertsSoFar.at(-1)?.time}
-              threshold={overview.alert_threshold}
-            />
-          </div>
-
+        <div className={cn('grid gap-5', refreshing)}>
           <Section
             title={t('monitor.glucoseTitle')}
             description={t('monitor.glucoseDescription')}

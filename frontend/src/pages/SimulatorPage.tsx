@@ -195,9 +195,11 @@ function Workspace({
     )
   }
 
+  // Two columns start at 1024 px, so that a 1280 px projector at 110% zoom still shows the
+  // results beside the form instead of far below it.
   return (
-    <div className="grid items-start gap-6 xl:grid-cols-[minmax(24rem,30rem)_1fr]">
-      <Card className="gap-4 py-4 xl:sticky xl:top-4 xl:max-h-[calc(100vh-2rem)] xl:overflow-y-auto">
+    <div className="grid items-start gap-6 lg:grid-cols-[minmax(22rem,28rem)_1fr]">
+      <Card className="gap-4 py-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
         <CardContent className="grid gap-4 px-4">
           <h2 className="text-lg font-semibold">{t('simulator.formTitle')}</h2>
           <Lede text={t('simulator.formIntro')} className="[&_p:first-child]:text-base" />
