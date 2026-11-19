@@ -302,6 +302,7 @@ The presentation for the grand finale at the Reimagining and Reforming Healthcar
 
 - PowerPoint, with the video on slide 5: [`docs/presentation/presentation.pptx`](docs/presentation/presentation.pptx)
 - PDF, with a still frame instead of the video: [`docs/presentation/presentation.pdf`](docs/presentation/presentation.pdf)
+- A guided demo run for phones, with the same synthetic patients: [lucifer-135.github.io/Rozmarra](https://lucifer-135.github.io/Rozmarra/). The QR code on the last slide opens it. The page is a static file, [`site/index.html`](site/index.html), built from the running API by [`scripts/build_demo_site.py`](scripts/build_demo_site.py), so every number on it comes from the prototype.
 
 ## 13. References and acknowledgements
 
