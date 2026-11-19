@@ -298,9 +298,9 @@ The open datasets keep their own licences. CGMacros uses the CC BY-NC-SA 4.0 lic
 
 ## 12. Presentation
 
-The presentation for the grand finale at the Reimagining and Reforming Healthcare in India Summit 2026 tells the story of one fasting day in 11 slides. It covers the problem, a 1-minute 42-second introduction video, the results, how Rozmarra fits care in India, the expected impact, the limits and what the team needs next. The live demonstration of the dashboard follows slide 6.
+The presentation for the grand finale at the Reimagining and Reforming Healthcare in India Summit 2026 tells the story of one fasting day in 10 slides and 8 minutes. It covers the problem, a video of 2 minutes 14 seconds, the results, how Rozmarra fits care in India, the expected impact, the limits and what the team needs next. The video explains the digital twin and then walks through the real prototype with synthetic patients: the patient list, a plan tested before the fast, an alert with its reasons during the fast, a trade-off between two plans, and the printed plan in Hindi.
 
-- PowerPoint, with the introduction video on slide 5: [`docs/presentation/presentation.pptx`](docs/presentation/presentation.pptx)
+- PowerPoint, with the video on slide 5: [`docs/presentation/presentation.pptx`](docs/presentation/presentation.pptx)
 - PDF, with a still frame instead of the video: [`docs/presentation/presentation.pdf`](docs/presentation/presentation.pdf)
 
 ## 13. References and acknowledgements
